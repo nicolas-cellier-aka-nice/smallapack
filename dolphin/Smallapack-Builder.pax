@@ -1,0 +1,44 @@
+| package |
+package := Package name: 'Smallapack-Builder'.
+package paxVersion: 1;
+	basicComment: ''.
+
+
+package classNames
+	add: #LapackInterfaceBuilder;
+	add: #LapackInterfaceBuilderArgument;
+	yourself.
+
+package binaryGlobalNames: (Set new
+	yourself).
+
+package globalAliases: (Set new
+	yourself).
+
+package setPrerequisites: (IdentitySet new
+	add: 'Object Arts\Dolphin\Base\Dolphin';
+	add: 'Smallapack-External';
+	yourself).
+
+package!
+
+"Class Definitions"!
+
+Object subclass: #LapackInterfaceBuilder
+	instanceVariableNames: 'sourceStream type name comment purpose description arguments shortName codeStream'
+	classVariableNames: 'ArgumentsExpr ArrayIndicatorExpr CharacterTypeExpr ComplexTypeExpr DescriptionExpr DetailsExpr DoubleComplexTypeExpr DoubleRealTypeExpr InputIndicatorExpr InputOutputIndicatorExpr IntegerTypeExpr LogicalTypeExpr OutputIndicatorExpr PurposeExpr RealTypeExpr ReferencesExpr SeparatorExpr WorkspaceIndicatorExpr'
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+Object subclass: #LapackInterfaceBuilderArgument
+	instanceVariableNames: 'name inout type dimensions lengthSpec isArray lowercaseName hasExtraLengthArgument'
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+
+"Global Aliases"!
+
+
+"Loose Methods"!
+
+"End of package definition"!
+
