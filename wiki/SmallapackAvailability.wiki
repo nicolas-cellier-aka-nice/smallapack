@@ -1,0 +1,18 @@
+#summary This page informs on the availability of Smallapack for various Smalltalk dialects.
+
+= Introduction =
+
+Smallapack is available for 3 Smalltalk dialects:
+  * Cincom Visualworks
+  * Dolphin Smalltalk
+  * Squeak/Pharo
+
+= Details =
+
+The version of Smallapack for Cincom Visualworks can be found in the Cincom public store under the bundle http://www.cincomsmalltalk.com/publicRepository/Smallapack(Bundle).html
+
+The version for Squeak and Pharo can be found on Squeaksource at http://www.squeaksource.com/Smallapack.html
+
+The version for Dolphin will be downloadable from this google code site.
+
+Anyone interested in porting the package to other dialects is welcomed and can obtain support from the author.
