@@ -1,0 +1,20 @@
+#summary This page informs on the pre-requisites required in order to use the Smallapack
+
+= Introduction =
+
+Smallapack is an interface to the LAPACK/BLAS libraries. Therefore, these libraries are a pre-requisite.
+
+
+= Details =
+
+Various Smalltalk dialects can call some external procedures via these two main mechanisms:
+  * by augmenting the Smalltalk virtual machine with user defined primitives
+  * by dynamically linking a library containing the procedure and using Foreign Function Interface (FFI)
+
+Smallapack has been developed with the second technology because it is thought to be more agile (easier and faster to develop and extend), and also because the feature is available on various Smalltalk dialects without too much differences.
+
+The drawback is that BLAS and LAPACK must be available as a Dynamic Link Library (Windows .DLL, Mac .dylib) or shared library (linux .so). The libraries are build as static by default, but http://www.netlib.org/lapack contains instructions for creating a dynamic version.
+
+Netlib provides a default implementation of the BLAS library. But this default implementation is not specifically optimized for you hardware. It is better to obtain an optimized BLAS, either from a vendor, or from the ATLAS project (See http://math-atlas.sourceforge.net/ ). Once more, it will be necessary to obtain or build a DLL.
+
+Note that Mac OSX provides an optimized BLAS/LAPACK in the veclib framework, and this should be installed along with XCode.
