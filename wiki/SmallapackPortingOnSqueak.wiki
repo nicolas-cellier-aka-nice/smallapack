@@ -1,0 +1,71 @@
+#summary This page explains the historical port of Smallapack from VisualWorks to Squeak - some information might be obsolete
+
+= Introduction =
+
+Porting the first version of Smallapack on Squeak (in 2006) has not been that easy. Here are a few historical notes taken while porting.
+
+= Details =
+
+Problems encountered porting Smallapack on Squeak:
+
+*first problem:* (minor) line end conventions in file.
+
+  * I develop under linux where line end convention is LF.
+  * I found Squeak very tyrannic with its Mac CR convention...
+  * All my attempts to work around failed and i had to resolve myself converting my files to CR before going to Squeak...
+
+*second problem:* lack of FFI examples
+
+  * How to pass an array of structures? (the Complex Matrix case)
+  * How to load a library before another? (mostly in Unix environment)
+  * How to define a specific library path?
+
+ All these questions were resolved slowly...
+
+ I proposed a new feature to automagically free allocated memory at http://bugs.squeak.org/view.php?id=3692
+ I did not invent much, this kind of utility exists in VW for a long time.
+
+ I also experimented an infinite loop as described at http://bugs.squeak.org/view.php?id=3691
+
+*third problem:* method can only have 15 arguments
+
+ LAPACK have some functions with more than 15...<br>
+ I circumvent this problem using a trick: pass a single array of arguments.<br>
+ I implemented Compiler tweak for having this automated (and not crafted by hand...)<br>
+ This can be found at http://bugs.squeak.org/view.php?id=2918
+
+*fourth problem:* a strange bug in unix FFI
+
+ This bug is described at http://bugs.squeak.org/view.php?id=3929<br>
+ Yet, i am stuck by this one...<br>
+ It prevents my SUnit TestCase to work.<br>
+ _update: I finally solved this one and the patch is integrated in Squeak VM. Anyway, Eliot Miranda has totally cleaned FFI on the cog vm_
+
+*fifth problem:* understand Squeak tools Monticello, SqueakMap, ...
+
+ Not really a problem, i find Monticello is great.<br>
+ But as a Newbie, there's always a learning curve...
+
+*sixth problem:* no Callback framework
+
+ I need such framework for example in Schur algorithm (a function for sorting eigenvalues is necessary)<br>
+ _update: it seems now possible with Aliens, but not yet implemented in Smallapack_
+
+*seventh problem:* bugs in Number library
+
+ especially, with floating point arithmetic...<br>
+ To be fair, most of these bugs are found in major Smalltalk implementations (VW, Squeak, Dolphin, ST/X, gst, ...)<br>
+ But Squeak had a little bit more bugs than others...<br>
+ You can see some of my patches at:
+ http://bugs.squeak.org/view.php?id=3564 , [http://bugs.squeak.org/view.php?id=3568 3568] , [http://bugs.squeak.org/view.php?id=3512 3512] , [http://bugs.squeak.org/view.php?id=3360 3360] ,  [http://bugs.squeak.org/view.php?id=3504 3504] , [http://bugs.squeak.org/view.php?id=3493 3493] , [http://bugs.squeak.org/view.php?id=3374 3374] , [http://bugs.squeak.org/view.php?id=3373 3373] , [http://bugs.squeak.org/view.php?id=2688 2688] , [http://bugs.squeak.org/view.php?id=3133 3133]
+
+
+*What i like in Squeak:*
+
+  * FFI is somehow more simple than VW DLLCC.
+  * The ability to work in Smalltalk memory with ByteArray is also simpler than allocating/freeing external heap.
+  * Squeak community is great.
+  * Monticello
+  * Mantis bug database
+
+All in all, porting to Squeak was a very interesting experience!
