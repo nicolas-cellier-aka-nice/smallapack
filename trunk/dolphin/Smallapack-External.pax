@@ -1,0 +1,185 @@
+| package |
+package := Package name: 'Smallapack-External'.
+package paxVersion: 1;
+	basicComment: ''.
+
+
+package classNames
+	add: #ArrayCLibrary;
+	add: #ArrayDLibrary;
+	add: #ArrayLibrary;
+	add: #ArraySLibrary;
+	add: #ArrayZLibrary;
+	add: #BlasCLibrary;
+	add: #BlasDLibrary;
+	add: #BlasLibrary;
+	add: #BlasSLibrary;
+	add: #BlasZLibrary;
+	add: #CMathLibrary;
+	add: #DOUBLECOMPLEX;
+	add: #DOUBLECOMPLEXArray;
+	add: #FLOATCOMPLEX;
+	add: #FLOATCOMPLEXArray;
+	add: #LapackCLibrary;
+	add: #LapackDLibrary;
+	add: #LapackLibrary;
+	add: #LapackSLibrary;
+	add: #LapackZLibrary;
+	yourself.
+
+package methodNames
+	add: #ExternalArray -> #replaceFrom:to:with:;
+	add: #ExternalArray -> #withArrayOffsetBy:;
+	yourself.
+
+package binaryGlobalNames: (Set new
+	yourself).
+
+package globalAliases: (Set new
+	yourself).
+
+package setPrerequisites: (IdentitySet new
+	add: '..\..\WINDOWS\Profiles\nicolas\Mes Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	yourself).
+
+package!
+
+"Class Definitions"!
+
+ExternalLibrary subclass: #CMathLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CMathLibrary subclass: #ArrayLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CMathLibrary subclass: #BlasLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CMathLibrary subclass: #LapackLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+ArrayLibrary subclass: #ArrayCLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+ArrayLibrary subclass: #ArrayDLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+ArrayLibrary subclass: #ArraySLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+ArrayLibrary subclass: #ArrayZLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+BlasLibrary subclass: #BlasCLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+BlasLibrary subclass: #BlasDLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+BlasLibrary subclass: #BlasSLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+BlasLibrary subclass: #BlasZLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackLibrary subclass: #LapackCLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackLibrary subclass: #LapackDLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackLibrary subclass: #LapackSLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackLibrary subclass: #LapackZLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+ExternalStructure subclass: #DOUBLECOMPLEX
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+ExternalStructure subclass: #FLOATCOMPLEX
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+ExternalArray subclass: #DOUBLECOMPLEXArray
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+ExternalArray subclass: #FLOATCOMPLEXArray
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+
+"Global Aliases"!
+
+
+"Loose Methods"!
+
+!ExternalArray methodsFor!
+
+replaceFrom: start to: stop with: replacementElements
+	"Destructively replace the elements of the receiver between the <integer> arguments
+	start and stop with the <Object> elements of the <sequencedReadableCollection> argument, 
+	replacementElements. Answer the receiver. Raise an Exception if  replacementElements does 
+	not contain the number of elements required to exactly fill the replacement interval in the receiver."
+
+	replacementElements size = (stop - start + 1)
+		ifFalse: [^self error: 'size of replacement incorrect'].
+	replacementElements class isBytes
+		ifTrue: [^self replaceFrom: start to: stop with: replacementElements startingAt: 1].
+
+	"revert to slow implementation"
+	start to: stop do: [:i | self at: i put: (replacementElements at: 1 + i - start)]!
+
+withArrayOffsetBy: anInteger
+	"Answer a copy pointing on a subArray"
+
+	| subArray subAddress |
+	anInteger = 0 ifTrue: [^self].
+	(anInteger >= self size or: [anInteger < 0]) ifTrue: [self error: 'array offset point out of memory'].
+	subAddress := bytes yourAddress + (anInteger * self elementSize).
+	subArray := self class fromAddress: subAddress length: (self size - anInteger).
+	subArray beUnfinalizable.
+	^subArray! !
+!ExternalArray categoriesFor: #replaceFrom:to:with:!public!replacing! !
+!ExternalArray categoriesFor: #withArrayOffsetBy:!converting!public! !
+
+"End of package definition"!
+

@@ -1,0 +1,384 @@
+| package |
+package := Package name: 'Smallapack-Matrix'.
+package paxVersion: 1;
+	basicComment: ''.
+
+
+package classNames
+	add: #AbstractMatrix;
+	add: #LapackCDIMatrix;
+	add: #LapackCGEMatrix;
+	add: #LapackCHEMatrix;
+	add: #LapackCTRMatrix;
+	add: #LapackDDIMatrix;
+	add: #LapackDGEMatrix;
+	add: #LapackDiagonalMatrix;
+	add: #LapackDSYMatrix;
+	add: #LapackDTRMatrix;
+	add: #LapackGeneralMatrix;
+	add: #LapackHalfMatrix;
+	add: #LapackMatrix;
+	add: #LapackSDIMatrix;
+	add: #LapackSGEMatrix;
+	add: #LapackSSYMatrix;
+	add: #LapackSTRMatrix;
+	add: #LapackUnpackedHermitianMatrix;
+	add: #LapackUnpackedMatrix;
+	add: #LapackUnpackedSymmetricRealMatrix;
+	add: #LapackUnpackedTriangularMatrix;
+	add: #LapackZDIMatrix;
+	add: #LapackZGEMatrix;
+	add: #LapackZHEMatrix;
+	add: #LapackZTRMatrix;
+	add: #Settings;
+	yourself.
+
+package methodNames
+	add: #Complex -> #asDoubleComplex;
+	add: #Complex -> #asFloatComplex;
+	add: #Complex -> #asLapackMatrix;
+	add: #Complex -> #coercing:do:;
+	add: #Complex -> #concatColumnsFromLapackMatrix:;
+	add: #Complex -> #concatRowsFromLapackMatrix:;
+	add: #Complex -> #differenceFromLapackMatrix:;
+	add: #Complex -> #productFromLapackMatrix:;
+	add: #Complex -> #quotientFromLapackMatrix:;
+	add: #Complex -> #reduce;
+	add: #Complex -> #respondsToArithmetic;
+	add: #Complex -> #sumFromLapackMatrix:;
+	add: #DOUBLEArray -> #asLapackMatrixNrow:ncol:;
+	add: #DOUBLECOMPLEXArray -> #asLapackMatrixNrow:ncol:;
+	add: #ExternalArray -> #isSequenceable;
+	add: #Float -> #asDoubleComplex;
+	add: #Float -> #asFloatComplex;
+	add: #Float -> #coercing:do:;
+	add: #FLOATArray -> #asLapackMatrixNrow:ncol:;
+	add: #FLOATCOMPLEXArray -> #asLapackMatrixNrow:ncol:;
+	add: #Number -> #asDoubleComplex;
+	add: #Number -> #asFloatComplex;
+	add: #Number -> #asLapackMatrix;
+	add: #Number -> #coercing:do:;
+	add: #Number -> #concatColumnsFromLapackMatrix:;
+	add: #Number -> #concatRowsFromLapackMatrix:;
+	add: #Number -> #differenceFromLapackMatrix:;
+	add: #Number -> #productFromLapackMatrix:;
+	add: #Number -> #quotientFromLapackMatrix:;
+	add: #Number -> #respondsToArithmetic;
+	add: #Number -> #sumFromLapackMatrix:;
+	add: #Object -> #isSequenceable;
+	add: #Object -> #respondsToArithmetic;
+	add: #SequenceableCollection -> #isSequenceable;
+	yourself.
+
+package binaryGlobalNames: (Set new
+	yourself).
+
+package globalAliases: (Set new
+	yourself).
+
+package setPrerequisites: (IdentitySet new
+	add: '..\Dolphin Smalltalk 5.1\Burning River\Complex\Complex';
+	add: '..\..\WINDOWS\Profiles\nicolas\Mes Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: 'Smallapack-Algorithm';
+	add: 'Smallapack-External';
+	yourself).
+
+package!
+
+"Class Definitions"!
+
+Object subclass: #AbstractMatrix
+	instanceVariableNames: 'array nrow ncol'
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+Object subclass: #Settings
+	instanceVariableNames: ''
+	classVariableNames: 'Registry'
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+AbstractMatrix subclass: #LapackMatrix
+	instanceVariableNames: ''
+	classVariableNames: 'ArrayInterfaces BandStorageMask BlasInterfaces BothUpperLowerMask CArrayClasses ComplexityMask ComplexMask DefaultSeedArray DiagonalMask DoublePrecisionMask FlagsToClassDictionary FullStorageMask GeneralMask HermitianMask LapackInterfaces LowerMask PackedStorageMask PrecisionMask PropertyMask RealMask SDCZMask SinglePrecisionMask SmalltalkArrayClasses StorageMask TriangularMask UpperMask'
+	poolDictionaries: ''
+	classInstanceVariableNames: 'libraryErrorCollection smalltalkAccessError cAccessError flags'!
+LapackMatrix subclass: #LapackDiagonalMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackMatrix subclass: #LapackGeneralMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackMatrix subclass: #LapackHalfMatrix
+	instanceVariableNames: 'uplo'
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackDiagonalMatrix subclass: #LapackCDIMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackDiagonalMatrix subclass: #LapackDDIMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackDiagonalMatrix subclass: #LapackSDIMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackDiagonalMatrix subclass: #LapackZDIMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackGeneralMatrix subclass: #LapackCGEMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackGeneralMatrix subclass: #LapackDGEMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackGeneralMatrix subclass: #LapackSGEMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackGeneralMatrix subclass: #LapackZGEMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackHalfMatrix subclass: #LapackUnpackedMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedMatrix subclass: #LapackUnpackedHermitianMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedMatrix subclass: #LapackUnpackedTriangularMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedHermitianMatrix subclass: #LapackCHEMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedHermitianMatrix subclass: #LapackUnpackedSymmetricRealMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedHermitianMatrix subclass: #LapackZHEMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedSymmetricRealMatrix subclass: #LapackDSYMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedSymmetricRealMatrix subclass: #LapackSSYMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedTriangularMatrix subclass: #LapackCTRMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedTriangularMatrix subclass: #LapackDTRMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedTriangularMatrix subclass: #LapackSTRMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+LapackUnpackedTriangularMatrix subclass: #LapackZTRMatrix
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+
+"Global Aliases"!
+
+
+"Loose Methods"!
+
+!Complex methodsFor!
+
+asDoubleComplex
+	^real asFloat i: imag asFloat!
+
+asFloatComplex
+	^real asFloat i: imag asFloat!
+
+asLapackMatrix
+	^LapackZGEMatrix 
+		fromSequence: (DOUBLECOMPLEXArray with: self)
+		nrow: 1
+		ncol: 1!
+
+coercing: aMatrix do: aBlock 
+	imag isZero ifTrue: [^real coercing: aMatrix do: aBlock].
+	^aMatrix coercingFromComplexNumber: self asDoubleComplex do: aBlock!
+
+concatColumnsFromLapackMatrix: aMatrix 	^self coercing: aMatrix		do: 			[:num :mat | 			mat concatColumnsWithLapackMatrix: (mat class 						nrow: 1						ncol: 1						withAll: self)]!
+
+concatRowsFromLapackMatrix: aMatrix 	^self coercing: aMatrix		do: 			[:num :mat | 			mat concatRowsWithLapackMatrix: (mat class 						nrow: 1						ncol: 1						withAll: self)]!
+
+differenceFromLapackMatrix: aMatrix 	"No such function available in blas/lapack ?	Create and fill a Matrix then fallback to matrix operation	this is not fully optimized"	^self coercing: aMatrix		do: 			[:num :mat | 			mat - (mat class 						nrow: mat nrow						ncol: mat ncol						withAll: num)]!
+
+productFromLapackMatrix: aMatrix 	^self coercing: aMatrix do: [:num :mat | mat scaledByComplex: num]!
+
+quotientFromLapackMatrix: aMatrix 	^self coercing: aMatrix		do: 			[:num :mat | mat scaledByComplex: num reciprocal]!
+
+reduce
+	imag isZero ifTrue: [^real reduce]!
+
+respondsToArithmetic	"this is a VW compatibility message used by Smallapack"		^true!
+
+sumFromLapackMatrix: aMatrix 	"No such function available in blas/lapack ?	Create and fill a Matrix then fallback to matrix operation	this is not fully optimized"	^self coercing: aMatrix		do: 			[:num :mat | 			mat + (mat class 						nrow: mat nrow						ncol: mat ncol						withAll: num)]! !
+!Complex categoriesFor: #asDoubleComplex!converting!public! !
+!Complex categoriesFor: #asFloatComplex!converting!public! !
+!Complex categoriesFor: #asLapackMatrix!public! !
+!Complex categoriesFor: #coercing:do:!converting!public! !
+!Complex categoriesFor: #concatColumnsFromLapackMatrix:!public! !
+!Complex categoriesFor: #concatRowsFromLapackMatrix:!public! !
+!Complex categoriesFor: #differenceFromLapackMatrix:!public! !
+!Complex categoriesFor: #productFromLapackMatrix:!public! !
+!Complex categoriesFor: #quotientFromLapackMatrix:!public! !
+!Complex categoriesFor: #reduce!converting!public! !
+!Complex categoriesFor: #respondsToArithmetic!public! !
+!Complex categoriesFor: #sumFromLapackMatrix:!public! !
+
+!DOUBLEArray methodsFor!
+
+asLapackMatrixNrow: nr ncol: nc 
+	^LapackDGEMatrix 
+		fromSequence: self copy
+		nrow: nr
+		ncol: nc! !
+!DOUBLEArray categoriesFor: #asLapackMatrixNrow:ncol:!converting!public! !
+
+!DOUBLECOMPLEXArray methodsFor!
+
+asLapackMatrixNrow: nr ncol: nc 
+	^LapackZGEMatrix 
+		fromSequence: self copy
+		nrow: nr
+		ncol: nc! !
+!DOUBLECOMPLEXArray categoriesFor: #asLapackMatrixNrow:ncol:!converting!public! !
+
+!ExternalArray methodsFor!
+
+isSequenceable
+	"Compatibility with ST-80 VW and Squeak"
+
+	^true! !
+!ExternalArray categoriesFor: #isSequenceable!public!testing! !
+
+!Float methodsFor!
+
+asDoubleComplex	^self i: 0.0!
+
+asFloatComplex	^self i: 0.0!
+
+coercing: aMatrix do: aBlock 	^aMatrix coercingFromRealNumber: self do: aBlock! !
+!Float categoriesFor: #asDoubleComplex!public! !
+!Float categoriesFor: #asFloatComplex!public! !
+!Float categoriesFor: #coercing:do:!public! !
+
+!FLOATArray methodsFor!
+
+asLapackMatrixNrow: nr ncol: nc 
+	^LapackSGEMatrix 
+		fromSequence: self copy
+		nrow: nr
+		ncol: nc! !
+!FLOATArray categoriesFor: #asLapackMatrixNrow:ncol:!converting!public! !
+
+!FLOATCOMPLEXArray methodsFor!
+
+asLapackMatrixNrow: nr ncol: nc 
+	^LapackCGEMatrix 
+		fromSequence: self copy
+		nrow: nr
+		ncol: nc! !
+!FLOATCOMPLEXArray categoriesFor: #asLapackMatrixNrow:ncol:!public! !
+
+!Number methodsFor!
+
+asDoubleComplex	^self asFloat asDoubleComplex!
+
+asFloatComplex	^self asFloat asFloatComplex!
+
+asLapackMatrix 
+	^LapackDGEMatrix 
+		fromSequence: (DOUBLEArray with: self asFloat)
+		nrow: 1
+		ncol: 1!
+
+coercing: aMatrix do: aBlock 	^aMatrix coercingFromNumber: self do: aBlock!
+
+concatColumnsFromLapackMatrix: aMatrix 	^self coercing: aMatrix		do: 			[:num :mat | 			mat concatColumnsWithLapackMatrix: (mat class 						nrow: 1						ncol: 1						withAll: self)]!
+
+concatRowsFromLapackMatrix: aMatrix 	^self coercing: aMatrix		do: 			[:num :mat | 			mat concatRowsWithLapackMatrix: (mat class 						nrow: 1						ncol: 1						withAll: self)]!
+
+differenceFromLapackMatrix: aMatrix 	"No such function available in blas/lapack ?	Create and fill a Matrix then fallback to matrix operation	this is not fully optimized"	^self coercing: aMatrix		do: 			[:num :mat | 			mat - (mat class 						nrow: mat nrow						ncol: mat ncol						withAll: num)]!
+
+productFromLapackMatrix: aMatrix 	^self coercing: aMatrix		do: 			[:num :mat | mat scaledByNumber: num]!
+
+quotientFromLapackMatrix: aMatrix 	^self coercing: aMatrix		do: 			[:num :mat | mat scaledByNumber: num reciprocal]!
+
+respondsToArithmetic	"this is a VW compatibility message used by Smallapack"		^true!
+
+sumFromLapackMatrix: aMatrix 	"No such function available in blas/lapack ?	Create and fill a Matrix then fallback to matrix operation	this is not fully optimized"	^self coercing: aMatrix		do: 			[:num :mat | 			mat + (mat class 						nrow: mat nrow						ncol: mat ncol						withAll: num)]! !
+!Number categoriesFor: #asDoubleComplex!public! !
+!Number categoriesFor: #asFloatComplex!public! !
+!Number categoriesFor: #asLapackMatrix!converting!public! !
+!Number categoriesFor: #coercing:do:!public! !
+!Number categoriesFor: #concatColumnsFromLapackMatrix:!public! !
+!Number categoriesFor: #concatRowsFromLapackMatrix:!public! !
+!Number categoriesFor: #differenceFromLapackMatrix:!public! !
+!Number categoriesFor: #productFromLapackMatrix:!public! !
+!Number categoriesFor: #quotientFromLapackMatrix:!public! !
+!Number categoriesFor: #respondsToArithmetic!public! !
+!Number categoriesFor: #sumFromLapackMatrix:!public! !
+
+!Object methodsFor!
+
+isSequenceable	"answer true if i am a sequenceable collection"		^false!
+
+respondsToArithmetic	"this is a VW compatibility message used by Smallapack"		^false! !
+!Object categoriesFor: #isSequenceable!public! !
+!Object categoriesFor: #respondsToArithmetic!public! !
+
+!SequenceableCollection methodsFor!
+
+isSequenceable
+	"Compatibility with ST-80 VW and Squeak"
+
+	^true! !
+!SequenceableCollection categoriesFor: #isSequenceable!public!testing! !
+
+"End of package definition"!
+
