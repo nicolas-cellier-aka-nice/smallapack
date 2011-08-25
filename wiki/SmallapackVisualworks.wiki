@@ -12,5 +12,5 @@ The first thing is to have an access configured on [http://www.cincomsmalltalk.c
 It is then necessary to open the store repository, select and load the Smallapack bundle.
 
 The last steps are:
-  * get a BLAS/LAPACK dynamic link library [SmallapackPrerequisiste]
+  * get a BLAS/LAPACK dynamic link library [SmallapackPrerequisistes]
   * open the settings and configure the BLAS/LAPACK library names and path
