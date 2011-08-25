@@ -1,0 +1,16 @@
+#summary this page informs about installing Smallapack on Cincom Visualworks.
+
+= Introduction =
+
+Installing Smallapack on Cincom Visualworks should be straight forward, since Store performs much of the work.
+
+
+= Details =
+
+The first thing is to have an access configured on [http://www.cincomsmalltalk.com/publicRepository Cincom public store]
+
+It is then necessary to open the store repository, select and load the Smallapack bundle.
+
+The last steps are:
+  * get a BLAS/LAPACK dynamic link library [SmallapackPrerequisiste]
+  * open the settings and configure the BLAS/LAPACK library names and path
