@@ -33,4 +33,4 @@ All code can be found on http://www.squeaksource.com/Smallapack.html and is load
 
 *The BLAS/LAPACK libraries*
 
- Some dynamic libraries must be provided [SmallapackPrerequisiste]. They must be found on the path used by Squeak FFI (I generally put the DLL in the same directory as the squeak .image). And their name must be matching the Smalltalk declaration in #moduleName (you'll have to adapt one or the other).
+ Some dynamic libraries must be provided [SmallapackPrerequisistes]. They must be found on the path used by Squeak FFI (I generally put the DLL in the same directory as the squeak .image). And their name must be matching the Smalltalk declaration in #moduleName (you'll have to adapt one or the other).
