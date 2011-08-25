@@ -9,12 +9,12 @@ A first port of Smallapack to Dolphin has been achieved.
 
 What you need to run Smallapack in Dolphin?
 
-  * Dolphin version 5.1 or X6
+  * Dolphin version 5.1 or X6 [http://www.object-arts.com/]
   * A BLAS and LAPACK dynamic libraries [SmallapackPrerequisistes]
   * Burning River Complex implementation (zip found at http://www.nls.net/mp/jarvis/Bob/DolphinGoodies.htm)
   * extensions to Complex (Smallapack-ComplexExtensions.pac)
   * the Smallapack packages (Smallapack-External.pac, Smallapack-Algorithm.pac, Smallapack-Matrix.pac, Smallapack-SUnitTests.pac)
-optionnaly, stuff that helped generating external interfaces (Smallapack-Builder.pac), VB regex being prerequisite.
+Optionnaly, stuff that helped generating external interfaces (Smallapack-Builder.pac), VB regex being prerequisite.
 
 I had to place a blas.dll and lapack.dll into Dolphin installation directory.
 
@@ -22,4 +22,4 @@ Port is roughly coming from squeak with regex editing for adapting some behavior
 
 There must still be some unused methods and unimplemented calls... and of course bugs.
 
-The packages are not guaranteed to be the latest version previously available since both my previous PC and my http://ncellier.ifrance.com site are dead...
+Warning: the packages are not guaranteed to be the latest version previously available since both my previous PC and my http://ncellier.ifrance.com site are dead...
