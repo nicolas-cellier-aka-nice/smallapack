@@ -1,0 +1,62 @@
+#summary This page explains the various Matrix classes that are available in Smallapack.
+
+= Introduction =
+
+Smallapack brings several matrix classes. Here is a review of these classes.
+
+
+= Details =
+
+All matrix classes in Smallapack are based on an abstract class named {{{AbstractMatrix}}}. This class defines a good part of the matrix protocol, but does not provide any accelerated part. It ha three instance variables:
+  * *array* which acts for storage of matrix contents;
+  * *nrow* which is the number of rows of the matrix (and is expected to be a positive integer);
+  * *ncol* which is the number of columns of the matrix (also a positive integer).
+The array is expected to be a {{{SequenceableCollection}}} of *nrow* {{{*}}} *ncol* elements. The matrix contents is stored columnwise.
+
+Under this hierarchy, there is another abstract class {{{LapackMatrix}}} and several subclasses. To understand the Smallapack matrix hierarchy, it is necessary to understand the zoo of available LAPACK matrices which is explained in the [http://www.netlib.org/lapack/lug/ LUG (LAPACK USER GUIDE)].
+
+*The Storage*
+
+LAPACK matrices can be stored under several formats:
+- a full matrix : in which case the storage has place for nrow{{{*}}}ncol elements
+- unpacked half matrix : same as above, but only the upper triangle or the lower triangle of this storage is used. This applies in case of symmetric, hermitian or triangular matrices
+- packed half : this time, the storage is restricted to store only half the matrix (diagonal included).
+- packed full : this is a variant when half storage is allocated, but contents is organized differently, with a square and two triangles.
+- band matrices : the storage is allocated to store only a few (sub/super)diagonals.
+
+The base Smallapack provides full and unpacked half matrix classes.
+Aditional packages provides packed half and band matrix classes.
+The packed full format is not yet supported, as it was added only to recent versions of LAPACK.
+
+*The data types*
+
+LAPACK provides operation for 4 different data types:
+  * single precision real matrix (prefixed with letter S) - where each element is an IEEE 754 32 bits float
+  * double precision real matrix (prefixed with letter D) - here each element is an IEEE 754 64 bits float
+  * single precision complex matrix (prefixed with letter C) - where each element is a pair of IEEE 754 32 bits floats (real part and imaginary part).
+  * double precision complex matrix (prefixed with letter Z) - where each element is a pair of IEEE 754 64 bits floats (real part and imaginary part).
+
+*The properties*
+
+LAPACK matrices can have several properties:
+  * general matrices (GE) have no special properties
+  * symmetric matrices (SY) are square matrices with a(i,j)=a(j,i)
+  * hermitian matrices (HE) are square matrices with a(i,j)=conj(a(j,i))
+  * triangular matrices (TR) are square matrices with a(i,j)=0 for i>j if lower triangular or for i<j if upper triangular.
+
+Generally, these properties are combined with specific storage: a symmetric matrix can be stored in full half format (prefixed with SY - there is a full storage allocated but only half is used), or it can be in half packed format (prefixed with SP - only the relevant part of each column is stored).
+
+* The Smallapack matrices *
+
+The base Smallapack provides a different class for each useful combination of (data type,storage,property). It follows LAPACK conventions for naming.
+
+Thus LapackDGEMatrix is a matrix of double precision real (D) with general property and storage (GE).
+
+LapackCTRMatrix is a matrix of single precision complex (C) which is square, triangular, unpacked (the full storage is allocated), and use only half the storage. Whether the matrix is upper or lower triangular however is not encoded in the class, but is a property of instance, and can be queried with *#isUpper* and *#isLower*. This design decision is somehow arbitrary, but follows the encoding of LAPACK.
+
+The main matrices of interest to begin with will be:
+- The general matrices CGE,DGE,SGE,ZGE
+- The symmetric or hermitian matrices CHE,DSY,SSY,ZHE
+- The triangular matrices CTR,DTR,STR,ZTR
+
+Note that CSY and ZSY are currently not implemented because complex symmetric matrices don't have that many interesting properties (there is almost no LAPACK algorithm available for such matrices).
