@@ -2,9 +2,12 @@
 
 = Introduction =
 
-In Smallapack, it is possible to create a new matrix from existing matrices. See [SmallapackTutorialMatrixCreating] for learning how to create your first matrix.
+In Smallapack, it is possible to create a new matrix from existing matrices. See [SmallapackTutorialMatrixCreation] for learning how to create a matrix first.
 
 
 = Details =
 
-TO BE COMPLETED
+*Extracting a sub-matrix*
+  TO BE COMPLETED
+
+*Concatenating matrices*
