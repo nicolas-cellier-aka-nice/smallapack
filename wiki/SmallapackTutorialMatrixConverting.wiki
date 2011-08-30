@@ -1,0 +1,10 @@
+#summary This page is a tutorial that explains how to create a matrix from another matrix in Smallapack.
+
+= Introduction =
+
+In Smallapack, it is possible to create a new matrix from existing matrices. See [SmallapackTutorialMatrixCreate] for learning how to create your first matrix.
+
+
+= Details =
+
+TO BE COMPLETED
