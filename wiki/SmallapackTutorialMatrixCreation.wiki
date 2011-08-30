@@ -1,0 +1,78 @@
+#summary This page is a tutorial that explains how to create a LapackMatrix in Smallapack.
+
+= Introduction =
+
+There are many possibilities available to create a {{{LapackMatrix}}}, because Smallapack is compatible with several other matrix library (Smallpack and Squeak for example).<br>
+The reader shall already be aware of available matrix classes [SmallapackTutorialMatrixClass].
+
+
+= Details =
+
+*Creating a matrix initialized with zeroes* (like _matlab_ {{{zeros(m,n)}}})
+
+Suppose you want to create a 3 rows by 2 columns matrices of double:
+  {{{LapackDGEMatrix nrow: 3 ncol: 2.}}}
+A synonym compatible with Smallpack protocol is:
+  {{{LapackDGEMatrix nRows: 3 nCols: 2.}}}
+A synonym compatible with Squeak protocol is:
+  {{{LapackDGEMatrix rows: 3 columns: 2.}}}
+Another possibility is to specify the shape with a Point or an Array:
+  {{{LapackDGEMatrix shape: 3 @ 2.}}}
+  {{{LapackDGEMatrix shape: #(3 2).}}}
+When providing a single integer, the shape will be square:
+  {{{LapackDGEMatrix shape: 3.}}}
+Also, the message *#zeros:* is synonym of *#shape:*, and so is *#dimensions:*.
+  {{{LapackDGEMatrix zeros: 3 @ 2.}}}
+In case of single row or column, just use one keyword:
+  {{{LapackDGEMatrix nrow: 3.}}}<br>
+  {{{LapackDGEMatrix ncol: 4.}}}
+
+*Creating a matrix filled with a unique value* (like _matlab_ {{{value*ones(m,n)}}})
+
+A 3 by 2 complex matrix in single precision:
+  {{{LapackCGEMatrix nrow: 3 ncol: 2 withAll: 1 - 2 i.}}}
+Squeak matrix compatible protocol #*rows:columns:element:* is also understood.<br>
+For the case of filling with 1, a message similar to *#shape:* is available:
+  {{{LapackDGEMatrix ones: 3 @ 2.}}}
+  {{{LapackDGEMatrix ones: #(3 2).}}}
+  {{{LapackDGEMatrix ones: 3.}}}
+
+*Creating an identity matrix* (like _matlab_ {{{eye(m,n)}}})
+
+Two synonyms are possible:
+  {{{LapackCGEMatrix eye: 3.}}}<br>
+  {{{LapackCGEMatrix identity: 3.}}}
+Also non square shapes are possible:
+  {{{LapackSGEMatrix eye: 2 @ 3.}}}<br>
+  {{{LapackSGEMatrix identity: #(3 2).}}}
+
+*Creating a matrix from existing sequenceable collections*
+
+It is possible to construct a matrix from a collection of collections, each representing a row or a column.
+  {{{LapackDGEMatrix rows: #( (11 12 13) (21 22 23) ).}}}<br>
+  {{{LapackDGEMatrix columns: #( (11 21 31) (12 22 32) ).}}}
+Specifying the diagonal is also possible (the matrix will be square):
+  {{{LapackDGEMatrix diagonal: #( (11 22 33) ).}}}<br>
+If the matrix a a single row or column, it can be specified too:
+  {{{LapackDGEMatrix row: #(11 12 13).}}}<br>
+  {{{LapackDGEMatrix column: #(11 21 31).}}}
+If is also possible to create a matrix from a collection with raw contents (data concatenated column after column - which is FORTRAN compatible column-major order):
+  {{{LapackDGEMatrix fromSequence: #(11 21 31 12 22 32) nrow: 3 ncol: 2.}}}
+
+*Creating a matrix with a generator block*
+
+The block is taking two parameters,the row number and column number:
+  {{{LapackDGEMatrix rows: 3 columns: 2 tabulate: [:i :j | i*10+j ].}}}
+
+*Creating a matrix with a pseudo random number generator*
+
+The generator is the one of LAPACK xLARNV and two distributions are available, a normal (mean zero, variance 1) and a uniform (between 0 and 1) distributions. Like *#shape:*, the messages take a shape parameter:
+  {{{LapackDGEMatrix randNormal: 3 @ 2.}}}<br>
+  {{{LapackDGEMatrix randUniform: #(3 2).}}}
+It is possible to control the seed of the PRNG with an Array of four integers, but *BEWARE* the seed array is MODIFIED and will contain the next seed when the message returns.
+  {{{LapackCGEMatrix randUniform: #(3 2) withSeed: (Array with: 3 with: 5 with: 7 with: 11).}}}
+Note that for a complex matrix as above both real and imaginary part are drawn.
+
+*Creating a matrix by converting, transforming, extracting another matrix*
+
+See [SmallapackTutorialMatrixConverting]
