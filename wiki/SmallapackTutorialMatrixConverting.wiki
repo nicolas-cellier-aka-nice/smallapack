@@ -17,6 +17,9 @@ Extracting several rows/columns:
    {{{(LapackSGEMatrix eye: 5 @ 4) atRows: (1 to: 3).}}}<br>
    {{{(LapackSGEMatrix eye: 4 @ 5) atColumns: #(1 2 4).}}}
 
+Extrating an arbitrary sub-matrix:
+   {{{(LapackSGEMatrix eye: 5 @ 4) atRows: (1 to: 3) atColumns: #(1 2 4).}}}<br>
+
 Extracting main diagonal:
    {{{(LapackSGEMatrix eye: 5 @ 4) diagonal.}}}
 
@@ -51,4 +54,21 @@ Concatenating the rows (like matlab {{{[top ; bottom]}}}):
    {{{(LapackSGEMatrix eye: 3 @ 2) ,, (LapackSGEMatrix eye: 2 @ 2).}}}
 
 Replicating a matrix (like matlab {{{repmat(a,m,n)}}}):
-   {{{(LapackSGEMatrix eye: 3 @ 2) replicateNrow: 5 timesNcol: 4.}}}
+   {{{(LapackSGEMatrix eye: 3 @ 2) replicateNrow: 5 timesNcol: 4.}}}<br>
+   {{{(LapackSGEMatrix eye: 3 @ 2) replicate: 5 @ 4.}}}
+
+Appending/prepending empty rows/columns:
+   {{{(LapackSGEMatrix eye: 3 @ 2) prependRows: 2.}}}<br>
+   {{{(LapackSGEMatrix eye: 3 @ 2) appendRows: 2.}}}<br>
+   {{{(LapackSGEMatrix eye: 3 @ 2) prependColumns: 1.}}}<br>
+   {{{(LapackSGEMatrix eye: 3 @ 2) appendColumns: 2.}}}
+
+*Reshaping matrices*
+
+Making a row or column matrix (the order will be columnwise as the underlying sequence):
+  {{{(LapackSGEMatrix fromSequence: #(11 21 31 12 22 32) nrow: 3 ncol: 2) asRowMatrix.}}}<br>
+  {{{(LapackSGEMatrix fromSequence: #(11 21 31 12 22 32) nrow: 3 ncol: 2) asColumnMatrix.}}}
+
+General reshaping:
+  {{{(LapackSGEMatrix eye: 3 @ 2) reshapeNrow: 2 ncol: 3.}}}<br>
+  {{{(LapackSGEMatrix eye: 3 @ 2) reshape: 2 @ 3.}}}
