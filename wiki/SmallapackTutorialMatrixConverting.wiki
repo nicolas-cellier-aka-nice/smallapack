@@ -8,6 +8,47 @@ In Smallapack, it is possible to create a new matrix from existing matrices. See
 = Details =
 
 *Extracting a sub-matrix*
-  TO BE COMPLETED
+
+Extracting a single row/column (like matlab {{{a(i,:) or a(:,j)}}}):
+   {{{(LapackSGEMatrix eye: 3 @ 2) atRow: 2.}}}<br>
+   {{{(LapackSGEMatrix eye: 3 @ 2) atColumn: 1.}}}
+
+Extracting several rows/columns:
+   {{{(LapackSGEMatrix eye: 5 @ 4) atRows: (1 to: 3).}}}<br>
+   {{{(LapackSGEMatrix eye: 4 @ 5) atColumns: #(1 2 4).}}}
+
+Extracting main diagonal:
+   {{{(LapackSGEMatrix eye: 5 @ 4) diagonal.}}}
+
+Extracting a super diagonal (above diagonal):
+   {{{(LapackSGEMatrix fromSequence: #(11 21 31 12 22 32) nrow: 3 ncol: 2) diagonalAt: 1.}}}
+
+Extracting a sub diagonal (below diagonal):
+   {{{(LapackSGEMatrix fromSequence: #(11 21 31 12 22 32) nrow: 3 ncol: 2) diagonalAt: -1.}}}
+
+Extracting a triangle:
+  {{{(LapackSGEMatrix ones: 4@3) upperTriangle.}}}<br>
+  {{{(LapackSGEMatrix ones: 4@3) lowerTriangle.}}}
+
+Extracting an upper triangle from first subdiagonal up to upper right:
+  {{{(LapackSGEMatrix ones: 4@3) upperTriangle: -1.}}}
+
+Extracting an upper triangle from first super diagonal:
+  {{{(LapackSGEMatrix ones: 4@3) upperTriangle: 1.}}}
+
+Extracting a lower triangle from first super diagonal, down to lower left:
+  {{{(LapackSGEMatrix ones: 4@3) lowerTriangle: 1.}}}
+
+Extracting a upper triangle from second sub diagonal:
+  {{{(LapackSGEMatrix ones: 4@3) lowerTriangle: -2.}}}
 
 *Concatenating matrices*
+
+Concatenating the columns (like matlab {{{[left , right]}}}):
+   {{{(LapackSGEMatrix eye: 3 @ 2) , (LapackSGEMatrix eye: 3 @ 3).}}}
+
+Concatenating the rows (like matlab {{{[top ; bottom]}}}):
+   {{{(LapackSGEMatrix eye: 3 @ 2) ,, (LapackSGEMatrix eye: 2 @ 2).}}}
+
+Replicating a matrix (like matlab {{{repmat(a,m,n)}}}):
+   {{{(LapackSGEMatrix eye: 3 @ 2) replicateNrow: 5 timesNcol: 4.}}}
