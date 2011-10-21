@@ -1,7 +1,95 @@
 | package |
 package := Package name: 'Smallapack-Matrix'.
 package paxVersion: 1;
-	basicComment: ''.
+	basicComment: 'Smallapack-Matrix hold classes for doing linear algebra
+
+Note1: we define several synonyms for compatibility with various matrix packages.
+
+Note2: matrices hold an underlying uni-dimensional array inst var, ordered column-wise FORTRAN oblige.
+
+Here is a small uncomplete overview of Matrix protocol:
+
+Different classes of Matrix:
+	There is an abstract class which can hold any kind of element (AbstractMatrix).
+	AbstractMatrix does implement limited protocol (no inversion, eigen values etc...).
+	Other classes are for storing floating point single/double precision real/complex matrices.
+	Class naming is based on LAPACK library naming.
+	1 letter tell contents (S=single real, D=double real, C=single complex, Z=double complex)
+	2 letters tell matrix property (GE=general, TR=triangular, SY=symmetric, HE=hermitian ...)
+	Thus LapackDGEMatrix is a general matrix holding double precision real numbers.
+
+Creating a matrix:
+	LapackDGEMatrix rows: 3 columns: 4.
+	LapackDGEMatrix rows: 3 columns: 4 element: 1.
+	LapackDGEMatrix rows: 3 columns: 4 tabulate: [:i :j | 10*i+j].
+	LapackDGEMatrix rows: 2 columns: 3 contents: (1 to: 6).
+	LapackDGEMatrix nrow; 3 ncol: 4.
+	LapackDGEMatrix nrow; 3 ncol: 4 withAll: 2.
+	LapackDGEMatrix nrow 3  ncol: 4 tabulate: [:i :j | 10*i+j].
+	LapackDGEMatrix fromSequence: (1 to: 6) nrow: 2 ncol: 3.
+	LapackDGEMatrix shape: 3.
+	LapackDGEMatrix shape: 3@4.
+	LapackDGEMatrix shape: #(3 4).
+	LapackDGEMatrix ones: 3@4.
+	LapackDGEMatrix zeros: 3@4.
+	LapackDGEMatrix eye: 3.
+	LapackDGEMAtrix row: #( 1 2 3 ).
+	LapackDGEMAtrix rows: #( #(1 2 3) #(4 5 6) ).
+	LapackDGEMAtrix column: #( 1 2 3 ).
+	LapackDGEMAtrix columns: #( #(1 2 3) #(4 5 6) ).
+
+Accessing an element:
+	(aMatrix at: i at: j).
+	(aMatrix atRow: i column: j).
+	(aMatrix rowAt: i columnAt: j).
+
+Accessing dimensions:
+	(aMatrix numberOfRows). "or #nrow or #nRows or #rowCount"
+	(aMatrix numberOfColumns). "or #ncol or #nCols or #columnCount"
+	(aMatrix shape). "or #dimensions"
+
+Accessing like a 1D-sequenceable collection: NOTE always columnwise, FORTRAN oblige
+	(aMatrix at: i).
+	(aMatrix at: i put: j).
+	(aMatrix size).
+
+Accessing a sub-matrix
+	(aMatrix atRow: 1).
+	(aMatrix rowAt: 1).
+	(aMatrix atColumn: 3).
+	(aMatrix columnAt: 2).
+	(LapackDGEMatrix ones: 4) diagonalAt: 0.
+	(LapackDGEMatrix ones: 4) diagonalAt: 1.
+	(LapackDGEMatrix ones: 4) diagonalAt: -1.
+	(LapackDGEMatrix ones: 4) upperTriangle: 0.
+	(LapackDGEMatrix ones: 4) upperTriangle: 1.
+	(LapackDGEMatrix ones: 4) upperTriangle: -1.
+
+Enumerating
+	do: select: reject: collect: anySatisfy: allSatisfy: sumOf: maxOf: minOf: count:
+
+Matrix enumerating
+	aMatrix rowsDo: [:arow | Transcript cr; show: arow printString].
+	aMatrix columnsDo: [:arow | Transcript cr; show: arow printString].
+
+Concatenating rows and columns:
+	(LapackDGEMatrix ones: 4) , (LapackDGEMatrix column: #(1 2 3 4)).
+	(LapackDGEMatrix ones: 4) ,, (LapackDGEMatrix row: #(1 2 3 4)).
+
+Doing operations with matrices:
+	aMatrix abs.
+	aMatrix negated
+	aMatrix transpose transposed transposeConjugate transposedConjugated.
+	aMatrix + bMatrix.
+	aMatrix - bMatrix.
+	aMatrix * bMatrix.
+	aMatrix + 1.
+	aMatrix * 2.
+
+Some algorithms:
+	aMatrix reciprocal.
+	x := a solve: b. "solve a*x=b"
+	aMatrix eigenValues.'.
 
 
 package classNames
@@ -78,7 +166,7 @@ package globalAliases: (Set new
 
 package setPrerequisites: (IdentitySet new
 	add: '..\Dolphin Smalltalk 5.1\Burning River\Complex\Complex';
-	add: '..\..\WINDOWS\Profiles\nicolas\Mes Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\Documents and Settings\cellier\Mes documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
 	add: 'Smallapack-Algorithm';
 	add: 'Smallapack-External';
 	yourself).
@@ -419,17 +507,21 @@ absMax	"Note: for matrices, this does not have norm properties"	^self maxOf: 
 
 adaptToComplex: rcvr andSend: selector 	"If I am involved in arithmetic with a Complex."	selector = #* ifTrue: [^self asComplexMatrix scaledByComplex: rcvr].	^self asComplexMatrix collect:  [:each | rcvr perform: selector with: each]!
 
-adaptToFloat: rcvr andCompare: selector 	"If I am involved in arithmetic with a Fraction."	^self adaptToNumber: rcvr andSend: selector !
+adaptToFloat: rcvr andCompare: selector 	"If I am involved in comparison with a Float."
+	^self adaptToNumber: rcvr andSend: selector !
 
 adaptToFloat: rcvr andSend: selector 	"If I am involved in arithmetic with a Float."	^self adaptToNumber: rcvr andSend: selector !
 
 adaptToFraction: rcvr andSend: selector 	"If I am involved in arithmetic with a Fraction."	^self adaptToNumber: rcvr andSend: selector !
 
-adaptToInteger: rcvr andCompare: selector 	"If I am involved in arithmetic with a Fraction."	^self adaptToNumber: rcvr andSend: selector !
+adaptToInteger: rcvr andCompare: selector 
+	"If I am involved in comparison with an Integer."
+
+	^self adaptToNumber: rcvr andSend: selector!
 
 adaptToInteger: rcvr andSend: selector 	"If I am involved in arithmetic with an Integer."	^self adaptToNumber: rcvr andSend: selector !
 
-adaptToNumber: rcvr andSend: selector 	"If I am involved in arithmetic with a Fraction."	selector = #* ifTrue: [^self scaledByNumber: rcvr].	^self collect:  [:each | rcvr perform: selector with: each]!
+adaptToNumber: rcvr andSend: selector 	"If I am involved in arithmetic with a Number."	selector = #* ifTrue: [^self scaledByNumber: rcvr].	^self collect:  [:each | rcvr perform: selector with: each]!
 
 adaptToScaledDecimal: rcvr andSend: selector 	"If I am involved in arithmetic with a ScaledDecimal."	^self adaptToNumber: rcvr andSend: selector !
 
@@ -463,7 +555,8 @@ asArray	| result |	result := array asArray.	^result == array ifTrue: [result 
 
 asBag	| aBag |	aBag := Bag new.	self do: [:each | aBag add: each].	^aBag!
 
-asColumnMatrix	^ncol = 1 		ifTrue: [self]		ifFalse: 			[| res |			res := self class nrow: self size.			1 to: self size do: [:i | res at: i put: (self at: i)]]!
+asColumnMatrix	^ncol = 1 		ifTrue: [self]		ifFalse: 			[| res |			res := self class nrow: self size.			1 to: self size do: [:i | res at: i put: (self at: i)].
+			res]!
 
 asDoubleComplexMatrix	^self asDoublePrecisionComplexMatrix!
 
@@ -481,7 +574,8 @@ asMatrix	^self!
 
 asOrderedCollection	| anOrderedCollection |	anOrderedCollection := OrderedCollection new: self size.	self do: [:each | anOrderedCollection addLast: each].	^anOrderedCollection!
 
-asRowMatrix	^nrow = 1 		ifTrue: [self]		ifFalse: 			[| res |			res := self class ncol: self size.			1 to: self size do: [:i | res at: i put: (self at: i)]]!
+asRowMatrix	^nrow = 1 		ifTrue: [self]		ifFalse: 			[| res |			res := self class ncol: self size.			1 to: self size do: [:i | res at: i put: (self at: i)].
+			res]!
 
 asSet	| aSet |	aSet := Set new.	self do: [:each | aSet add: each].	^aSet!
 
@@ -495,7 +589,7 @@ asSortedCollection: aBlock 	| aSortedCollection |	aSortedCollection := SortedC
 
 at: anInteger	"Access the underlying array	should be overloaded if packed storage is used"	^array at: anInteger!
 
-at: rowIndex at: columnIndex 	"Squak compatible"	^self rowAt: rowIndex columnAt: columnIndex!
+at: rowIndex at: columnIndex 	"Squeak compatible"	^self rowAt: rowIndex columnAt: columnIndex!
 
 at: r at: c ifInvalid: v	"If r,c is a valid index for this matrix, answer the corresponding element.	 Otherwise, answer v value.	Squeak compatible - I added the message v value: this enables using aBlock"	(r between: 1 and: nrow) ifFalse: [^v value].	(c between: 1 and: ncol) ifFalse: [^v value].	^self rowAt: r columnAt: c!
 
@@ -545,6 +639,14 @@ atRow: rowIndex putSequence: aCollection 	"synonym"	^self rowAt: rowIndex put
 
 atRows: rowsIndexCollection 	| res j |	res := self class allocateNrow: rowsIndexCollection size ncol: ncol.	j := 0.	rowsIndexCollection 		do: [:i | res rowAt: (j := j + 1) putSequence: (self rowAt: i)].	^res!
 
+atRows: rowsIndexCollection atColumns: columnIndexCollection
+	| res |
+	res := self class allocateNrow: rowsIndexCollection size ncol: columnIndexCollection size.
+	columnIndexCollection keysAndValuesDo: [:j :jCol |
+		rowsIndexCollection  keysAndValuesDo: [:i :iRow |
+			res rowAt: i columnAt: j put: (self rowAt: iRow columnAt: jCol)]].
+	^res!
+
 capacity	^nrow * ncol!
 
 collect: aBlock 	| result |	result := self class allocateNrow: nrow ncol: ncol.	1 to: self size		do: [:i | result at: i put: (aBlock value: (self at: i))].	^result!
@@ -591,7 +693,23 @@ cumulativeSum: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue:
 
 diagonal	"Answer a Column Matrix with elements extracted from my diagonal.	This is not compatible with Matlab function diag.	Matlab code would be:		^self isVector			ifTrue: [self clas diagonal: self]			ifFalse: [self diagonalAt: 0]"	^self diagonalAt: 0!
 
-diagonalAt: index 	"Answer a Column Matrix with elements extracted from :	- my diagonal if index is 0	- super diagonal (upper right) number index if index > 0	- sub diagonal (lower left) number index negated if index < 0	This is not compatible with Matlab function diag"	| diag |	index >= 0 		ifTrue: 			[diag := self class nrow: (self diagonalSizeAt: index).			1 to: diag size				do: [:i | diag at: i put: (self rowAt: i columnAt: i + index)]]		ifFalse: 			[diag := self class nrow: (self diagonalSizeAt: index).			1 to: diag size				do: [:i | diag at: i put: (self rowAt: i - index columnAt: i)]].	^diag!
+diagonalAt: index 
+	"Answer a Column Matrix with elements extracted from :
+	- my diagonal if index is 0
+	- super diagonal (upper right) number index if index > 0
+	- sub diagonal (lower left) number index negated if index < 0
+	This is not compatible with Matlab function diag"
+
+	| diag |
+	diag := self class nrow: (self diagonalSizeAt: index).
+	index >= 0 
+		ifTrue: 
+			[1 to: diag size
+				do: [:i | diag at: i put: (self rowAt: i columnAt: i + index)]]
+		ifFalse: 
+			[1 to: diag size
+				do: [:i | diag at: i put: (self rowAt: i - index columnAt: i)]].
+	^diag!
 
 diagonalSizeAt: index 	"answer the size of a diagonal"	^index >= 0 		ifTrue: [nrow min: ncol - index]		ifFalse: [nrow + index min: ncol]!
 
@@ -615,7 +733,7 @@ dimensions	^Array with: nrow with: ncol!
 
 do: aBlock 	"Evaluate aBlock with each of the receiver's elements as the argument."	1 to: self size do: [:i | aBlock value: (self at: i)]!
 
-dotProduct: n elementsIncrement: incx with: aMatrix increment: incy 	"BLAS primitve xDOT - naive implementation"	^(1 to: n) sum: 			[:i | 			(self at: (i - 1) * incx + 1) 				* (aMatrix at: (i - 1) * incy + 1)]!
+dotProduct: n elementsIncrement: incx with: aMatrix increment: incy 	"BLAS primitve xDOT - naive implementation"	^(1 to: n) sumOf: 			[:i | 			(self at: (i - 1) * incx + 1) 				* (aMatrix at: (i - 1) * incy + 1)]!
 
 elementwisePowerFromNumber: aNumber 	| res |	res := self class allocateNrow: nrow ncol: ncol.	1 to: ncol		do: 			[:jc | 			1 to: nrow				do: 					[:ir | 					res 						rowAt: ir						columnAt: jc						put: aNumber ** (res rowAt: ir columnAt: jc)]].	^res!
 
@@ -637,11 +755,11 @@ elementwiseQuotientWithNumber: aNumber 	| res |	res := self class allocateNrow
 
 fill: n elementsWithStride: incy withSelfPlusScalar: alpha timesVector: aMatrix stride: incx 	"BLAS primitve xAXPY - naive implementation"	1 to: n		do: 			[:i | 			self at: (i - 1) * incx + 1				put: (self at: (i - 1) * incx + 1) * alpha 						+ (aMatrix at: (i - 1) * incy + 1)]!
 
-fill: m elementsWithStride: incy withSelfScaledBy: beta plusScalar: alpha timesMatrix: a transposed: trans timesVector: x length: n stride: incx 	"BLAS primitve xGEMV - naive implementation"	trans 		ifTrue: 			[1 to: m				do: 					[:i | 					self at: (i - 1) * incy + 1						put: alpha * ((1 to: n) 										sum: [:j | (a rowAt: j columnAt: i) * (x at: (j - 1) * incx + 1)]) 								+ (beta * (self at: (i - 1) * incy + 1))]]		ifFalse: 			[1 to: m				do: 					[:i | 					self at: (i - 1) * incy + 1						put: alpha * ((1 to: n) 										sum: [:j | (a rowAt: i columnAt: j) * (x at: (j - 1) * incx + 1)]) 								+ (beta * (self at: (i - 1) * incy + 1))]]!
+fill: m elementsWithStride: incy withSelfScaledBy: beta plusScalar: alpha timesMatrix: a transposed: trans timesVector: x length: n stride: incx 	"BLAS primitve xGEMV - naive implementation"	trans 		ifTrue: 			[1 to: m				do: 					[:i | 					self at: (i - 1) * incy + 1						put: alpha * ((1 to: n) 										sumOf: [:j | (a rowAt: j columnAt: i) * (x at: (j - 1) * incx + 1)]) 								+ (beta * (self at: (i - 1) * incy + 1))]]		ifFalse: 			[1 to: m				do: 					[:i | 					self at: (i - 1) * incy + 1						put: alpha * ((1 to: n) 										sumOf: [:j | (a rowAt: i columnAt: j) * (x at: (j - 1) * incx + 1)]) 								+ (beta * (self at: (i - 1) * incy + 1))]]!
 
 fillM: m byN: n withScalar: alpha timesColumnVector: x stride: incx timesRowVector: y stride: incy 	"Blas library xGERx 	fill mxn elements of self from following m-length x and a n-length y vector product		alpha*x*transpose(y)"	1 to: n		do: 			[:j | 			1 to: m				do: 					[:i | 					self 						rowAt: i						columnAt: j						put: alpha * (x at: (i - 1) * incx + 1) 								* (y at: (j - 1) * incy + 1)]]!
 
-fillM: m byN: n withSelfScaledBy: beta plusScalar: alpha timesLeftMatrix: a transposed: transa timesRightMatrix: b transposed: transb length: k 	"BLAS primitve xGEMM - naive implementation"	transa 		ifTrue: 			[transb 				ifTrue: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sum: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: j columnAt: kk)]) 												+ (beta * (self rowAt: i columnAt: j))]]]				ifFalse: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sum: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: kk columnAt: j)]) 												+ (beta * (self rowAt: i columnAt: j))]]]]		ifFalse: 			[transb 				ifTrue: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sum: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: j columnAt: kk)]) 												+ (beta * (self rowAt: i columnAt: j))]]]				ifFalse: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sum: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: kk columnAt: j)]) 												+ (beta * (self rowAt: i columnAt: j))]]]]!
+fillM: m byN: n withSelfScaledBy: beta plusScalar: alpha timesLeftMatrix: a transposed: transa timesRightMatrix: b transposed: transb length: k 	"BLAS primitve xGEMM - naive implementation"	transa 		ifTrue: 			[transb 				ifTrue: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sumOf: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: j columnAt: kk)]) 												+ (beta * (self rowAt: i columnAt: j))]]]				ifFalse: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sumOf: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: kk columnAt: j)]) 												+ (beta * (self rowAt: i columnAt: j))]]]]		ifFalse: 			[transb 				ifTrue: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sumOf: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: j columnAt: kk)]) 												+ (beta * (self rowAt: i columnAt: j))]]]				ifFalse: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sumOf: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: kk columnAt: j)]) 												+ (beta * (self rowAt: i columnAt: j))]]]]!
 
 findMax	"answer the index of the max of all elements  "	| max index |	self isEmpty ifTrue: [^0].	index := 1.	max := self at: 1.	2 to: self size		do: 			[:i | 			| tmp |			(tmp := self at: i) > max 				ifTrue: 					[max := tmp.					index := i]].	^index!
 
@@ -656,6 +774,21 @@ first	^self at: 1!
 fromColumn: jStart toColumn: jStop by: jStep	^self atColumns: (jStart to: jStop by: jStep)!
 
 fromRow: iStart toRow: iStop by: iStep	^self atRows: (iStart to: iStop by: iStep)!
+
+fromRow: irStart toRow: irStop fromColumn: jcStart toColumn: jcStop 
+	"Extract a contiguous sub-matrix"
+
+	| nr nc result |
+	nr := irStop - irStart + 1.
+	nc := jcStop - jcStart + 1.
+	result := self class nrow: nr ncol: nc.
+	result 
+		copy: nr
+		rowsStartingAt: irStart
+		and: nc
+		columnsStartingAt: jcStart
+		from: self.
+	^result!
 
 generalizedAt: index 	^index indexAccessInto: self!
 
@@ -753,13 +886,15 @@ nCols	"Synonym Smallpack compatible"	^ncol!
 
 negated	^self collect: [:e | e negated]!
 
-norm1	^(1 to: ncol) 		maxOf: [:jc | (1 to: nrow) sum: [:ir | (self rowAt: ir columnAt: jc) abs]]!
+norm1	^(1 to: ncol) 		maxOf: [:jc | (1 to: nrow) sumOf: [:ir | (self rowAt: ir columnAt: jc) abs]]!
 
-norm2	^self singularValues max!
+norm2	^self isVector
+		ifTrue: [self vectorNorm2]
+		ifFalse: [self singularValues max]!
 
 normFrobenius	^self vectorNorm2!
 
-normInfinity	^(1 to: nrow) 		maxOf: [:ir | (1 to: ncol) sum: [:jc | (self rowAt: ir columnAt: jc) abs]]!
+normInfinity	^(1 to: nrow) 		maxOf: [:ir | (1 to: ncol) sumOf: [:jc | (self rowAt: ir columnAt: jc) abs]]!
 
 nrow	^nrow!
 
@@ -779,7 +914,10 @@ printOn: aStream 	aStream		nextPut: $(;		nextPutAll: self class name;		space
 
 product	| prod |	self isEmpty ifTrue: [^1].	prod := self at: 1.	2 to: self size do: [:i | prod := prod * (self at: i)].	^prod!
 
-product: aBlock 	| product |	self isEmpty ifTrue: [^1].	product := aBlock value: (self at: 1).	2 to: self size		do: [:i | product := product * (aBlock value: (self at: i))].	^product!
+product: aBlock 
+	"backward compatibility - synonym of productOf:"
+	| product |	#deprecated.
+	^self productOf: aBlock!
 
 product: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: 1.			1 to: nrow				do: 					[:ir | 					res at: ir						put: ((1 to: ncol) 								product: [:jc | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: 1 ncol: ncol.			1 to: ncol				do: 					[:jc | 					res at: jc						put: ((1 to: nrow) 								product: [:ir | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
 
@@ -803,19 +941,59 @@ productFromMatrix: aMatrix 	"Algorithm ^(aMatrix productMatrixWithMatrix: self)
 
 productMatrixAtRightWithMatrix: aMatrix 	"Answer the matrix product		aMatrix * self	This can be optimized in special cases of hermitian or triangular Matrix	and should be overloaded in these subclasses"	^aMatrix productMatrixWithMatrix: self!
 
-productMatrixTransposeWithColumnVector: aVector 	"Matrix transpose * vector	naive algorithm"	| result |	result := self class allocateNrow: nrow ncol: 1.	1 to: nrow		do: 			[:ir | 			result at: ir				put: ((1 to: ncol) 						sum: [:jc | (self rowAt: jc columnAt: ir) * (aVector at: jc)])].	^result!
+productMatrixTransposeWithColumnVector: aVector 	"Matrix transpose * vector	naive algorithm"	| result |	result := self class allocateNrow: nrow ncol: 1.	1 to: nrow		do: 			[:ir | 			result at: ir				put: ((1 to: ncol) 						sumOf: [:jc | (self rowAt: jc columnAt: ir) * (aVector at: jc)])].	^result!
 
-productMatrixWithColumnVector: aVector 	"Matrix * vector	naive algorithm"	| result |	result := self class allocateNrow: nrow ncol: 1.	1 to: nrow		do: 			[:ir | 			result at: ir				put: ((1 to: ncol) 						sum: [:jc | (self rowAt: ir columnAt: jc) * (aVector at: jc)])].	^result!
+productMatrixWithColumnVector: aVector 	"Matrix * vector	naive algorithm"	| result |	result := self class allocateNrow: nrow ncol: 1.	1 to: nrow		do: 			[:ir | 			result at: ir				put: ((1 to: ncol) 						sumOf: [:jc | (self rowAt: ir columnAt: jc) * (aVector at: jc)])].	^result!
 
-productMatrixWithMatrix: aMatrix 	| a b c iA iB iC |	a := self.	b := aMatrix.	c := aMatrix class allocateNrow: a nrow ncol: b ncol.	iC := 0.	iB := 1.	1 to: b ncol		do: 			[:jc | 			iA := 1.			1 to: a nrow				do: 					[:ir | 					| cij kA kB |					cij := (a at: (kA := iA)) * (b at: (kB := iB)).					2 to: b nrow						do: [:k | cij := cij + ((a at: (kA := kA + a nrow)) * (b at: (kB := kB + 1)))].					c at: (iC := iC + 1) put: cij.					iA := iA + 1].			iB := iB + b nrow].	^c!
+productMatrixWithMatrix: aMatrix 
+	| a b c iB iC |
+	a := self.
+	b := aMatrix.
+	c := aMatrix class allocateNrow: a nrow ncol: b ncol.
+	iC := 0.
+	iB := 1.
+	1 to: b ncol
+		do: 
+			[:jc | 
+			1 to: a nrow
+				do: 
+					[:iA | 
+					| cij kA kB |
+					cij := (a at: (kA := iA)) * (b at: (kB := iB)).
+					2 to: b nrow
+						do: [:k | cij := cij + ((a at: (kA := kA + a nrow)) * (b at: (kB := kB + 1)))].
+					c at: (iC := iC + 1) put: cij].
+			iB := iB + b nrow].
+	^c!
 
-productRowVectorWithColumnVector: aVector 	"Answer the result of operation (a dot product)		leftVector transpose * aVector	where		leftVector transpose = self"	| res |	res := self class allocateNrow: 1 ncol: 1.	res at: 1		put: ((1 to: self size) sum: [:i | (self at: i) * (aVector at: i)]).	^res!
+productOf: aBlock 
+	"Evaluate the product of all elements"
+	| product |
+	self isEmpty ifTrue: [^1].	product := aBlock value: (self at: 1).	2 to: self size		do: [:i | product := product * (aBlock value: (self at: i))].	^product!
 
-productRowVectorWithMatrix: aMatrix 	"Vector * Matrix	naive algorithm"	| result |	result := self class allocateNrow: 1 ncol: aMatrix ncol.	1 to: aMatrix ncol		do: 			[:jc | 			result at: jc				put: ((1 to: aMatrix nrow) 						sum: [:ir | (self at: ir) * (aMatrix rowAt: ir columnAt: jc)])].	^result!
+productRowVectorWithColumnVector: aVector 	"Answer the result of operation (a dot product)		leftVector transpose * aVector	where		leftVector transpose = self"	| res |	res := self class allocateNrow: 1 ncol: 1.	res at: 1		put: ((1 to: self size) sumOf: [:i | (self at: i) * (aVector at: i)]).	^res!
+
+productRowVectorWithMatrix: aMatrix 	"Vector * Matrix	naive algorithm"	| result |	result := self class allocateNrow: 1 ncol: aMatrix ncol.	1 to: aMatrix ncol		do: 			[:jc | 			result at: jc				put: ((1 to: aMatrix nrow) 						sumOf: [:ir | (self at: ir) * (aMatrix rowAt: ir columnAt: jc)])].	^result!
 
 realPart	^self collect: [:e | e real]!
 
+replicate: newDimensions
+	^self class shape: newDimensions do: [:nr :nc | self replicateNrow: nr timesNcol: nc]!
+
 replicateNrow: nr timesNcol: nc 	"build a Matrix by replicating self in rows and in columns	Analogous to Matlab repmat"	| res |	res := self class allocateNrow: nrow * nr ncol: ncol * nc.	1 to: nc		do: 			[:jc | 			1 to: nr				do: 					[:ir | 					res 						copy: nrow rowsStartingAt: (ir - 1) * nrow + 1						and: ncol columnsStartingAt: (jc - 1) * ncol + 1						from: self]].	^res!
+
+reshape: newDimensions
+	^self class shape: newDimensions do: [:nr :nc | self reshapeNrow: nr ncol: nc]!
+
+reshapeNrow: nr ncol: nc
+	nrow * ncol = (nr * nc) ifFalse: [self error: 'cannot reshape with a different size'].
+	^(nrow = nr and: [ncol = nc])
+		ifTrue: [self]
+		ifFalse: 
+			[| res |
+			res := self class nrow: nr ncol: nc.
+			1 to: self size do: [:i | res at: i put: (self at: i)].
+			res]!
 
 respondsToArithmetic	^true!
 
@@ -851,7 +1029,80 @@ setOffDiagonal: alpha diagonal: beta 	self atAllPut: alpha.	1 to: (nrow min: n
 
 setToEye	"Initialize diagonal to 1, off diagonal to 0"	self setOffDiagonal: 0 diagonal: 1!
 
+singularValues
+	^self subclassResponsibility!
+
 size	^self capacity!
+
+smallLowerTriangle: ind 
+	"return small lower triangle matrix starting with super-diagonal ind"
+
+	| lower |
+	ind <= 0
+		ifTrue: [
+			lower := self class nrow: (nrow + ind max: 0) ncol: (ncol min: (nrow + ind max: 0)).
+			1 to: lower ncol
+				do: 
+					[:j | 
+					1 to: lower nrow
+						do: 
+							[:i | 
+							j <= i 
+								ifTrue: 
+									[lower 
+										rowAt: i
+										columnAt: j
+										put: (self rowAt: i - ind columnAt: j)]]]]
+		ifFalse: [
+			lower := self class nrow: nrow ncol: (ncol min: nrow + ind).
+			1 to: lower ncol
+				do: 
+					[:j | 
+					1 to: lower nrow
+						do: 
+							[:i | 
+							j - ind <= i 
+								ifTrue: 
+									[lower 
+										rowAt: i
+										columnAt: j
+										put: (self rowAt: i columnAt: j)]]]].
+	^lower	!
+
+smallUpperTriangle: ind 
+	"return small upper triangle matrix starting with super-diagonal ind"
+
+	| upper |
+	ind >= 0
+		ifTrue: [
+			upper := self class nrow: (nrow min: (ncol - ind max: 0)) ncol: (ncol - ind max: 0).
+			1 to: upper ncol
+				do: 
+					[:j | 
+					1 to: upper nrow
+						do: 
+							[:i | 
+							j >= i 
+								ifTrue: 
+									[upper 
+										rowAt: i
+										columnAt: j
+										put: (self rowAt: i columnAt: j + ind)]]]]
+		ifFalse: [
+			upper := self class nrow: (nrow min: ncol - ind) ncol: ncol.
+			1 to: upper ncol
+				do: 
+					[:j | 
+					1 to: upper nrow
+						do: 
+							[:i | 
+							j - ind >= i 
+								ifTrue: 
+									[upper 
+										rowAt: i
+										columnAt: j
+										put: (self rowAt: i columnAt: j)]]]].
+	^upper	!
 
 subtractFromFloat: aFloat 	^self collect: [:each | aFloat - each]!
 
@@ -863,9 +1114,12 @@ subtractFromScaledDecimal: aScaledDecimal	^self collect: [:each | aScaledDecima
 
 sum	| sum |	self isEmpty ifTrue: [^0].	sum := self at: 1.	2 to: self size do: [:i | sum := sum + (self at: i)].	^sum!
 
-sum: aBlock 	| sum |	self isEmpty ifTrue: [^0].	sum := aBlock value: (self at: 1).	2 to: self size do: [:i | sum := sum + (aBlock value: (self at: i))].	^sum!
+sum: aBlock 
+	"backward compatibility - synonym of sumOf:"
 
-sum: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: 1.			1 to: nrow				do: 					[:ir | 					res at: ir						put: ((1 to: ncol) 								sum: [:jc | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: 1 ncol: ncol.			1 to: ncol				do: 					[:jc | 					res at: jc						put: ((1 to: nrow) 								sum: [:ir | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
+	#deprecated.	^self sumOf: aBlock!
+
+sum: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: 1.			1 to: nrow				do: 					[:ir | 					res at: ir						put: ((1 to: ncol) 								sumOf: [:jc | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: 1 ncol: ncol.			1 to: ncol				do: 					[:jc | 					res at: jc						put: ((1 to: nrow) 								sumOf: [:ir | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
 
 sumFromComplex: aComplex 	^self collect: [:each | aComplex + each]!
 
@@ -882,6 +1136,8 @@ sumFromInteger: anInteger 	^self collect: [:each | anInteger + each]!
 sumFromLapackMatrix: aLapackMatrix	^self sumFromMatrix: aLapackMatrix asGeneralMatrix!
 
 sumFromMatrix: aMatrix 	| res |	(nrow = aMatrix nrow and: [ncol = aMatrix ncol]) 		ifFalse: [^self error: 'matrix dimensions are not compatible'].	res := self class allocateNrow: nrow ncol: ncol.	1 to: self size		do: [:i | res at: i put: (aMatrix at: i) + (self at: i)].	^res!
+
+sumOf: aBlock 	| sum |	self isEmpty ifTrue: [^0].	sum := aBlock value: (self at: 1).	2 to: self size do: [:i | sum := sum + (aBlock value: (self at: i))].	^sum!
 
 swap: r1 at: c1 with: r2 at: c2 	"Squeak compatible protocol"	^self swapRowAt: r1 columnAt: c1 withRowAt: r2 columnAt: c2!
 
@@ -903,9 +1159,9 @@ upperTriangle	"return upper triangle matrix"	^self upperTriangle: 0!
 
 upperTriangle: ind 	"return upper triangle matrix starting with super-diagonal ind"	| upper |	upper := self copy.	1 to: ncol		do: 			[:j | 			1 to: nrow				do: 					[:i | 					j - ind < i 						ifTrue: 							[upper 								rowAt: i								columnAt: j								put: 0]]].	^upper!
 
-vectorNorm1	^self sum: [:e | e abs]!
+vectorNorm1	^self sumOf: [:e | e abs]!
 
-vectorNorm2	"Naive algorithm - not protected against underflow/overflow"	^(self sum: [:e | e abs squared]) sqrt!
+vectorNorm2	"Naive algorithm - not protected against underflow/overflow"	^(self sumOf: [:e | e abs squared]) sqrt!
 
 vectorNormFrobenius	^self vectorNorm2!
 
@@ -924,268 +1180,278 @@ withIndicesDo: aBlock 	"Squeak compatible message	BEWARE this is column-major 
 withIndicesInject: start into: aBlock 	"Squeak compatible message	BEWARE this is column-major ordered"	| current |	current := start.	1 to: ncol		do: 			[:column | 			1 to: nrow				do: 					[:row | 					"NOT EFFICIENT AT ALL... CREATE AN ARRAY AT EACH STEP					SHOULD CONSIDER ADDING value:value:value:value: EXTENSION IN VW"					current := aBlock valueWithArguments: (Array 										with: current										with: (self rowAt: row columnAt: column)										with: row										with: column)]].	^current!
 
 zero	^self class nrow: nrow ncol: ncol! !
-!AbstractMatrix categoriesFor: #-!public! !
-!AbstractMatrix categoriesFor: #*!public! !
-!AbstractMatrix categoriesFor: #,!public! !
-!AbstractMatrix categoriesFor: #,,!public! !
-!AbstractMatrix categoriesFor: #+!public! !
-!AbstractMatrix categoriesFor: #=!public! !
-!AbstractMatrix categoriesFor: #abs!public! !
-!AbstractMatrix categoriesFor: #absMax!public! !
-!AbstractMatrix categoriesFor: #adaptToComplex:andSend:!public! !
-!AbstractMatrix categoriesFor: #adaptToFloat:andCompare:!public! !
-!AbstractMatrix categoriesFor: #adaptToFloat:andSend:!public! !
-!AbstractMatrix categoriesFor: #adaptToFraction:andSend:!public! !
-!AbstractMatrix categoriesFor: #adaptToInteger:andCompare:!public! !
-!AbstractMatrix categoriesFor: #adaptToInteger:andSend:!public! !
-!AbstractMatrix categoriesFor: #adaptToNumber:andSend:!public! !
-!AbstractMatrix categoriesFor: #adaptToScaledDecimal:andSend:!public! !
-!AbstractMatrix categoriesFor: #addToFloat:!public! !
-!AbstractMatrix categoriesFor: #addToFraction:!public! !
-!AbstractMatrix categoriesFor: #addToInteger:!public! !
-!AbstractMatrix categoriesFor: #addToScaledDecimal:!public! !
-!AbstractMatrix categoriesFor: #allSatisfy:!public! !
-!AbstractMatrix categoriesFor: #anySatisfy:!public! !
-!AbstractMatrix categoriesFor: #appendColumns:!public! !
-!AbstractMatrix categoriesFor: #appendRows:!public! !
-!AbstractMatrix categoriesFor: #arrayAt:!public! !
-!AbstractMatrix categoriesFor: #arrayAt:put:!public! !
-!AbstractMatrix categoriesFor: #arrayOffsetAtRow:atColumn:!public! !
-!AbstractMatrix categoriesFor: #arraySize!public! !
-!AbstractMatrix categoriesFor: #asAbstractMatrix!public! !
-!AbstractMatrix categoriesFor: #asArray!public! !
-!AbstractMatrix categoriesFor: #asBag!public! !
-!AbstractMatrix categoriesFor: #asColumnMatrix!public! !
-!AbstractMatrix categoriesFor: #asDoubleComplexMatrix!public! !
-!AbstractMatrix categoriesFor: #asDoubleMatrix!public! !
-!AbstractMatrix categoriesFor: #asDoublePrecisionComplexMatrix!public! !
-!AbstractMatrix categoriesFor: #asDoublePrecisionMatrix!public! !
-!AbstractMatrix categoriesFor: #asFloatComplexMatrix!public! !
-!AbstractMatrix categoriesFor: #asFloatMatrix!public! !
-!AbstractMatrix categoriesFor: #asMatrix!public! !
-!AbstractMatrix categoriesFor: #asOrderedCollection!public! !
-!AbstractMatrix categoriesFor: #asRowMatrix!public! !
-!AbstractMatrix categoriesFor: #asSet!public! !
-!AbstractMatrix categoriesFor: #asSinglePrecisionComplexMatrix!public! !
-!AbstractMatrix categoriesFor: #asSinglePrecisionMatrix!public! !
-!AbstractMatrix categoriesFor: #asSortedCollection!public! !
-!AbstractMatrix categoriesFor: #asSortedCollection:!public! !
-!AbstractMatrix categoriesFor: #at:!public! !
-!AbstractMatrix categoriesFor: #at:at:!public! !
-!AbstractMatrix categoriesFor: #at:at:ifInvalid:!public! !
-!AbstractMatrix categoriesFor: #at:at:incrementBy:!public! !
-!AbstractMatrix categoriesFor: #at:at:put:!public! !
-!AbstractMatrix categoriesFor: #at:put:!public! !
-!AbstractMatrix categoriesFor: #atAllPut:!public! !
-!AbstractMatrix categoriesFor: #atColumn:!public! !
-!AbstractMatrix categoriesFor: #atColumn:put:!public! !
-!AbstractMatrix categoriesFor: #atColumn:putAll:!public! !
-!AbstractMatrix categoriesFor: #atColumn:putSequence:!public! !
-!AbstractMatrix categoriesFor: #atColumns:!public! !
-!AbstractMatrix categoriesFor: #atInteger:!public! !
-!AbstractMatrix categoriesFor: #atInteger:andInteger:!public! !
-!AbstractMatrix categoriesFor: #atInteger:andInteger:put:!public! !
-!AbstractMatrix categoriesFor: #atInteger:put:!public! !
-!AbstractMatrix categoriesFor: #atIntervalFrom:to:by:!public! !
-!AbstractMatrix categoriesFor: #atPoint:!public! !
-!AbstractMatrix categoriesFor: #atPoint:put:!public! !
-!AbstractMatrix categoriesFor: #atRow:!public! !
-!AbstractMatrix categoriesFor: #atRow:column:!public! !
-!AbstractMatrix categoriesFor: #atRow:column:put:!public! !
-!AbstractMatrix categoriesFor: #atRow:put:!public! !
-!AbstractMatrix categoriesFor: #atRow:putAll:!public! !
-!AbstractMatrix categoriesFor: #atRow:putSequence:!public! !
-!AbstractMatrix categoriesFor: #atRows:!public! !
-!AbstractMatrix categoriesFor: #capacity!public! !
-!AbstractMatrix categoriesFor: #collect:!public! !
-!AbstractMatrix categoriesFor: #columnAt:!public! !
-!AbstractMatrix categoriesFor: #columnAt:putAll:!public! !
-!AbstractMatrix categoriesFor: #columnAt:putSequence:!public! !
-!AbstractMatrix categoriesFor: #columnCount!public! !
-!AbstractMatrix categoriesFor: #columns!public! !
-!AbstractMatrix categoriesFor: #columns:!public! !
-!AbstractMatrix categoriesFor: #columnsDo:!public! !
-!AbstractMatrix categoriesFor: #concatColumnsFromLapackMatrix:!public! !
-!AbstractMatrix categoriesFor: #concatColumnsFromMatrix:!public! !
-!AbstractMatrix categoriesFor: #concatColumnsWithMatrix:!public! !
-!AbstractMatrix categoriesFor: #concatRowsFromLapackMatrix:!public! !
-!AbstractMatrix categoriesFor: #concatRowsFromMatrix:!public! !
-!AbstractMatrix categoriesFor: #concatRowsWithMatrix:!public! !
-!AbstractMatrix categoriesFor: #conjugated!public! !
-!AbstractMatrix categoriesFor: #copy:elementsFrom:sourceIncrement:destIncrement:!public! !
-!AbstractMatrix categoriesFor: #copy:elementsFrom:sourceOffset:sourceIncrement:destOffset:destIncrement:!public! !
-!AbstractMatrix categoriesFor: #copy:rowsStartingAt:and:columnsStartingAt:from:!public! !
-!AbstractMatrix categoriesFor: #count:!public! !
-!AbstractMatrix categoriesFor: #cumulativeProduct:dimension:!public! !
-!AbstractMatrix categoriesFor: #cumulativeSum:dimension:!public! !
-!AbstractMatrix categoriesFor: #diagonal!public! !
-!AbstractMatrix categoriesFor: #diagonalAt:!public! !
-!AbstractMatrix categoriesFor: #diagonalSizeAt:!public! !
-!AbstractMatrix categoriesFor: #differenceFromComplex:!public! !
-!AbstractMatrix categoriesFor: #differenceFromDouble:!public! !
-!AbstractMatrix categoriesFor: #differenceFromFixedPoint:!public! !
-!AbstractMatrix categoriesFor: #differenceFromFloat:!public! !
-!AbstractMatrix categoriesFor: #differenceFromFraction:!public! !
-!AbstractMatrix categoriesFor: #differenceFromInteger:!public! !
-!AbstractMatrix categoriesFor: #differenceFromLapackMatrix:!public! !
-!AbstractMatrix categoriesFor: #differenceFromMatrix:!public! !
-!AbstractMatrix categoriesFor: #dimensions!public! !
-!AbstractMatrix categoriesFor: #do:!public! !
-!AbstractMatrix categoriesFor: #dotProduct:elementsIncrement:with:increment:!public! !
-!AbstractMatrix categoriesFor: #elementwisePowerFromNumber:!public! !
-!AbstractMatrix categoriesFor: #elementwisePowerWithMatrix:!public! !
-!AbstractMatrix categoriesFor: #elementwisePowerWithNumber:!public! !
-!AbstractMatrix categoriesFor: #elementwiseProductFromNumber:!public! !
-!AbstractMatrix categoriesFor: #elementwiseProductWithMatrix:!public! !
-!AbstractMatrix categoriesFor: #elementwiseProductWithNumber:!public! !
-!AbstractMatrix categoriesFor: #elementwiseQuotientFromNumber:!public! !
-!AbstractMatrix categoriesFor: #elementwiseQuotientWithMatrix:!public! !
-!AbstractMatrix categoriesFor: #elementwiseQuotientWithNumber:!public! !
-!AbstractMatrix categoriesFor: #fill:elementsWithStride:withSelfPlusScalar:timesVector:stride:!public! !
-!AbstractMatrix categoriesFor: #fill:elementsWithStride:withSelfScaledBy:plusScalar:timesMatrix:transposed:timesVector:length:stride:!public! !
-!AbstractMatrix categoriesFor: #fillM:byN:withScalar:timesColumnVector:stride:timesRowVector:stride:!public! !
-!AbstractMatrix categoriesFor: #fillM:byN:withSelfScaledBy:plusScalar:timesLeftMatrix:transposed:timesRightMatrix:transposed:length:!public! !
-!AbstractMatrix categoriesFor: #findMax!public! !
-!AbstractMatrix categoriesFor: #findMaxOf:!public! !
-!AbstractMatrix categoriesFor: #findMin!public! !
-!AbstractMatrix categoriesFor: #findMinOf:!public! !
-!AbstractMatrix categoriesFor: #first!public! !
-!AbstractMatrix categoriesFor: #fromColumn:toColumn:by:!public! !
-!AbstractMatrix categoriesFor: #fromRow:toRow:by:!public! !
-!AbstractMatrix categoriesFor: #generalizedAt:!public! !
-!AbstractMatrix categoriesFor: #generalizedAt:put:!public! !
-!AbstractMatrix categoriesFor: #hash!public! !
-!AbstractMatrix categoriesFor: #hasSameShapeAs:!public! !
-!AbstractMatrix categoriesFor: #hasShape:by:!public! !
-!AbstractMatrix categoriesFor: #i!public! !
-!AbstractMatrix categoriesFor: #i:!public! !
-!AbstractMatrix categoriesFor: #identity!public! !
-!AbstractMatrix categoriesFor: #imaginaryPart!public! !
-!AbstractMatrix categoriesFor: #indicesCollect:!public! !
-!AbstractMatrix categoriesFor: #indicesDo:!public! !
-!AbstractMatrix categoriesFor: #indicesInject:into:!public! !
-!AbstractMatrix categoriesFor: #inject:into:!public! !
-!AbstractMatrix categoriesFor: #isColumnMatrix!public! !
-!AbstractMatrix categoriesFor: #isColumnVector!public! !
-!AbstractMatrix categoriesFor: #isComplexMatrix!public! !
-!AbstractMatrix categoriesFor: #isDiagonal!public! !
-!AbstractMatrix categoriesFor: #isEmpty!public! !
-!AbstractMatrix categoriesFor: #isHermitian!public! !
-!AbstractMatrix categoriesFor: #isLowerTriangular!public! !
-!AbstractMatrix categoriesFor: #isMatrix!public! !
-!AbstractMatrix categoriesFor: #isRowMatrix!public! !
-!AbstractMatrix categoriesFor: #isRowVector!public! !
-!AbstractMatrix categoriesFor: #isSameSequenceAs:!public! !
-!AbstractMatrix categoriesFor: #isSequenceable!public! !
-!AbstractMatrix categoriesFor: #isSquare!public! !
-!AbstractMatrix categoriesFor: #isSymmetric!public! !
-!AbstractMatrix categoriesFor: #isTriangular!public! !
-!AbstractMatrix categoriesFor: #isUpperTriangular!public! !
-!AbstractMatrix categoriesFor: #isVector!public! !
-!AbstractMatrix categoriesFor: #isZero!public! !
-!AbstractMatrix categoriesFor: #last!public! !
-!AbstractMatrix categoriesFor: #lowerTriangle!public! !
-!AbstractMatrix categoriesFor: #lowerTriangle:!public! !
-!AbstractMatrix categoriesFor: #max!public! !
-!AbstractMatrix categoriesFor: #maxOf:!public! !
-!AbstractMatrix categoriesFor: #maxOf:dimension:!public! !
-!AbstractMatrix categoriesFor: #min!public! !
-!AbstractMatrix categoriesFor: #minOf:!public! !
-!AbstractMatrix categoriesFor: #minOf:dimension:!public! !
-!AbstractMatrix categoriesFor: #multiplyByFloat:!public! !
-!AbstractMatrix categoriesFor: #multiplyByFraction:!public! !
-!AbstractMatrix categoriesFor: #multiplyByInteger:!public! !
-!AbstractMatrix categoriesFor: #multiplyByScaledDecimal:!public! !
-!AbstractMatrix categoriesFor: #naiveSetOffDiagonal:diagonal:!public! !
-!AbstractMatrix categoriesFor: #ncol!public! !
-!AbstractMatrix categoriesFor: #nCols!public! !
-!AbstractMatrix categoriesFor: #negated!public! !
-!AbstractMatrix categoriesFor: #norm1!public! !
-!AbstractMatrix categoriesFor: #norm2!public! !
-!AbstractMatrix categoriesFor: #normFrobenius!public! !
-!AbstractMatrix categoriesFor: #normInfinity!public! !
-!AbstractMatrix categoriesFor: #nrow!public! !
-!AbstractMatrix categoriesFor: #nRows!public! !
-!AbstractMatrix categoriesFor: #numberOfColumns!public! !
-!AbstractMatrix categoriesFor: #numberOfRows!public! !
-!AbstractMatrix categoriesFor: #postCopy!public! !
-!AbstractMatrix categoriesFor: #prependColumns:!public! !
-!AbstractMatrix categoriesFor: #prependRows:!public! !
-!AbstractMatrix categoriesFor: #printOn:!public! !
-!AbstractMatrix categoriesFor: #product!public! !
-!AbstractMatrix categoriesFor: #product:!public! !
-!AbstractMatrix categoriesFor: #product:dimension:!public! !
-!AbstractMatrix categoriesFor: #productColumnVectorWithRowVector:!public! !
-!AbstractMatrix categoriesFor: #productFromComplex:!public! !
-!AbstractMatrix categoriesFor: #productFromDouble:!public! !
-!AbstractMatrix categoriesFor: #productFromFixedPoint:!public! !
-!AbstractMatrix categoriesFor: #productFromFloat:!public! !
-!AbstractMatrix categoriesFor: #productFromFraction:!public! !
-!AbstractMatrix categoriesFor: #productFromInteger:!public! !
-!AbstractMatrix categoriesFor: #productFromLapackMatrix:!public! !
-!AbstractMatrix categoriesFor: #productFromMatrix:!public! !
-!AbstractMatrix categoriesFor: #productMatrixAtRightWithMatrix:!public! !
-!AbstractMatrix categoriesFor: #productMatrixTransposeWithColumnVector:!public! !
-!AbstractMatrix categoriesFor: #productMatrixWithColumnVector:!public! !
-!AbstractMatrix categoriesFor: #productMatrixWithMatrix:!public! !
-!AbstractMatrix categoriesFor: #productRowVectorWithColumnVector:!public! !
-!AbstractMatrix categoriesFor: #productRowVectorWithMatrix:!public! !
-!AbstractMatrix categoriesFor: #realPart!public! !
-!AbstractMatrix categoriesFor: #replicateNrow:timesNcol:!public! !
-!AbstractMatrix categoriesFor: #respondsToArithmetic!public! !
-!AbstractMatrix categoriesFor: #rowAt:!public! !
-!AbstractMatrix categoriesFor: #rowAt:columnAt:!public! !
-!AbstractMatrix categoriesFor: #rowAt:columnAt:put:!public! !
-!AbstractMatrix categoriesFor: #rowAt:putAll:!public! !
-!AbstractMatrix categoriesFor: #rowAt:putSequence:!public! !
-!AbstractMatrix categoriesFor: #rowCount!public! !
-!AbstractMatrix categoriesFor: #rows!public! !
-!AbstractMatrix categoriesFor: #rows:!public! !
-!AbstractMatrix categoriesFor: #rowsDo:!public! !
-!AbstractMatrix categoriesFor: #scale:elementsBy:increment:!public! !
-!AbstractMatrix categoriesFor: #scaledByComplex:!public! !
-!AbstractMatrix categoriesFor: #scaledByNumber:!public! !
-!AbstractMatrix categoriesFor: #setArray:nrow:ncol:!public! !
-!AbstractMatrix categoriesFor: #setDiagonal:!public! !
-!AbstractMatrix categoriesFor: #setOffDiagonal:diagonal:!public! !
-!AbstractMatrix categoriesFor: #setToEye!public! !
-!AbstractMatrix categoriesFor: #size!public! !
-!AbstractMatrix categoriesFor: #subtractFromFloat:!public! !
-!AbstractMatrix categoriesFor: #subtractFromFraction:!public! !
-!AbstractMatrix categoriesFor: #subtractFromInteger:!public! !
-!AbstractMatrix categoriesFor: #subtractFromScaledDecimal:!public! !
-!AbstractMatrix categoriesFor: #sum!public! !
-!AbstractMatrix categoriesFor: #sum:!public! !
-!AbstractMatrix categoriesFor: #sum:dimension:!public! !
-!AbstractMatrix categoriesFor: #sumFromComplex:!public! !
-!AbstractMatrix categoriesFor: #sumFromDouble:!public! !
-!AbstractMatrix categoriesFor: #sumFromFixedPoint:!public! !
-!AbstractMatrix categoriesFor: #sumFromFloat:!public! !
-!AbstractMatrix categoriesFor: #sumFromFraction:!public! !
-!AbstractMatrix categoriesFor: #sumFromInteger:!public! !
-!AbstractMatrix categoriesFor: #sumFromLapackMatrix:!public! !
-!AbstractMatrix categoriesFor: #sumFromMatrix:!public! !
-!AbstractMatrix categoriesFor: #swap:at:with:at:!public! !
-!AbstractMatrix categoriesFor: #swapColumn:withColumn:!public! !
-!AbstractMatrix categoriesFor: #swapRow:withRow:!public! !
-!AbstractMatrix categoriesFor: #swapRowAt:columnAt:withRowAt:columnAt:!public! !
-!AbstractMatrix categoriesFor: #transpose!public! !
-!AbstractMatrix categoriesFor: #transposeConjugated!public! !
-!AbstractMatrix categoriesFor: #transposed!public! !
-!AbstractMatrix categoriesFor: #transposedConjugated!public! !
-!AbstractMatrix categoriesFor: #upperTriangle!public! !
-!AbstractMatrix categoriesFor: #upperTriangle:!public! !
-!AbstractMatrix categoriesFor: #vectorNorm1!public! !
-!AbstractMatrix categoriesFor: #vectorNorm2!public! !
-!AbstractMatrix categoriesFor: #vectorNormFrobenius!public! !
-!AbstractMatrix categoriesFor: #vectorNormInfinity!public! !
-!AbstractMatrix categoriesFor: #with:collect:!public! !
-!AbstractMatrix categoriesFor: #with:do:!public! !
-!AbstractMatrix categoriesFor: #withArrayOffsetBy:!public! !
-!AbstractMatrix categoriesFor: #withIndicesCollect:!public! !
-!AbstractMatrix categoriesFor: #withIndicesDo:!public! !
-!AbstractMatrix categoriesFor: #withIndicesInject:into:!public! !
-!AbstractMatrix categoriesFor: #zero!public! !
+!AbstractMatrix categoriesFor: #-!arithmetic!public! !
+!AbstractMatrix categoriesFor: #*!arithmetic!public! !
+!AbstractMatrix categoriesFor: #,!concatenating!public! !
+!AbstractMatrix categoriesFor: #,,!concatenating!public! !
+!AbstractMatrix categoriesFor: #+!arithmetic!public! !
+!AbstractMatrix categoriesFor: #=!comparing!public! !
+!AbstractMatrix categoriesFor: #abs!arithmetic!public! !
+!AbstractMatrix categoriesFor: #absMax!arithmetic!norm!public! !
+!AbstractMatrix categoriesFor: #adaptToComplex:andSend:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #adaptToFloat:andCompare:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #adaptToFloat:andSend:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #adaptToFraction:andSend:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #adaptToInteger:andCompare:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #adaptToInteger:andSend:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #adaptToNumber:andSend:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #adaptToScaledDecimal:andSend:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #addToFloat:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #addToFraction:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #addToInteger:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #addToScaledDecimal:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #allSatisfy:!enumerating!public! !
+!AbstractMatrix categoriesFor: #anySatisfy:!enumerating!public! !
+!AbstractMatrix categoriesFor: #appendColumns:!concatenating!public! !
+!AbstractMatrix categoriesFor: #appendRows:!concatenating!public! !
+!AbstractMatrix categoriesFor: #arrayAt:!accessing-storage!public! !
+!AbstractMatrix categoriesFor: #arrayAt:put:!accessing-storage!public! !
+!AbstractMatrix categoriesFor: #arrayOffsetAtRow:atColumn:!accessing-storage!public! !
+!AbstractMatrix categoriesFor: #arraySize!accessing-size!public! !
+!AbstractMatrix categoriesFor: #asAbstractMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asArray!converting!public! !
+!AbstractMatrix categoriesFor: #asBag!converting!public! !
+!AbstractMatrix categoriesFor: #asColumnMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asDoubleComplexMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asDoubleMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asDoublePrecisionComplexMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asDoublePrecisionMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asFloatComplexMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asFloatMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asOrderedCollection!converting!public! !
+!AbstractMatrix categoriesFor: #asRowMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asSet!converting!public! !
+!AbstractMatrix categoriesFor: #asSinglePrecisionComplexMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asSinglePrecisionMatrix!converting!public! !
+!AbstractMatrix categoriesFor: #asSortedCollection!converting!public! !
+!AbstractMatrix categoriesFor: #asSortedCollection:!converting!public! !
+!AbstractMatrix categoriesFor: #at:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #at:at:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #at:at:ifInvalid:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #at:at:incrementBy:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #at:at:put:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #at:put:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #atAllPut:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #atColumn:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atColumn:put:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atColumn:putAll:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atColumn:putSequence:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atColumns:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atInteger:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #atInteger:andInteger:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #atInteger:andInteger:put:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #atInteger:put:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #atIntervalFrom:to:by:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atPoint:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #atPoint:put:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #atRow:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atRow:column:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atRow:column:put:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atRow:put:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atRow:putAll:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atRow:putSequence:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atRows:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #atRows:atColumns:!public! !
+!AbstractMatrix categoriesFor: #capacity!accessing-size!public! !
+!AbstractMatrix categoriesFor: #collect:!enumerating!public! !
+!AbstractMatrix categoriesFor: #columnAt:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #columnAt:putAll:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #columnAt:putSequence:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #columnCount!accessing-size!public! !
+!AbstractMatrix categoriesFor: #columns!enumerating!public! !
+!AbstractMatrix categoriesFor: #columns:!enumerating!public! !
+!AbstractMatrix categoriesFor: #columnsDo:!enumerating!public! !
+!AbstractMatrix categoriesFor: #concatColumnsFromLapackMatrix:!concatenating!public! !
+!AbstractMatrix categoriesFor: #concatColumnsFromMatrix:!concatenating!public! !
+!AbstractMatrix categoriesFor: #concatColumnsWithMatrix:!concatenating!public! !
+!AbstractMatrix categoriesFor: #concatRowsFromLapackMatrix:!concatenating!public! !
+!AbstractMatrix categoriesFor: #concatRowsFromMatrix:!concatenating!public! !
+!AbstractMatrix categoriesFor: #concatRowsWithMatrix:!concatenating!public! !
+!AbstractMatrix categoriesFor: #conjugated!arithmetic!arithmetic-complex!public! !
+!AbstractMatrix categoriesFor: #copy:elementsFrom:sourceIncrement:destIncrement:!blas!public! !
+!AbstractMatrix categoriesFor: #copy:elementsFrom:sourceOffset:sourceIncrement:destOffset:destIncrement:!blas!public! !
+!AbstractMatrix categoriesFor: #copy:rowsStartingAt:and:columnsStartingAt:from:!blas!public! !
+!AbstractMatrix categoriesFor: #count:!enumerating!public! !
+!AbstractMatrix categoriesFor: #cumulativeProduct:dimension:!enumerating!public! !
+!AbstractMatrix categoriesFor: #cumulativeSum:dimension:!enumerating!public! !
+!AbstractMatrix categoriesFor: #diagonal!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #diagonalAt:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #diagonalSizeAt:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #differenceFromComplex:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #differenceFromDouble:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #differenceFromFixedPoint:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #differenceFromFloat:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #differenceFromFraction:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #differenceFromInteger:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #differenceFromLapackMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #differenceFromMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #dimensions!accessing-size!public! !
+!AbstractMatrix categoriesFor: #do:!enumerating!public! !
+!AbstractMatrix categoriesFor: #dotProduct:elementsIncrement:with:increment:!blas!public! !
+!AbstractMatrix categoriesFor: #elementwisePowerFromNumber:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #elementwisePowerWithMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #elementwisePowerWithNumber:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #elementwiseProductFromNumber:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #elementwiseProductWithMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #elementwiseProductWithNumber:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #elementwiseQuotientFromNumber:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #elementwiseQuotientWithMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #elementwiseQuotientWithNumber:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #fill:elementsWithStride:withSelfPlusScalar:timesVector:stride:!blas!public! !
+!AbstractMatrix categoriesFor: #fill:elementsWithStride:withSelfScaledBy:plusScalar:timesMatrix:transposed:timesVector:length:stride:!blas!public! !
+!AbstractMatrix categoriesFor: #fillM:byN:withScalar:timesColumnVector:stride:timesRowVector:stride:!blas!public! !
+!AbstractMatrix categoriesFor: #fillM:byN:withSelfScaledBy:plusScalar:timesLeftMatrix:transposed:timesRightMatrix:transposed:length:!blas!public! !
+!AbstractMatrix categoriesFor: #findMax!enumerating!public! !
+!AbstractMatrix categoriesFor: #findMaxOf:!enumerating!public! !
+!AbstractMatrix categoriesFor: #findMin!enumerating!public! !
+!AbstractMatrix categoriesFor: #findMinOf:!enumerating!public! !
+!AbstractMatrix categoriesFor: #first!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #fromColumn:toColumn:by:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #fromRow:toRow:by:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #fromRow:toRow:fromColumn:toColumn:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #generalizedAt:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #generalizedAt:put:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #hash!comparing!public! !
+!AbstractMatrix categoriesFor: #hasSameShapeAs:!public!testing! !
+!AbstractMatrix categoriesFor: #hasShape:by:!public!testing! !
+!AbstractMatrix categoriesFor: #i!arithmetic-complex!public! !
+!AbstractMatrix categoriesFor: #i:!arithmetic-complex!public! !
+!AbstractMatrix categoriesFor: #identity!arithmetic!public! !
+!AbstractMatrix categoriesFor: #imaginaryPart!arithmetic-complex!public! !
+!AbstractMatrix categoriesFor: #indicesCollect:!enumerating!public! !
+!AbstractMatrix categoriesFor: #indicesDo:!enumerating!public! !
+!AbstractMatrix categoriesFor: #indicesInject:into:!enumerating!public! !
+!AbstractMatrix categoriesFor: #inject:into:!enumerating!public! !
+!AbstractMatrix categoriesFor: #isColumnMatrix!public!testing! !
+!AbstractMatrix categoriesFor: #isColumnVector!public!testing! !
+!AbstractMatrix categoriesFor: #isComplexMatrix!public!testing! !
+!AbstractMatrix categoriesFor: #isDiagonal!public!testing! !
+!AbstractMatrix categoriesFor: #isEmpty!public!testing! !
+!AbstractMatrix categoriesFor: #isHermitian!public!testing! !
+!AbstractMatrix categoriesFor: #isLowerTriangular!public!testing! !
+!AbstractMatrix categoriesFor: #isMatrix!public!testing! !
+!AbstractMatrix categoriesFor: #isRowMatrix!public!testing! !
+!AbstractMatrix categoriesFor: #isRowVector!public!testing! !
+!AbstractMatrix categoriesFor: #isSameSequenceAs:!public!testing! !
+!AbstractMatrix categoriesFor: #isSequenceable!public!testing! !
+!AbstractMatrix categoriesFor: #isSquare!public!testing! !
+!AbstractMatrix categoriesFor: #isSymmetric!public!testing! !
+!AbstractMatrix categoriesFor: #isTriangular!public!testing! !
+!AbstractMatrix categoriesFor: #isUpperTriangular!public!testing! !
+!AbstractMatrix categoriesFor: #isVector!public!testing! !
+!AbstractMatrix categoriesFor: #isZero!public!testing! !
+!AbstractMatrix categoriesFor: #last!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #lowerTriangle!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #lowerTriangle:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #max!enumerating!public! !
+!AbstractMatrix categoriesFor: #maxOf:!enumerating!public! !
+!AbstractMatrix categoriesFor: #maxOf:dimension:!enumerating!public! !
+!AbstractMatrix categoriesFor: #min!enumerating!public! !
+!AbstractMatrix categoriesFor: #minOf:!enumerating!public! !
+!AbstractMatrix categoriesFor: #minOf:dimension:!enumerating!public! !
+!AbstractMatrix categoriesFor: #multiplyByFloat:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #multiplyByFraction:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #multiplyByInteger:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #multiplyByScaledDecimal:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #naiveSetOffDiagonal:diagonal:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #ncol!accessing-size!public! !
+!AbstractMatrix categoriesFor: #nCols!accessing-size!public! !
+!AbstractMatrix categoriesFor: #negated!arithmetic!public! !
+!AbstractMatrix categoriesFor: #norm1!norm!public! !
+!AbstractMatrix categoriesFor: #norm2!norm!public! !
+!AbstractMatrix categoriesFor: #normFrobenius!norm!public! !
+!AbstractMatrix categoriesFor: #normInfinity!norm!public! !
+!AbstractMatrix categoriesFor: #nrow!accessing-size!public! !
+!AbstractMatrix categoriesFor: #nRows!accessing-size!public! !
+!AbstractMatrix categoriesFor: #numberOfColumns!accessing-size!public! !
+!AbstractMatrix categoriesFor: #numberOfRows!accessing-size!public! !
+!AbstractMatrix categoriesFor: #postCopy!copying!public! !
+!AbstractMatrix categoriesFor: #prependColumns:!concatenating!public! !
+!AbstractMatrix categoriesFor: #prependRows:!concatenating!public! !
+!AbstractMatrix categoriesFor: #printOn:!printing!public! !
+!AbstractMatrix categoriesFor: #product!enumerating!public! !
+!AbstractMatrix categoriesFor: #product:!enumerating!public! !
+!AbstractMatrix categoriesFor: #product:dimension:!enumerating!public! !
+!AbstractMatrix categoriesFor: #productColumnVectorWithRowVector:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productFromComplex:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productFromDouble:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productFromFixedPoint:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productFromFloat:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productFromFraction:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productFromInteger:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productFromLapackMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productFromMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productMatrixAtRightWithMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productMatrixTransposeWithColumnVector:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productMatrixWithColumnVector:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productMatrixWithMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productOf:!enumerating!public! !
+!AbstractMatrix categoriesFor: #productRowVectorWithColumnVector:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #productRowVectorWithMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #realPart!arithmetic-complex!public! !
+!AbstractMatrix categoriesFor: #replicate:!concatenating!public! !
+!AbstractMatrix categoriesFor: #replicateNrow:timesNcol:!concatenating!public! !
+!AbstractMatrix categoriesFor: #reshape:!converting!public! !
+!AbstractMatrix categoriesFor: #reshapeNrow:ncol:!converting!public! !
+!AbstractMatrix categoriesFor: #respondsToArithmetic!arithmetic!public!testing! !
+!AbstractMatrix categoriesFor: #rowAt:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #rowAt:columnAt:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #rowAt:columnAt:put:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #rowAt:putAll:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #rowAt:putSequence:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #rowCount!accessing-size!public! !
+!AbstractMatrix categoriesFor: #rows!enumerating!public! !
+!AbstractMatrix categoriesFor: #rows:!enumerating!public! !
+!AbstractMatrix categoriesFor: #rowsDo:!enumerating!public! !
+!AbstractMatrix categoriesFor: #scale:elementsBy:increment:!blas!public! !
+!AbstractMatrix categoriesFor: #scaledByComplex:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #scaledByNumber:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #setArray:nrow:ncol:!accessing-storage!public! !
+!AbstractMatrix categoriesFor: #setDiagonal:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #setOffDiagonal:diagonal:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #setToEye!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #singularValues!decomposition!public! !
+!AbstractMatrix categoriesFor: #size!accessing-size!public! !
+!AbstractMatrix categoriesFor: #smallLowerTriangle:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #smallUpperTriangle:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #subtractFromFloat:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #subtractFromFraction:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #subtractFromInteger:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #subtractFromScaledDecimal:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #sum!enumerating!public! !
+!AbstractMatrix categoriesFor: #sum:!enumerating!public! !
+!AbstractMatrix categoriesFor: #sum:dimension:!enumerating!public! !
+!AbstractMatrix categoriesFor: #sumFromComplex:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #sumFromDouble:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #sumFromFixedPoint:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #sumFromFloat:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #sumFromFraction:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #sumFromInteger:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #sumFromLapackMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #sumFromMatrix:!arithmetic-internal!public! !
+!AbstractMatrix categoriesFor: #sumOf:!enumerating!public! !
+!AbstractMatrix categoriesFor: #swap:at:with:at:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #swapColumn:withColumn:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #swapRow:withRow:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #swapRowAt:columnAt:withRowAt:columnAt:!accessing-elements!public! !
+!AbstractMatrix categoriesFor: #transpose!arithmetic!public! !
+!AbstractMatrix categoriesFor: #transposeConjugated!arithmetic!arithmetic-complex!public! !
+!AbstractMatrix categoriesFor: #transposed!arithmetic!public! !
+!AbstractMatrix categoriesFor: #transposedConjugated!arithmetic!arithmetic-complex!public! !
+!AbstractMatrix categoriesFor: #upperTriangle!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #upperTriangle:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #vectorNorm1!norm!public! !
+!AbstractMatrix categoriesFor: #vectorNorm2!norm!public! !
+!AbstractMatrix categoriesFor: #vectorNormFrobenius!norm!public! !
+!AbstractMatrix categoriesFor: #vectorNormInfinity!norm!public! !
+!AbstractMatrix categoriesFor: #with:collect:!enumerating!public! !
+!AbstractMatrix categoriesFor: #with:do:!enumerating!public! !
+!AbstractMatrix categoriesFor: #withArrayOffsetBy:!accessing-submatrix!public! !
+!AbstractMatrix categoriesFor: #withIndicesCollect:!enumerating!public! !
+!AbstractMatrix categoriesFor: #withIndicesDo:!enumerating!public! !
+!AbstractMatrix categoriesFor: #withIndicesInject:into:!enumerating!public! !
+!AbstractMatrix categoriesFor: #zero!arithmetic!public! !
 
 !AbstractMatrix class methodsFor!
 
@@ -1367,7 +1633,7 @@ absMax	^self class isGeneralMatrix 		ifTrue: [super absMax]		ifFalse: [self a
 
 arrayPointer	"Answer a pointer on an array directly usable in C primitives..."	^self cArray asParameter!
 
-arrayPointerWithOffset: anOffset	"Answer a pointer on an array directly usable in C primitives...	The offset is given in number of elements, not in bytes."	^(self cArray withArrayOffsetBy: anOffset) asParameter!
+arrayPointerWithOffset: anOffset	"Answer a pointer on an array directly usable in C primitives...	The offset is given in number of elements, not in bytes."	^(self cArray withArrayOffsetBy: anOffset)!
 
 asAbstractMatrix	^ AbstractMatrix basicNew		setArray: (self isInCSpace				ifTrue: [array copyInSmalltalkSpace]				ifFalse: [array copy])		nrow: nrow		ncol: ncol!
 
@@ -1431,11 +1697,7 @@ cArray
 					["we can use optimized primitive in this case"
 
 					cArray := self class cArrayClass new: theArray size.
-					cArray asParameter 
-						copyAt: 0
-						from: theArray
-						size: theArray basicSize
-						startingAt: 1]
+					cArray replaceFrom: 1 to: theArray size  with: theArray startingAt: 1]
 				ifFalse: 
 					["one did not use the optimized smalltalkArrayClass
 					Fall back to slower elementwise copy"
@@ -1455,7 +1717,8 @@ coerceFlags: destFlags 	| flags m |	(flags := self class flags) = destFlags if
 
 coerceFlagsButProperty: destFlags 	| flags m |	(flags := self class flags) = destFlags ifTrue: [^self].	m := self.	(flags bitAnd: ComplexityMask) = (destFlags bitAnd: ComplexityMask) 		ifFalse: 			[m := m asComplexMatrix.			flags := m class flags].	(flags bitAnd: PrecisionMask) = (destFlags bitAnd: PrecisionMask) 		ifFalse: 			[m := m asDoublePrecisionMatrix.			flags := m class flags].	^m!
 
-coerceToComplexMatrix	"Fast implementation: copy every two reals"	| dst src |	dst := self class complexMatrix nrow: nrow ncol: ncol.	src := self withArrayOffsetBy: 0.	(dst castToRealWithArrayOffsetBy: 0) 		copy: src arraySize		elementsFrom: src		sourceIncrement: 1		destIncrement: 2.	^dst!
+coerceToComplexMatrix	"Warning: we get here only in case we are a real matrix
+	Fast implementation: copy every two reals"	| dst |	dst := self class complexMatrix nrow: nrow ncol: ncol.	(dst castToRealWithArrayOffsetBy: 0) 		copy: self arraySize		elementsFrom: self		sourceIncrement: 1		destIncrement: 2.	^dst!
 
 coerceToDoublePrecisionComplexMatrix	"SLOW naive implementation"	| res |	res := self class doublePrecisionMatrix complexMatrix allocateNrow: nrow ncol: ncol.	1 to: ncol		do: 			[:jc | 			1 to: nrow				do: 					[:ir | 					res 						rowAt: ir						columnAt: jc						put: (self rowAt: ir columnAt: jc) asDoubleComplex]].	^res!
 
@@ -1756,6 +2019,12 @@ fromColumn: jStart toColumn: jStop by: jStep
 							toColumn: jStop
 							by: jStep)]!
 
+generalizedEigenValueDecompositionWithRHSMatrix: aMatrix 
+	"solve a generalized eigenvalue problem"
+
+	^self asGeneralMatrix 
+		generalizedEigenValueDecompositionWithRHSMatrix: aMatrix!
+
 hessenbergDecomposition
 	"hessenberg decomposition"
 
@@ -1764,7 +2033,7 @@ hessenbergDecomposition
 			[^self error: 'hessenberg decomposition apply only on square Matrices'].
 	^LapackHessenbergDecomposition decompose: self asGeneralMatrix!
 
-imaginaryPart	"Fast implementation: copy every two reals"	^self class isComplexMatrix 		ifTrue: 			[| res |			((res := self class realMatrix nrow: nrow ncol: ncol) withArrayOffsetBy: 0) 				copy: self arraySize				elementsFrom: (self castToRealWithArrayOffsetBy: 1)				sourceIncrement: 2				destIncrement: 1.			res]		ifFalse: [self zero]!
+imaginaryPart	"Fast implementation: copy every two reals"	^self class isComplexMatrix 		ifTrue: 			[| res |			(res := self class realMatrix nrow: nrow ncol: ncol) 				copy: self arraySize				elementsFrom: (self castToRealWithArrayOffsetBy: 1)				sourceIncrement: 2				destIncrement: 1.			res]		ifFalse: [self zero]!
 
 inPlaceScaledByComplex: aComplex 
 	"Scale self in place (modify self, not a copy).
@@ -1779,7 +2048,7 @@ inPlaceScaledByComplex: aComplex
 			on: Error
 			do: 
 				[:exc | 
-				exc retryWith: 
+				exc retryUsing: 
 						[self 
 							scale: self size
 							elementsBy: aComplex
@@ -1950,7 +2219,7 @@ rank	"Compute rank of self with default tolerance"	^self rankTolerance: self 
 
 rankTolerance: tol 	"Answer the number of linearly independant rows or columns of self.	count non null singular values with a tolerance "	^self singularValues count: [:each | each > tol ]!
 
-realPart	"Fast implementation: copy every two reals"	^self class isComplexMatrix 		ifTrue: 			[| res |			((res := self class realMatrix nrow: nrow ncol: ncol) withArrayOffsetBy: 0) 				copy: self arraySize				elementsFrom: (self castToRealWithArrayOffsetBy: 0)				sourceIncrement: 2				destIncrement: 1.			res]		ifFalse: [self]!
+realPart	"Fast implementation: copy every two reals"	^self class isComplexMatrix 		ifTrue: 			[| res |			(res := self class realMatrix nrow: nrow ncol: ncol)				copy: self arraySize				elementsFrom: (self castToRealWithArrayOffsetBy: 0)				sourceIncrement: 2				destIncrement: 1.			res]		ifFalse: [self]!
 
 reciprocal	nrow = ncol ifFalse: [self error: 'should be square'].	^self copy inPlaceSolve: (self class eye: nrow)!
 
@@ -2015,145 +2284,146 @@ swapRow: i1 withRow: i2 	"Most matrices loose their properties when swapping ro
 transposeConjugated	^self class isComplexMatrix 		ifTrue: [super transposeConjugated]		ifFalse: [self transposed]!
 
 withArrayOffsetBy: aPositiveInteger 	"Return a kind of shallow copy of self pointing on the same C underlying object, but with an offset.	This is ugly like C code but maybe more efficient.	This also has the side effect of hiding properties while storing elements	(because property could be lost due to temporary disagreement when filling)"	| newArray |	newArray := self cArray withArrayOffsetBy: aPositiveInteger.	^self class generalMatrix basicNew 		setArray: newArray		nrow: newArray size		ncol: 1! !
-!LapackMatrix categoriesFor: #-!public! !
-!LapackMatrix categoriesFor: #*!public! !
-!LapackMatrix categoriesFor: #,!public! !
-!LapackMatrix categoriesFor: #,,!public! !
-!LapackMatrix categoriesFor: #/!public! !
-!LapackMatrix categoriesFor: #\!public! !
-!LapackMatrix categoriesFor: #+!public! !
-!LapackMatrix categoriesFor: #absMax!public! !
-!LapackMatrix categoriesFor: #arrayPointer!public! !
-!LapackMatrix categoriesFor: #arrayPointerWithOffset:!public! !
-!LapackMatrix categoriesFor: #asAbstractMatrix!public! !
-!LapackMatrix categoriesFor: #asColumnMatrix!public! !
-!LapackMatrix categoriesFor: #asComplexMatrix!public! !
-!LapackMatrix categoriesFor: #asDoublePrecisionComplexMatrix!public! !
-!LapackMatrix categoriesFor: #asDoublePrecisionMatrix!public! !
-!LapackMatrix categoriesFor: #asGeneralMatrix!public! !
-!LapackMatrix categoriesFor: #asPackedMatrix!public! !
-!LapackMatrix categoriesFor: #asParameter!public! !
-!LapackMatrix categoriesFor: #asParameterWithOffset:!public! !
-!LapackMatrix categoriesFor: #asRowMatrix!public! !
-!LapackMatrix categoriesFor: #asSinglePrecisionComplexMatrix!public! !
-!LapackMatrix categoriesFor: #asSinglePrecisionMatrix!public! !
-!LapackMatrix categoriesFor: #asUnpackedMatrix!public! !
-!LapackMatrix categoriesFor: #at:put:!public! !
-!LapackMatrix categoriesFor: #at:put:handle:!public! !
-!LapackMatrix categoriesFor: #atAllPut:!public! !
-!LapackMatrix categoriesFor: #atIntervalFrom:to:by:!public! !
-!LapackMatrix categoriesFor: #blasInterface!public! !
-!LapackMatrix categoriesFor: #cArray!public! !
-!LapackMatrix categoriesFor: #castTo:!public! !
-!LapackMatrix categoriesFor: #castToColumn!public! !
-!LapackMatrix categoriesFor: #castToRealWithArrayOffsetBy:!public! !
-!LapackMatrix categoriesFor: #castToRow!public! !
-!LapackMatrix categoriesFor: #coerceFlags:!public! !
-!LapackMatrix categoriesFor: #coerceFlagsButProperty:!public! !
-!LapackMatrix categoriesFor: #coerceToComplexMatrix!public! !
-!LapackMatrix categoriesFor: #coerceToDoublePrecisionComplexMatrix!public! !
-!LapackMatrix categoriesFor: #coerceToDoublePrecisionMatrix!public! !
-!LapackMatrix categoriesFor: #coerceToGeneralMatrix!public! !
-!LapackMatrix categoriesFor: #coerceToSinglePrecisionComplexMatrix!public! !
-!LapackMatrix categoriesFor: #coerceToSinglePrecisionMatrix!public! !
-!LapackMatrix categoriesFor: #coercing:do:!public! !
-!LapackMatrix categoriesFor: #coercingButPropertyFromLapackMatrix:do:!public! !
-!LapackMatrix categoriesFor: #coercingFromComplexNumber:do:!public! !
-!LapackMatrix categoriesFor: #coercingFromLapackMatrix:do:!public! !
-!LapackMatrix categoriesFor: #coercingFromNumber:do:!public! !
-!LapackMatrix categoriesFor: #coercingFromRealNumber:do:!public! !
-!LapackMatrix categoriesFor: #concatColumnsFromLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #concatColumnsWithLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #concatRowsFromLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #concatRowsWithLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #conjugated!public! !
-!LapackMatrix categoriesFor: #copy!public! !
-!LapackMatrix categoriesFor: #copy:elementsFrom:sourceOffset:sourceIncrement:destOffset:destIncrement:!public! !
-!LapackMatrix categoriesFor: #copy:rowsStartingAt:and:columnsStartingAt:from:!public! !
-!LapackMatrix categoriesFor: #defaultTolerance!public! !
-!LapackMatrix categoriesFor: #determinant!public! !
-!LapackMatrix categoriesFor: #differenceFromLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #differenceWithLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #dotProduct:elementsIncrement:with:increment:!public! !
-!LapackMatrix categoriesFor: #eigenValueDecomposition!public! !
-!LapackMatrix categoriesFor: #eigenValues!public! !
-!LapackMatrix categoriesFor: #fill:elementsWithStride:withSelfPlusScalar:timesVector:stride:!public! !
-!LapackMatrix categoriesFor: #fillM:byN:withScalar:timesColumnVector:stride:timesRowVector:stride:!public! !
-!LapackMatrix categoriesFor: #fillRandNormal!public! !
-!LapackMatrix categoriesFor: #fillRandNormalWithSeed:!public! !
-!LapackMatrix categoriesFor: #fillRandUniform!public! !
-!LapackMatrix categoriesFor: #fillRandUniformWithSeed:!public! !
-!LapackMatrix categoriesFor: #fromColumn:toColumn:by:!public! !
-!LapackMatrix categoriesFor: #hessenbergDecomposition!public! !
-!LapackMatrix categoriesFor: #imaginaryPart!public! !
-!LapackMatrix categoriesFor: #inPlaceScaledByComplex:!public! !
-!LapackMatrix categoriesFor: #inPlaceScaledByNumber:!public! !
-!LapackMatrix categoriesFor: #inPlaceSolve:!public! !
-!LapackMatrix categoriesFor: #isBandMatrix!public! !
-!LapackMatrix categoriesFor: #isComplexMatrix!public! !
-!LapackMatrix categoriesFor: #isDiagonalMatrix!public! !
-!LapackMatrix categoriesFor: #isDoublePrecisionMatrix!public! !
-!LapackMatrix categoriesFor: #isGeneralMatrix!public! !
-!LapackMatrix categoriesFor: #isHermitianMatrix!public! !
-!LapackMatrix categoriesFor: #isInCSpace!public! !
-!LapackMatrix categoriesFor: #isPackedMatrix!public! !
-!LapackMatrix categoriesFor: #isRealMatrix!public! !
-!LapackMatrix categoriesFor: #isSinglePrecisionMatrix!public! !
-!LapackMatrix categoriesFor: #isSymmetricMatrix!public! !
-!LapackMatrix categoriesFor: #isTriangularMatrix!public! !
-!LapackMatrix categoriesFor: #isUnpackedMatrix!public! !
-!LapackMatrix categoriesFor: #lapackInterface!public! !
-!LapackMatrix categoriesFor: #leftDivideFromLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #leftDivideWithLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #multiplyByFloat:!public! !
-!LapackMatrix categoriesFor: #multiplyByFraction:!public! !
-!LapackMatrix categoriesFor: #multiplyByInteger:!public! !
-!LapackMatrix categoriesFor: #multiplyByScaledDecimal:!public! !
-!LapackMatrix categoriesFor: #naiveCoerceToDoublePrecisionMatrix!public! !
-!LapackMatrix categoriesFor: #naiveCoerceToSinglePrecisionMatrix!public! !
-!LapackMatrix categoriesFor: #negated!public! !
-!LapackMatrix categoriesFor: #norm1!public! !
-!LapackMatrix categoriesFor: #normFrobenius!public! !
-!LapackMatrix categoriesFor: #normInfinity!public! !
-!LapackMatrix categoriesFor: #pluDecomposition!public! !
-!LapackMatrix categoriesFor: #postCoercingFromLapackMatrix:do:!public! !
-!LapackMatrix categoriesFor: #postCopy!public! !
-!LapackMatrix categoriesFor: #productColumnVectorWithRowVector:!public! !
-!LapackMatrix categoriesFor: #productFromComplex:!public! !
-!LapackMatrix categoriesFor: #productFromDouble:!public! !
-!LapackMatrix categoriesFor: #productFromFixedPoint:!public! !
-!LapackMatrix categoriesFor: #productFromFloat:!public! !
-!LapackMatrix categoriesFor: #productFromFraction:!public! !
-!LapackMatrix categoriesFor: #productFromInteger:!public! !
-!LapackMatrix categoriesFor: #productFromLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #productRowVectorWithColumnVector:!public! !
-!LapackMatrix categoriesFor: #productRowVectorWithMatrix:!public! !
-!LapackMatrix categoriesFor: #productWithLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #pseudoInverse!public! !
-!LapackMatrix categoriesFor: #pseudoInverseTolerance:!public! !
-!LapackMatrix categoriesFor: #qrDecomposition!public! !
-!LapackMatrix categoriesFor: #qrpDecomposition!public! !
-!LapackMatrix categoriesFor: #quotientFromLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #rank!public! !
-!LapackMatrix categoriesFor: #rankTolerance:!public! !
-!LapackMatrix categoriesFor: #realPart!public! !
-!LapackMatrix categoriesFor: #reciprocal!public! !
-!LapackMatrix categoriesFor: #reduceGeneralityIfPossible!public! !
-!LapackMatrix categoriesFor: #rightDivideWithLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #scaledByComplex:!public! !
-!LapackMatrix categoriesFor: #scaledByNumber:!public! !
-!LapackMatrix categoriesFor: #schurDecomposition!public! !
-!LapackMatrix categoriesFor: #setOffDiagonal:diagonal:!public! !
-!LapackMatrix categoriesFor: #singularValueDecomposition!public! !
-!LapackMatrix categoriesFor: #singularValues!public! !
-!LapackMatrix categoriesFor: #solve:!public! !
-!LapackMatrix categoriesFor: #storeInSmalltalkSpace!public! !
-!LapackMatrix categoriesFor: #sumFromLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #sumWithLapackMatrix:!public! !
-!LapackMatrix categoriesFor: #swapColumn:withColumn:!public! !
-!LapackMatrix categoriesFor: #swapRow:withRow:!public! !
-!LapackMatrix categoriesFor: #transposeConjugated!public! !
-!LapackMatrix categoriesFor: #withArrayOffsetBy:!public! !
+!LapackMatrix categoriesFor: #-!arithmetic!public! !
+!LapackMatrix categoriesFor: #*!arithmetic!public! !
+!LapackMatrix categoriesFor: #,!concatenating!public! !
+!LapackMatrix categoriesFor: #,,!concatenating!public! !
+!LapackMatrix categoriesFor: #/!arithmetic!public! !
+!LapackMatrix categoriesFor: #\!arithmetic!public! !
+!LapackMatrix categoriesFor: #+!arithmetic!public! !
+!LapackMatrix categoriesFor: #absMax!norm!public! !
+!LapackMatrix categoriesFor: #arrayPointer!accessing-storage!public! !
+!LapackMatrix categoriesFor: #arrayPointerWithOffset:!accessing-storage!public! !
+!LapackMatrix categoriesFor: #asAbstractMatrix!converting!public! !
+!LapackMatrix categoriesFor: #asColumnMatrix!converting!public! !
+!LapackMatrix categoriesFor: #asComplexMatrix!converting!public! !
+!LapackMatrix categoriesFor: #asDoublePrecisionComplexMatrix!converting!public! !
+!LapackMatrix categoriesFor: #asDoublePrecisionMatrix!converting!public! !
+!LapackMatrix categoriesFor: #asGeneralMatrix!converting!public! !
+!LapackMatrix categoriesFor: #asPackedMatrix!converting!public! !
+!LapackMatrix categoriesFor: #asParameter!converting!public! !
+!LapackMatrix categoriesFor: #asParameterWithOffset:!converting!public! !
+!LapackMatrix categoriesFor: #asRowMatrix!converting!public! !
+!LapackMatrix categoriesFor: #asSinglePrecisionComplexMatrix!converting!public! !
+!LapackMatrix categoriesFor: #asSinglePrecisionMatrix!converting!public! !
+!LapackMatrix categoriesFor: #asUnpackedMatrix!converting!public! !
+!LapackMatrix categoriesFor: #at:put:!accessing-elements!public! !
+!LapackMatrix categoriesFor: #at:put:handle:!accessing-elements!public! !
+!LapackMatrix categoriesFor: #atAllPut:!accessing-elements!public! !
+!LapackMatrix categoriesFor: #atIntervalFrom:to:by:!accessing-submatrix!public! !
+!LapackMatrix categoriesFor: #blasInterface!accessing!public! !
+!LapackMatrix categoriesFor: #cArray!accessing-storage!public! !
+!LapackMatrix categoriesFor: #castTo:!coercing!public! !
+!LapackMatrix categoriesFor: #castToColumn!coercing!public! !
+!LapackMatrix categoriesFor: #castToRealWithArrayOffsetBy:!coercing!public! !
+!LapackMatrix categoriesFor: #castToRow!coercing!public! !
+!LapackMatrix categoriesFor: #coerceFlags:!coercing!public! !
+!LapackMatrix categoriesFor: #coerceFlagsButProperty:!coercing!public! !
+!LapackMatrix categoriesFor: #coerceToComplexMatrix!coercing!public! !
+!LapackMatrix categoriesFor: #coerceToDoublePrecisionComplexMatrix!coercing!public! !
+!LapackMatrix categoriesFor: #coerceToDoublePrecisionMatrix!coercing!public! !
+!LapackMatrix categoriesFor: #coerceToGeneralMatrix!coercing!public! !
+!LapackMatrix categoriesFor: #coerceToSinglePrecisionComplexMatrix!coercing!public! !
+!LapackMatrix categoriesFor: #coerceToSinglePrecisionMatrix!coercing!public! !
+!LapackMatrix categoriesFor: #coercing:do:!coercing!public! !
+!LapackMatrix categoriesFor: #coercingButPropertyFromLapackMatrix:do:!coercing!public! !
+!LapackMatrix categoriesFor: #coercingFromComplexNumber:do:!coercing!public! !
+!LapackMatrix categoriesFor: #coercingFromLapackMatrix:do:!coercing!public! !
+!LapackMatrix categoriesFor: #coercingFromNumber:do:!coercing!public! !
+!LapackMatrix categoriesFor: #coercingFromRealNumber:do:!coercing!public! !
+!LapackMatrix categoriesFor: #concatColumnsFromLapackMatrix:!concatenating!public! !
+!LapackMatrix categoriesFor: #concatColumnsWithLapackMatrix:!concatenating!public! !
+!LapackMatrix categoriesFor: #concatRowsFromLapackMatrix:!concatenating!public! !
+!LapackMatrix categoriesFor: #concatRowsWithLapackMatrix:!concatenating!public! !
+!LapackMatrix categoriesFor: #conjugated!arithmetic-complex!public! !
+!LapackMatrix categoriesFor: #copy!copying!public! !
+!LapackMatrix categoriesFor: #copy:elementsFrom:sourceOffset:sourceIncrement:destOffset:destIncrement:!blas!public! !
+!LapackMatrix categoriesFor: #copy:rowsStartingAt:and:columnsStartingAt:from:!blas!public! !
+!LapackMatrix categoriesFor: #defaultTolerance!accessing!public! !
+!LapackMatrix categoriesFor: #determinant!arithmetic!public! !
+!LapackMatrix categoriesFor: #differenceFromLapackMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #differenceWithLapackMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #dotProduct:elementsIncrement:with:increment:!blas!public! !
+!LapackMatrix categoriesFor: #eigenValueDecomposition!decomposition!public! !
+!LapackMatrix categoriesFor: #eigenValues!decomposition!public! !
+!LapackMatrix categoriesFor: #fill:elementsWithStride:withSelfPlusScalar:timesVector:stride:!blas!public! !
+!LapackMatrix categoriesFor: #fillM:byN:withScalar:timesColumnVector:stride:timesRowVector:stride:!blas!public! !
+!LapackMatrix categoriesFor: #fillRandNormal!accessing-submatrix!public! !
+!LapackMatrix categoriesFor: #fillRandNormalWithSeed:!accessing-submatrix!public! !
+!LapackMatrix categoriesFor: #fillRandUniform!accessing-submatrix!public! !
+!LapackMatrix categoriesFor: #fillRandUniformWithSeed:!accessing-submatrix!public! !
+!LapackMatrix categoriesFor: #fromColumn:toColumn:by:!accessing-submatrix!public! !
+!LapackMatrix categoriesFor: #generalizedEigenValueDecompositionWithRHSMatrix:!decomposition!public! !
+!LapackMatrix categoriesFor: #hessenbergDecomposition!decomposition!public! !
+!LapackMatrix categoriesFor: #imaginaryPart!arithmetic-complex!public! !
+!LapackMatrix categoriesFor: #inPlaceScaledByComplex:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #inPlaceScaledByNumber:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #inPlaceSolve:!arithmetic!public! !
+!LapackMatrix categoriesFor: #isBandMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isComplexMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isDiagonalMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isDoublePrecisionMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isGeneralMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isHermitianMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isInCSpace!public!testing! !
+!LapackMatrix categoriesFor: #isPackedMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isRealMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isSinglePrecisionMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isSymmetricMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isTriangularMatrix!public!testing! !
+!LapackMatrix categoriesFor: #isUnpackedMatrix!public!testing! !
+!LapackMatrix categoriesFor: #lapackInterface!accessing!public! !
+!LapackMatrix categoriesFor: #leftDivideFromLapackMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #leftDivideWithLapackMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #multiplyByFloat:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #multiplyByFraction:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #multiplyByInteger:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #multiplyByScaledDecimal:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #naiveCoerceToDoublePrecisionMatrix!coercing!public! !
+!LapackMatrix categoriesFor: #naiveCoerceToSinglePrecisionMatrix!coercing!public! !
+!LapackMatrix categoriesFor: #negated!arithmetic!public! !
+!LapackMatrix categoriesFor: #norm1!norm!public! !
+!LapackMatrix categoriesFor: #normFrobenius!norm!public! !
+!LapackMatrix categoriesFor: #normInfinity!norm!public! !
+!LapackMatrix categoriesFor: #pluDecomposition!decomposition!public! !
+!LapackMatrix categoriesFor: #postCoercingFromLapackMatrix:do:!coercing!public! !
+!LapackMatrix categoriesFor: #postCopy!copying!public! !
+!LapackMatrix categoriesFor: #productColumnVectorWithRowVector:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #productFromComplex:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #productFromDouble:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #productFromFixedPoint:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #productFromFloat:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #productFromFraction:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #productFromInteger:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #productFromLapackMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #productRowVectorWithColumnVector:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #productRowVectorWithMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #productWithLapackMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #pseudoInverse!arithmetic!public! !
+!LapackMatrix categoriesFor: #pseudoInverseTolerance:!arithmetic!public! !
+!LapackMatrix categoriesFor: #qrDecomposition!decomposition!public! !
+!LapackMatrix categoriesFor: #qrpDecomposition!decomposition!public! !
+!LapackMatrix categoriesFor: #quotientFromLapackMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #rank!accessing!public! !
+!LapackMatrix categoriesFor: #rankTolerance:!accessing!public! !
+!LapackMatrix categoriesFor: #realPart!arithmetic-complex!public! !
+!LapackMatrix categoriesFor: #reciprocal!arithmetic!public! !
+!LapackMatrix categoriesFor: #reduceGeneralityIfPossible!coercing!public! !
+!LapackMatrix categoriesFor: #rightDivideWithLapackMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #scaledByComplex:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #scaledByNumber:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #schurDecomposition!decomposition!public! !
+!LapackMatrix categoriesFor: #setOffDiagonal:diagonal:!accessing-elements!public! !
+!LapackMatrix categoriesFor: #singularValueDecomposition!decomposition!public! !
+!LapackMatrix categoriesFor: #singularValues!decomposition!public! !
+!LapackMatrix categoriesFor: #solve:!arithmetic!public! !
+!LapackMatrix categoriesFor: #storeInSmalltalkSpace!accessing-storage!public! !
+!LapackMatrix categoriesFor: #sumFromLapackMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #sumWithLapackMatrix:!arithmetic-internal!public! !
+!LapackMatrix categoriesFor: #swapColumn:withColumn:!accessing-submatrix!public! !
+!LapackMatrix categoriesFor: #swapRow:withRow:!accessing-submatrix!public! !
+!LapackMatrix categoriesFor: #transposeConjugated!arithmetic-complex!public! !
+!LapackMatrix categoriesFor: #withArrayOffsetBy:!accessing-storage!public! !
 
 !LapackMatrix class methodsFor!
 
@@ -2443,6 +2713,9 @@ rowAt: i columnAt: j put: aNumber 	^i = j 		ifTrue: [self arrayAt: i put: aNum
 
 sumWithLapackMatrix: aLapackMatrix 	"at this point, matrices should have same class"	| res |	res := self copy.	res castToColumn 		fill: self arraySize		elementsWithStride: 1		withSelfPlusScalar: 1		timesVector: aLapackMatrix castToColumn		stride: 1.	^res!
 
+transposed
+	^self!
+
 upperTriangle: ind 	"return upper triangle matrix"	^ind <= 0 ifTrue: [self] ifFalse: [self class nrow: nrow ncol: ncol]! !
 !LapackDiagonalMatrix categoriesFor: #at:!public! !
 !LapackDiagonalMatrix categoriesFor: #at:put:!public! !
@@ -2468,6 +2741,7 @@ upperTriangle: ind 	"return upper triangle matrix"	^ind <= 0 ifTrue: [self] i
 !LapackDiagonalMatrix categoriesFor: #rowAt:columnAt:!public! !
 !LapackDiagonalMatrix categoriesFor: #rowAt:columnAt:put:!public! !
 !LapackDiagonalMatrix categoriesFor: #sumWithLapackMatrix:!public! !
+!LapackDiagonalMatrix categoriesFor: #transposed!public! !
 !LapackDiagonalMatrix categoriesFor: #upperTriangle:!public! !
 
 !LapackDiagonalMatrix class methodsFor!
@@ -2497,7 +2771,23 @@ absMax
 
 coerceToGeneralMatrix	^self!
 
-diagonalAt: index 	| diag |	index >= 0 		ifTrue: 			[diag := self class nrow: (self diagonalSizeAt: index).			diag 				copy: diag size				elementsFrom: (self withArrayOffsetBy: index * nrow)				sourceIncrement: nrow + 1				destIncrement: 1]		ifFalse: 			[diag := self class nrow: (self diagonalSizeAt: index).			diag 				copy: diag size				elementsFrom: (self withArrayOffsetBy: index negated)				sourceIncrement: nrow + 1				destIncrement: 1].	^diag!
+diagonalAt: index 
+	| diag |
+	diag := self class nrow: (self diagonalSizeAt: index).
+	index >= 0 
+		ifTrue: 
+			[diag 
+				copy: diag size
+				elementsFrom: (self withArrayOffsetBy: index * nrow)
+				sourceIncrement: nrow + 1
+				destIncrement: 1]
+		ifFalse: 
+			[diag 
+				copy: diag size
+				elementsFrom: (self withArrayOffsetBy: index negated)
+				sourceIncrement: nrow + 1
+				destIncrement: 1].
+	^diag!
 
 eigenValueDecomposition
 	^self isRealMatrix 
@@ -2580,6 +2870,17 @@ fillM: m byN: n withSelfScaledBy: beta plusScalar: alpha timesLeftMatrix: a tran
 							transposed: transb
 							length: k)]!
 
+generalizedEigenValueDecompositionWithRHSMatrix: aLapackMatrix 
+	"solve a generalized eigen value problem"
+
+	^aLapackMatrix coercingFromLapackMatrix: self
+		do: 
+			[:a :b | 
+			(a isRealMatrix 
+				ifTrue: [LapackRealGeneralizedEigenDecomposition]
+				ifFalse: [LapackComplexGeneralizedEigenDecomposition])
+					decomposeLeft: a right: b]!
+
 i	| res |	res := self class complexMatrix nrow: nrow ncol: ncol.	^self class isComplexMatrix 		ifTrue: 			[| selfReal selfImag resReal resImag |			selfReal := self castToRealWithArrayOffsetBy: 0.			selfImag := self castToRealWithArrayOffsetBy: 1.			resReal := res castToRealWithArrayOffsetBy: 0.			resImag := res castToRealWithArrayOffsetBy: 1.			resImag 				copy: self arraySize				elementsFrom: selfReal				sourceIncrement: 2				destIncrement: 2.			resReal 				copy: self arraySize				elementsFrom: selfImag				sourceIncrement: 2				destIncrement: 2.			resReal 				scale: self arraySize				elementsBy: -1				increment: 2.			res]		ifFalse: 			[(res castToRealWithArrayOffsetBy: 1) 				copy: self arraySize				elementsFrom: self				sourceIncrement: 1				destIncrement: 2.			res]!
 
 lowerTriangle: ind 
@@ -2588,30 +2889,31 @@ lowerTriangle: ind
 	^
 	[ind <= 0 
 		ifTrue: 
-			[| b |
+			[| b offset |
 			b := self class triangularMatrix nrow: nrow ncol: ncol.
+			offset := ind negated.
 			b beLower.
 			self lapackInterface 
 				lacpyWithuplo: self lapackInterface lower
-				m: nrow + ind
-				n: ncol + ind
-				a: (self asParameterWithOffset: ind negated)
+				m: b nrow - offset
+				n: (b nrow - offset min: b ncol)
+				a: (self arrayPointerWithOffset: offset)
 				lda: nrow
-				b: (b asParameterWithOffset: ind negated)
+				b: (b arrayPointerWithOffset: offset)
 				ldb: b nrow.
 			b]
 		ifFalse: 
 			[| b offset |
 			offset := (ind + 1) * nrow.
 			b := self copy.
-			self lapackInterface 
-				lacpyWithuplo: self lapackInterface upper
-				m: nrow - ind - 1
-				n: ncol - ind - 1
-				a: (self zero asParameterWithOffset: offset)
-				lda: nrow
-				b: (b asParameterWithOffset: offset)
-				ldb: b nrow.
+			b lapackInterface 
+				lasetWithuplo: b lapackInterface upper
+				m: (b ncol - ind - 1 min: b nrow)
+				n: b ncol - ind - 1
+				alpha: 0.0
+				beta: 0.0
+				a: (b arrayPointerWithOffset: offset)
+				lda: b nrow.
 			b]] 
 			on: Error
 			do: [:exc | exc return: (super lowerTriangle: ind)]!
@@ -2726,6 +3028,77 @@ productMatrixWithMatrix: aLapackMatrix
 
 reciprocal	nrow = ncol ifFalse: [self error: 'should be square'].	^[self pluDecomposition inverse] on: Error		do: [:exc | exc return: super reciprocal]!
 
+smallLowerTriangle: ind 
+	"return lower triangle matrix"
+
+	^
+	[ind <= 0 
+		ifTrue: 
+			[| b |
+			b := self class triangularMatrix nrow: (nrow + ind max: 1) ncol: (ncol min: (nrow + ind max: 0)).
+			b beLower.
+			self lapackInterface 
+				lacpyWithuplo: self lapackInterface lower
+				m: b nrow
+				n: b ncol
+				a: (self arrayPointerWithOffset: ind negated)
+				lda: nrow
+				b: (b arrayPointerWithOffset: 0)
+				ldb: b nrow.
+			b]
+		ifFalse: 
+			[| b offset |
+			offset := (ind + 1) * nrow.
+			b := self class nrow: nrow ncol: (ncol min: nrow + ind).
+			b copy: b nrow rowsStartingAt: 1 and: b ncol columnsStartingAt: 1 from: self.
+			b lapackInterface 
+				lasetWithuplo: b lapackInterface upper
+				m: (b ncol - ind - 1 min: b nrow)
+				n: b ncol - ind - 1
+				alpha: 0.0
+				beta: 0.0
+				a: (b arrayPointerWithOffset: offset)
+				lda: b nrow.
+			b]] 
+			on: Error
+			do: [:exc | exc return: (super smallLowerTriangle: ind)]!
+
+smallUpperTriangle: ind 
+	"return upper triangle matrix"
+
+	^
+	[ind >= 0 
+		ifTrue: 
+			[| b offset |
+			offset := ind * nrow.
+			b := self class triangularMatrix nrow: (nrow min: (ncol - ind max: 1)) ncol: (ncol - ind max: 0).
+			b beUpper.
+			self lapackInterface 
+				lacpyWithuplo: self lapackInterface upper
+				m: b nrow
+				n: b ncol
+				a: (self arrayPointerWithOffset: offset)
+				lda: nrow
+				b: (b arrayPointerWithOffset: 0)
+				ldb: b nrow.
+			b]
+		ifFalse: 
+			[| b offset |
+			b := self class nrow: (nrow min: ncol - ind) ncol: ncol.
+			b copy: b nrow rowsStartingAt: 1 and: b ncol columnsStartingAt: 1 from: self.
+			offset := 1 - ind.
+			b lapackInterface
+				lasetWithuplo: self lapackInterface lower
+				m: b nrow - offset
+				n: (b nrow - offset min: b ncol)
+				alpha: 0.0
+				beta: 0.0
+				a: (b arrayPointerWithOffset: offset)
+				lda: b nrow.
+			b]] 
+			on: Error
+			do: [:exc | exc return: (super smallUpperTriangle: ind)]!
+
 swapColumn: j1 withColumn: j2 
 	((j1 between: 1 and: ncol) and: [j2 between: 1 and: ncol]) 
 		ifFalse: [^self error: 'bad column specification'].
@@ -2772,6 +3145,18 @@ swapRow: i1 withRow: i2
 									columnAt: col].
 					exc return: self]!
 
+transposed
+	| res |
+	self isRowMatrix ifTrue: [^self asColumnMatrix].
+	self isColumnMatrix ifTrue: [^self asRowMatrix].
+	res := self class allocateNrow: ncol ncol: nrow.
+	nrow <= ncol
+		ifTrue: [0 to: nrow - 1 do: [:i |
+				res copy: ncol elementsFrom: self sourceOffset: i sourceIncrement: nrow destOffset: i * ncol destIncrement: 1 ] ]
+		ifFalse: [0 to: ncol - 1 do: [:j |
+				res copy: nrow elementsFrom: self sourceOffset: j * nrow sourceIncrement: 1 destOffset: j destIncrement: ncol ] ].
+	^res!
+
 upperTriangle: ind 
 	"return upper triangle matrix"
 
@@ -2784,47 +3169,52 @@ upperTriangle: ind
 			b beUpper.
 			self lapackInterface 
 				lacpyWithuplo: self lapackInterface upper
-				m: nrow - ind
-				n: ncol - ind
-				a: (self asParameterWithOffset: offset)
+				m: (b ncol - ind min: b nrow)
+				n: b nrow - ind
+				a: (self arrayPointerWithOffset: offset)
 				lda: nrow
-				b: (b asParameterWithOffset: offset)
+				b: (b arrayPointerWithOffset: offset)
 				ldb: b nrow.
 			b]
 		ifFalse: 
-			[| b |
+			[| b offset |
 			b := self copy.
-			self lapackInterface 
-				lacpyWithuplo: self lapackInterface lower
-				m: nrow + ind - 1
-				n: ncol + ind - 1
-				a: (self zero asParameterWithOffset: 1 - ind)
-				lda: nrow
-				b: (b asParameterWithOffset: 1 - ind)
-				ldb: b nrow.
+			offset := 1 - ind.
+			b lapackInterface
+				lasetWithuplo: self lapackInterface lower
+				m: b nrow - offset
+				n: (b nrow - offset min: b ncol)
+				alpha: 0.0
+				beta: 0.0
+				a: (b arrayPointerWithOffset: offset)
+				lda: b nrow.
 			b]] 
 			on: Error
 			do: [:exc | exc return: (super upperTriangle: ind)]! !
-!LapackGeneralMatrix categoriesFor: #absMax!public! !
-!LapackGeneralMatrix categoriesFor: #coerceToGeneralMatrix!public! !
-!LapackGeneralMatrix categoriesFor: #diagonalAt:!public! !
-!LapackGeneralMatrix categoriesFor: #eigenValueDecomposition!public! !
-!LapackGeneralMatrix categoriesFor: #eigenValues!public! !
-!LapackGeneralMatrix categoriesFor: #fill:elementsWithStride:withSelfScaledBy:plusScalar:timesMatrix:transposed:timesVector:length:stride:!public! !
-!LapackGeneralMatrix categoriesFor: #fillM:byN:withSelfScaledBy:plusScalar:timesLeftMatrix:transposed:timesRightMatrix:transposed:length:!public! !
-!LapackGeneralMatrix categoriesFor: #i!public! !
-!LapackGeneralMatrix categoriesFor: #lowerTriangle:!public! !
-!LapackGeneralMatrix categoriesFor: #norm1!public! !
-!LapackGeneralMatrix categoriesFor: #normFrobenius!public! !
-!LapackGeneralMatrix categoriesFor: #normInfinity!public! !
-!LapackGeneralMatrix categoriesFor: #pluDecomposition!public! !
-!LapackGeneralMatrix categoriesFor: #productMatrixTransposeWithColumnVector:!public! !
-!LapackGeneralMatrix categoriesFor: #productMatrixWithColumnVector:!public! !
-!LapackGeneralMatrix categoriesFor: #productMatrixWithMatrix:!public! !
-!LapackGeneralMatrix categoriesFor: #reciprocal!public! !
+!LapackGeneralMatrix categoriesFor: #absMax!arithmetic!norm!public! !
+!LapackGeneralMatrix categoriesFor: #coerceToGeneralMatrix!arithmetic-internal!public! !
+!LapackGeneralMatrix categoriesFor: #diagonalAt:!accessing-submatrix!public! !
+!LapackGeneralMatrix categoriesFor: #eigenValueDecomposition!decomposition!public! !
+!LapackGeneralMatrix categoriesFor: #eigenValues!decomposition!public! !
+!LapackGeneralMatrix categoriesFor: #fill:elementsWithStride:withSelfScaledBy:plusScalar:timesMatrix:transposed:timesVector:length:stride:!blas!public! !
+!LapackGeneralMatrix categoriesFor: #fillM:byN:withSelfScaledBy:plusScalar:timesLeftMatrix:transposed:timesRightMatrix:transposed:length:!blas!public! !
+!LapackGeneralMatrix categoriesFor: #generalizedEigenValueDecompositionWithRHSMatrix:!decomposition!public! !
+!LapackGeneralMatrix categoriesFor: #i!arithmetic-complex!public! !
+!LapackGeneralMatrix categoriesFor: #lowerTriangle:!accessing-submatrix!public! !
+!LapackGeneralMatrix categoriesFor: #norm1!norm!public! !
+!LapackGeneralMatrix categoriesFor: #normFrobenius!norm!public! !
+!LapackGeneralMatrix categoriesFor: #normInfinity!norm!public! !
+!LapackGeneralMatrix categoriesFor: #pluDecomposition!decomposition!public! !
+!LapackGeneralMatrix categoriesFor: #productMatrixTransposeWithColumnVector:!arithmetic-internal!public! !
+!LapackGeneralMatrix categoriesFor: #productMatrixWithColumnVector:!arithmetic-internal!public! !
+!LapackGeneralMatrix categoriesFor: #productMatrixWithMatrix:!arithmetic-internal!public! !
+!LapackGeneralMatrix categoriesFor: #reciprocal!arithmetic!public! !
+!LapackGeneralMatrix categoriesFor: #smallLowerTriangle:!accessing-submatrix!public! !
+!LapackGeneralMatrix categoriesFor: #smallUpperTriangle:!accessing-submatrix!public! !
 !LapackGeneralMatrix categoriesFor: #swapColumn:withColumn:!public! !
 !LapackGeneralMatrix categoriesFor: #swapRow:withRow:!public! !
-!LapackGeneralMatrix categoriesFor: #upperTriangle:!public! !
+!LapackGeneralMatrix categoriesFor: #transposed!norm!public! !
+!LapackGeneralMatrix categoriesFor: #upperTriangle:!accessing-submatrix!public! !
 
 LapackHalfMatrix guid: (GUID fromString: '{7BCA3B72-375B-4750-B6DD-E3D7FD401C4E}')!
 LapackHalfMatrix comment: 'LapackHalfMatrix has common protocol for those matrices storing only half a triangle.
@@ -3581,6 +3971,18 @@ setArray: anArray nrow: nr ncol: nc 	self beBothUpperLower.	super 		setArray:
 
 singularValueDecomposition	self fillOtherTriangle.	^super singularValueDecomposition!
 
+smallLowerTriangle: ind 
+	"return lower triangle matrix"
+
+	(ind <= 0 and: [self isLower]) ifFalse: [self fillOtherTriangle].
+	^(self castTo: self class generalMatrix) smallLowerTriangle: ind!
+
+smallUpperTriangle: ind 
+	"return upper triangle matrix"
+
+	(ind >= 0 and: [self isUpper]) ifFalse: [self fillOtherTriangle].
+	^(self castTo: self class generalMatrix) smallUpperTriangle: ind!
+
 sumWithLapackMatrix: aLapackMatrix 	"at this point, matrices should have same class.	but are they both upper / lower ?"	| res |	((aLapackMatrix isUpper and: [self isLower]) 		or: [aLapackMatrix isLower and: [self isUpper]]) 			ifTrue: [self fillOtherTriangle].	res := self copy.	res 		fill: self size		elementsWithStride: 1		withSelfPlusScalar: 1		timesVector: aLapackMatrix		stride: 1.	self isBothUpperLower 		ifTrue: 			[aLapackMatrix isUpper 				ifTrue: [res beUpper]				ifFalse: [aLapackMatrix isLower ifTrue: [res beLower]]].	^res!
 
 transposeConjugated	^self!
@@ -3593,7 +3995,7 @@ upperTriangle: ind 	"return upper triangle matrix"	(ind >= 0 and: [self isUpp
 !LapackUnpackedHermitianMatrix categoriesFor: #coerceToGeneralMatrix!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #coercingFromComplexNumber:do:!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #complementOfRow:column:!public! !
-!LapackUnpackedHermitianMatrix categoriesFor: #diagonalAt:!public! !
+!LapackUnpackedHermitianMatrix categoriesFor: #diagonalAt:!accessing-submatrix!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #differenceWithLapackMatrix:!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #eigenValueDecomposition!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #fillLowerTriangleLapack!public! !
@@ -3607,7 +4009,7 @@ upperTriangle: ind 	"return upper triangle matrix"	(ind >= 0 and: [self isUpp
 !LapackUnpackedHermitianMatrix categoriesFor: #isBothUpperLower!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #isHermitian!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #isSymmetric!public! !
-!LapackUnpackedHermitianMatrix categoriesFor: #lowerTriangle:!public! !
+!LapackUnpackedHermitianMatrix categoriesFor: #lowerTriangle:!accessing-submatrix!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #norm1!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #normFrobenius!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #normInfinity!public! !
@@ -3620,10 +4022,12 @@ upperTriangle: ind 	"return upper triangle matrix"	(ind >= 0 and: [self isUpp
 !LapackUnpackedHermitianMatrix categoriesFor: #scaledByComplex:!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #setArray:nrow:ncol:!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #singularValueDecomposition!public! !
+!LapackUnpackedHermitianMatrix categoriesFor: #smallLowerTriangle:!accessing-submatrix!public! !
+!LapackUnpackedHermitianMatrix categoriesFor: #smallUpperTriangle:!accessing-submatrix!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #sumWithLapackMatrix:!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #transposeConjugated!public! !
 !LapackUnpackedHermitianMatrix categoriesFor: #transposed!public! !
-!LapackUnpackedHermitianMatrix categoriesFor: #upperTriangle:!public! !
+!LapackUnpackedHermitianMatrix categoriesFor: #upperTriangle:!accessing-submatrix!public! !
 
 !LapackUnpackedHermitianMatrix class methodsFor!
 
@@ -3922,11 +4326,27 @@ reciprocal
 		diag: self lapackInterface nonUnit
 		n: ncol
 		a: inv asParameter
-		lda: nrow] 
+		lda: nrow.
+	inv] 
 			on: Error
 			do: [:exc | exc return: super reciprocal]!
 
 sumWithLapackMatrix: aLapackMatrix 	"at this point, matrices should have same class.	but are they both upper / lower ?"	| res |	res := self copy.	res 		fill: self size		elementsWithStride: 1		withSelfPlusScalar: 1		timesVector: aLapackMatrix		stride: 1.	(self isUpper xor: aLapackMatrix isUpper) 		ifTrue: [res := res castTo: self class generalMatrix].	^res!
+
+transposed
+	| res |
+	nrow = 1 ifTrue: [^self].
+	res := self class allocateNrow: ncol ncol: nrow.
+	self isUpper
+		ifTrue:
+			[res beLower.
+			0 to: nrow - 1 do: [:i |
+				res copy: ncol - i elementsFrom: self sourceOffset: i * nrow + i sourceIncrement: nrow destOffset: i * ncol + i destIncrement: 1 ] ]
+		ifFalse: 
+			[res beUpper.
+			0 to: ncol - 1 do: [:i |
+				res copy: nrow - i elementsFrom: self sourceOffset: i * nrow + i sourceIncrement: 1 destOffset: i * ncol + i destIncrement: ncol ] ].
+	^res!
 
 upperTriangle: ind 
 	"return upper triangle matrix"
@@ -3983,6 +4403,7 @@ upperTriangle: ind
 !LapackUnpackedTriangularMatrix categoriesFor: #productMatrixWithMatrix:!public! !
 !LapackUnpackedTriangularMatrix categoriesFor: #reciprocal!public! !
 !LapackUnpackedTriangularMatrix categoriesFor: #sumWithLapackMatrix:!public! !
+!LapackUnpackedTriangularMatrix categoriesFor: #transposed!public! !
 !LapackUnpackedTriangularMatrix categoriesFor: #upperTriangle:!public! !
 
 !LapackUnpackedTriangularMatrix class methodsFor!
