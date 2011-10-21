@@ -1,7 +1,11 @@
 | package |
 package := Package name: 'Smallapack-External'.
 package paxVersion: 1;
-	basicComment: ''.
+	basicComment: 'Smallapack-External defines the BLAS-LAPACK external libraries.
+
+These libraries are for doing LINEAR ALGEBRA on numerical matrices
+- single or double precision floating point
+- in real or complex field'.
 
 
 package classNames
@@ -39,7 +43,7 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: '..\..\WINDOWS\Profiles\nicolas\Mes Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: 'E:\Documents and Settings\nicolas\My Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
 	yourself).
 
 package!
@@ -2423,6 +2427,57 @@ ggbalWithjob: job n: n a: a lda: lda b: b ldb: ldb ilo: ilo ihi: ihi lscale: lsc
 				self free: cARGldb.
 				self free: cARGinfo]!
 
+ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr 
+	"generalized eigenvalue/vector decomposition (for complex general matrices)
+	use LAPACK 3.0 feature to get optimized lwork
+	return 0 if OK"
+
+	| work rwork lwork |
+	^
+	[work := self allocateElementArraySize: 1.
+	rwork := self allocateRealArraySize: 8 * n.
+	(self 
+		ggevWithjobvl: jobvl
+		jobvr: jobvr
+		n: n
+		a: a
+		lda: lda
+		b: b
+		ldb: ldb
+		alpha: alpha
+		beta: beta
+		vl: vl
+		ldvl: ldvl
+		vr: vr
+		ldvr: ldvr
+		work: work
+		lwork: -1
+		rwork: rwork) = 0 
+		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
+		ifFalse: [lwork := 1 max: 2 * n].
+	work free.
+	work := self allocateElementArraySize: lwork.
+	self 
+		ggevWithjobvl: jobvl
+		jobvr: jobvr
+		n: n
+		a: a
+		lda: lda
+		b: b
+		ldb: ldb
+		alpha: alpha
+		beta: beta
+		vl: vl
+		ldvl: ldvl
+		vr: vr
+		ldvr: ldvr
+		work: work
+		lwork: lwork
+		rwork: rwork] 
+			ensure: 
+				[self free: rwork.
+				self free: work]!
+
 ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr work: work lwork: lwork rwork: rwork 
 	| cARGjobvl cARGjobvr cARGn cARGlda cARGldb cARGldvl cARGldvr cARGlwork cARGinfo |
 	^
@@ -2466,6 +2521,54 @@ ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alpha: alpha 
 				self free: cARGldvr.
 				self free: cARGlwork.
 				self free: cARGinfo]!
+
+ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alphar: alphar alphai: alphai beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr 
+	"generalized eigenvalue/vector decomposition (for real general matrices)
+	use LAPACK 3.0 feature to get optimized lwork
+	return 0 if OK"
+
+	| work lwork |
+	^
+	[work := self allocateElementArraySize: 1.
+	(self 
+		ggevWithjobvl: jobvl
+		jobvr: jobvr
+		n: n
+		a: a
+		lda: lda
+		b: b
+		ldb: ldb
+		alphar: alphar
+		alphai: alphai
+		beta: beta
+		vl: vl
+		ldvl: ldvl
+		vr: vr
+		ldvr: ldvr
+		work: work
+		lwork: -1) = 0 
+		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
+		ifFalse: [lwork := 1 max: 8 * n * n].
+	work free.
+	work := self allocateElementArraySize: lwork.
+	self 
+		ggevWithjobvl: jobvl
+		jobvr: jobvr
+		n: n
+		a: a
+		lda: lda
+		b: b
+		ldb: ldb
+		alphar: alphar
+		alphai: alphai
+		beta: beta
+		vl: vl
+		ldvl: ldvl
+		vr: vr
+		ldvr: ldvr
+		work: work
+		lwork: lwork] 
+			ensure: [self free: work]!
 
 ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alphar: alphar alphai: alphai beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr work: work lwork: lwork 
 	| cARGjobvl cARGjobvr cARGn cARGlda cARGldb cARGldvl cARGldvr cARGlwork cARGinfo |
@@ -2708,6 +2811,46 @@ gghrdWithcompq: compq compz: compz n: n ilo: ilo ihi: ihi a: a lda: lda b: b ldb
 				self free: cARGldz.
 				self free: cARGinfo]!
 
+gglseWithm: m n: n p: p a: a lda: lda b: b ldb: ldb c: c d: d x: x 
+	"least squares subject to equality constraints by orthogonalization
+	use LAPACK 3.0 feature to get optimized lwork
+	return 0 if OK"
+	
+	| work lwork |
+	^ [work := self allocateElementArraySize: 1.
+	(self
+			gglseWithm: m
+			n: n
+			p: p
+			a: a
+			lda: lda
+			b: b
+			ldb: ldb
+			c: c
+			d: d
+			x: x
+			work: work
+			lwork: -1)
+			= 0
+		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
+		ifFalse: [lwork := 1 max: m + n + p].
+	self free: work.
+	work := self allocateElementArraySize: lwork.
+	self
+		gglseWithm: m
+		n: n
+		p: p
+		a: a
+		lda: lda
+		b: b
+		ldb: ldb
+		c: c
+		d: d
+		x: x
+		work: work
+		lwork: lwork]
+		ensure: [self free: work]!
+
 gglseWithm: m n: n p: p a: a lda: lda b: b ldb: ldb c: c d: d x: x work: work lwork: lwork 
 	| cARGm cARGn cARGp cARGlda cARGldb cARGlwork cARGinfo |
 	^
@@ -2808,8 +2951,78 @@ ggrqfWithm: m p: p n: n a: a lda: lda taua: taua b: b ldb: ldb taub: taub work: 
 				self free: cARGlwork.
 				self free: cARGinfo]!
 
+ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq
+	"Generalized singular value/vector decomposition (for real/complex general matrices)
+	return 0 if OK"
+
+	| work rwork iwork |
+	^self isComplex 
+		ifTrue: 
+			[
+			[work := self allocateElementArraySize: ((3 * n max: m) max: p)+n.
+			rwork := self allocateRealArraySize: 2 * n.
+			iwork := self allocateIntegerArraySize: n.
+			self 
+				ggsvdWithjobu: jobu
+				jobv: jobv
+				jobq: jobq
+				m: m
+				n: n
+				p: p
+				k: k
+				l: l
+				a: a
+				lda: lda
+				b: b
+				ldb: ldb
+				alpha: alpha
+				beta: beta
+				u: u
+				ldu: ldu
+				v: v
+				ldv: ldv
+				q: q
+				ldq: ldq
+				work: work
+				rwork: rwork
+				iwork: iwork] 
+					ensure: 
+						[self free: work.
+						self free: rwork.
+						self free: iwork]]
+		ifFalse: 
+			[
+			[work := self allocateElementArraySize: ((3*n max: m) max: p)+n.
+			iwork := self allocateIntegerArraySize: n.
+			self 
+				ggsvdWithjobu: jobu
+				jobv: jobv
+				jobq: jobq
+				m: m
+				n: n
+				p: p
+				k: k
+				l: l
+				a: a
+				lda: lda
+				b: b
+				ldb: ldb
+				alpha: alpha
+				beta: beta
+				u: u
+				ldu: ldu
+				v: v
+				ldv: ldv
+				q: q
+				ldq: ldq
+				work: work
+				iwork: iwork] 
+					ensure: 
+						[self free: work.
+						self free: iwork]]!
+
 ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work iwork: iwork 
-	| cARGjobu cARGjobv cARGjobq cARGm cARGn cARGp cARGlda cARGldb cARGldu cARGldv cARGldq |
+	| cARGjobu cARGjobv cARGjobq cARGm cARGn cARGp cARGlda cARGldb cARGldu cARGldv cARGldq cARGinfo |
 	^
 	[cARGjobu := self cCharPointerOn: jobu.
 	cARGjobv := self cCharPointerOn: jobv.
@@ -2822,6 +3035,7 @@ ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda
 	cARGldu := self cIntegerPointerOn: ldu.
 	cARGldv := self cIntegerPointerOn: ldv.
 	cARGldq := self cIntegerPointerOn: ldq.
+	cARGinfo := self cIntegerPointerOn: 0.
 	self 
 		xggsvdWithjobu: cARGjobu
 		jobv: cARGjobv
@@ -2845,9 +3059,11 @@ ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda
 		ldq: cARGldq
 		work: work
 		iwork: iwork
+		info: cARGinfo
 		length: 1
 		length: 1
-		length: 1] 
+		length: 1.
+	cARGinfo sdwordAtOffset: 0]
 			ensure: 
 				[self free: cARGjobu.
 				self free: cARGjobv.
@@ -2859,10 +3075,11 @@ ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda
 				self free: cARGldb.
 				self free: cARGldu.
 				self free: cARGldv.
-				self free: cARGldq]!
+				self free: cARGldq.
+				self free: cARGinfo]!
 
 ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work rwork: rwork iwork: iwork 
-	| cARGjobu cARGjobv cARGjobq cARGm cARGn cARGp cARGlda cARGldb cARGldu cARGldv cARGldq |
+	| cARGjobu cARGjobv cARGjobq cARGm cARGn cARGp cARGlda cARGldb cARGldu cARGldv cARGldq cARGinfo |
 	^
 	[cARGjobu := self cCharPointerOn: jobu.
 	cARGjobv := self cCharPointerOn: jobv.
@@ -2875,6 +3092,7 @@ ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda
 	cARGldu := self cIntegerPointerOn: ldu.
 	cARGldv := self cIntegerPointerOn: ldv.
 	cARGldq := self cIntegerPointerOn: ldq.
+	cARGinfo := self cIntegerPointerOn: 0.
 	self 
 		xggsvdWithjobu: cARGjobu
 		jobv: cARGjobv
@@ -2899,9 +3117,11 @@ ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda
 		work: work
 		rwork: rwork
 		iwork: iwork
+		info: cARGinfo
 		length: 1
 		length: 1
-		length: 1] 
+		length: 1.
+	cARGinfo sdwordAtOffset: 0] 
 			ensure: 
 				[self free: cARGjobu.
 				self free: cARGjobv.
@@ -2913,7 +3133,8 @@ ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda
 				self free: cARGldb.
 				self free: cARGldu.
 				self free: cARGldv.
-				self free: cARGldq]!
+				self free: cARGldq.
+				self free: cARGinfo]!
 
 heconWithuplo: uplo n: n a: a lda: lda ipiv: ipiv anorm: anorm rcond: rcond work: work 
 	| cARGuplo cARGn cARGlda cARGanorm cARGinfo |
@@ -5613,6 +5834,21 @@ upper	^$U!
 
 valueEigenValuesInterval	"for finding eigenvalues lying in a certain interval"	^$V!
 
+wantQ: aBoolean
+	^aBoolean
+		ifTrue: [$Q]
+		ifFalse: [$N]!
+
+wantU: aBoolean
+	^aBoolean
+		ifTrue: [$U]
+		ifFalse: [$N]!
+
+wantV: aBoolean
+	^aBoolean
+		ifTrue: [$V]
+		ifFalse: [$N]!
+
 xgebakWithjob: job side: side n: n ilo: ilo ihi: ihi scale: scale m: m v: v ldv: ldv info: info length: lengthOfjob length: lengthOfside 
 
 	self subclassResponsibility!
@@ -5792,11 +6028,11 @@ xggrqfWithm: m p: p n: n a: a lda: lda taua: taua b: b ldb: ldb taub: taub work:
 
 	self subclassResponsibility!
 
-xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work iwork: iwork length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
+xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work iwork: iwork info: info length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
 
 	self subclassResponsibility!
 
-xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work rwork: rwork iwork: iwork length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
+xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work rwork: rwork iwork: iwork info: info length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
 
 	self subclassResponsibility!
 
@@ -6060,311 +6296,318 @@ xungqrWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork info: in
 xungrqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork info: info 
 
 	self subclassResponsibility! !
-!LapackLibrary categoriesFor: #allEigenValues!public! !
-!LapackLibrary categoriesFor: #allocateComplexArraySize:!public! !
-!LapackLibrary categoriesFor: #allocateElementArraySize:!public! !
-!LapackLibrary categoriesFor: #allocateRealArraySize:!public! !
-!LapackLibrary categoriesFor: #allSingularVector!public! !
-!LapackLibrary categoriesFor: #balanceDoNothing!public! !
-!LapackLibrary categoriesFor: #balancePermute!public! !
-!LapackLibrary categoriesFor: #balancePermuteAndScale!public! !
-!LapackLibrary categoriesFor: #balanceScale!public! !
-!LapackLibrary categoriesFor: #cComplexPointerOn:!public! !
-!LapackLibrary categoriesFor: #cElementPointerOn:!public! !
-!LapackLibrary categoriesFor: #cRealPointerOn:!public! !
-!LapackLibrary categoriesFor: #dlamch:length:!public! !
-!LapackLibrary categoriesFor: #doComputeVector!public! !
-!LapackLibrary categoriesFor: #dontComputeVector!public! !
-!LapackLibrary categoriesFor: #eps!public! !
-!LapackLibrary categoriesFor: #gebakWithjob:side:n:ilo:ihi:scale:m:v:ldv:!public! !
-!LapackLibrary categoriesFor: #gebalWithjob:n:a:lda:ilo:ihi:scale:!public! !
-!LapackLibrary categoriesFor: #geconWithnorm:n:a:lda:anorm:rcond:work:iwork:!public! !
-!LapackLibrary categoriesFor: #geconWithnorm:n:a:lda:anorm:rcond:work:rwork:!public! !
-!LapackLibrary categoriesFor: #geesWithjobvs:sort:select:n:a:lda:sdim:w:vs:ldvs:!public! !
-!LapackLibrary categoriesFor: #geesWithjobvs:sort:select:n:a:lda:sdim:w:vs:ldvs:work:lwork:rwork:bwork:!public! !
-!LapackLibrary categoriesFor: #geesWithjobvs:sort:select:n:a:lda:sdim:wr:wi:vs:ldvs:!public! !
-!LapackLibrary categoriesFor: #geesWithjobvs:sort:select:n:a:lda:sdim:wr:wi:vs:ldvs:work:lwork:bwork:!public! !
-!LapackLibrary categoriesFor: #geevWithjobvl:jobvr:n:a:lda:w:vl:ldvl:vr:ldvr:!public! !
-!LapackLibrary categoriesFor: #geevWithjobvl:jobvr:n:a:lda:w:vl:ldvl:vr:ldvr:work:lwork:rwork:!public! !
-!LapackLibrary categoriesFor: #geevWithjobvl:jobvr:n:a:lda:wr:wi:vl:ldvl:vr:ldvr:!public! !
-!LapackLibrary categoriesFor: #geevWithjobvl:jobvr:n:a:lda:wr:wi:vl:ldvl:vr:ldvr:work:lwork:!public! !
-!LapackLibrary categoriesFor: #geevxWithbalanc:jobvl:jobvr:sense:n:a:lda:w:vl:ldvl:vr:ldvr:scale:abnrm:rconde:rcondv:work:lwork:rwork:!public! !
-!LapackLibrary categoriesFor: #gehrdWithn:a:lda:tau:!public! !
-!LapackLibrary categoriesFor: #gehrdWithn:ilo:ihi:a:lda:tau:!public! !
-!LapackLibrary categoriesFor: #gehrdWithn:ilo:ihi:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #gelqfWithm:n:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #gelsdWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:!public! !
-!LapackLibrary categoriesFor: #gelsdWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:iwork:!public! !
-!LapackLibrary categoriesFor: #gelsdWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:rwork:iwork:!public! !
-!LapackLibrary categoriesFor: #gelssWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:!public! !
-!LapackLibrary categoriesFor: #gelssWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:!public! !
-!LapackLibrary categoriesFor: #gelssWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:rwork:!public! !
-!LapackLibrary categoriesFor: #gelsWithtrans:m:n:nrhs:a:lda:b:ldb:work:lwork:!public! !
-!LapackLibrary categoriesFor: #gelsxWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:!public! !
-!LapackLibrary categoriesFor: #gelsxWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:rwork:!public! !
-!LapackLibrary categoriesFor: #gelsyWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:!public! !
-!LapackLibrary categoriesFor: #gelsyWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:lwork:!public! !
-!LapackLibrary categoriesFor: #gelsyWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:lwork:rwork:!public! !
-!LapackLibrary categoriesFor: #geqlfWithm:n:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #geqp3Withm:n:a:lda:jpvt:tau:!public! !
-!LapackLibrary categoriesFor: #geqp3Withm:n:a:lda:jpvt:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #geqp3Withm:n:a:lda:jpvt:tau:work:lwork:rwork:!public! !
-!LapackLibrary categoriesFor: #geqrfWithm:n:a:lda:tau:!public! !
-!LapackLibrary categoriesFor: #geqrfWithm:n:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #gerqfWithm:n:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #gesddWithjobz:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:iwork:!public! !
-!LapackLibrary categoriesFor: #gesddWithjobz:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:rwork:iwork:!public! !
-!LapackLibrary categoriesFor: #gesvdWithjobu:jobvt:m:n:a:lda:s:u:ldu:vt:ldvt:!public! !
-!LapackLibrary categoriesFor: #gesvdWithjobu:jobvt:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:!public! !
-!LapackLibrary categoriesFor: #gesvdWithjobu:jobvt:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:rwork:!public! !
-!LapackLibrary categoriesFor: #gesvWithn:nrhs:a:lda:ipiv:b:ldb:!public! !
-!LapackLibrary categoriesFor: #getrfWithm:n:a:lda:ipiv:!public! !
-!LapackLibrary categoriesFor: #getriWithn:a:lda:ipiv:!public! !
-!LapackLibrary categoriesFor: #getriWithn:a:lda:ipiv:work:lwork:!public! !
-!LapackLibrary categoriesFor: #getrsWithtrans:n:nrhs:a:lda:ipiv:b:ldb:!public! !
-!LapackLibrary categoriesFor: #ggbakWithjob:side:n:ilo:ihi:lscale:rscale:m:v:ldv:!public! !
-!LapackLibrary categoriesFor: #ggbalWithjob:n:a:lda:b:ldb:ilo:ihi:lscale:rscale:work:!public! !
-!LapackLibrary categoriesFor: #ggevWithjobvl:jobvr:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:work:lwork:rwork:!public! !
-!LapackLibrary categoriesFor: #ggevWithjobvl:jobvr:n:a:lda:b:ldb:alphar:alphai:beta:vl:ldvl:vr:ldvr:work:lwork:!public! !
-!LapackLibrary categoriesFor: #ggevxWithbalanc:jobvl:jobvr:sense:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:lscale:rscale:abnrm:bbnrm:rconde:rcondv:work:lwork:rwork:iwork:bwork:!public! !
-!LapackLibrary categoriesFor: #ggevxWithbalanc:jobvl:jobvr:sense:n:a:lda:b:ldb:alphar:alphai:beta:vl:ldvl:vr:ldvr:lscale:rscale:abnrm:bbnrm:rconde:rcondv:work:lwork:iwork:bwork:!public! !
+!LapackLibrary categoriesFor: #allEigenValues!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #allocateComplexArraySize:!accessing!public! !
+!LapackLibrary categoriesFor: #allocateElementArraySize:!accessing!public! !
+!LapackLibrary categoriesFor: #allocateRealArraySize:!accessing!public! !
+!LapackLibrary categoriesFor: #allSingularVector!processing-svd!public! !
+!LapackLibrary categoriesFor: #balanceDoNothing!processing-balance!public! !
+!LapackLibrary categoriesFor: #balancePermute!processing-balance!public! !
+!LapackLibrary categoriesFor: #balancePermuteAndScale!processing-balance!public! !
+!LapackLibrary categoriesFor: #balanceScale!processing-balance!public! !
+!LapackLibrary categoriesFor: #cComplexPointerOn:!accessing!public! !
+!LapackLibrary categoriesFor: #cElementPointerOn:!accessing!public! !
+!LapackLibrary categoriesFor: #cRealPointerOn:!accessing!public! !
+!LapackLibrary categoriesFor: #dlamch:length:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #doComputeVector!accessing!public! !
+!LapackLibrary categoriesFor: #dontComputeVector!accessing!public! !
+!LapackLibrary categoriesFor: #eps!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #gebakWithjob:side:n:ilo:ihi:scale:m:v:ldv:!processing-balance!public! !
+!LapackLibrary categoriesFor: #gebalWithjob:n:a:lda:ilo:ihi:scale:!processing-balance!public! !
+!LapackLibrary categoriesFor: #geconWithnorm:n:a:lda:anorm:rcond:work:iwork:!processing-condition number!public! !
+!LapackLibrary categoriesFor: #geconWithnorm:n:a:lda:anorm:rcond:work:rwork:!processing-condition number!public! !
+!LapackLibrary categoriesFor: #geesWithjobvs:sort:select:n:a:lda:sdim:w:vs:ldvs:!processing-schur!public! !
+!LapackLibrary categoriesFor: #geesWithjobvs:sort:select:n:a:lda:sdim:w:vs:ldvs:work:lwork:rwork:bwork:!processing-schur!public! !
+!LapackLibrary categoriesFor: #geesWithjobvs:sort:select:n:a:lda:sdim:wr:wi:vs:ldvs:!processing-schur!public! !
+!LapackLibrary categoriesFor: #geesWithjobvs:sort:select:n:a:lda:sdim:wr:wi:vs:ldvs:work:lwork:bwork:!processing-schur!public! !
+!LapackLibrary categoriesFor: #geevWithjobvl:jobvr:n:a:lda:w:vl:ldvl:vr:ldvr:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #geevWithjobvl:jobvr:n:a:lda:w:vl:ldvl:vr:ldvr:work:lwork:rwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #geevWithjobvl:jobvr:n:a:lda:wr:wi:vl:ldvl:vr:ldvr:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #geevWithjobvl:jobvr:n:a:lda:wr:wi:vl:ldvl:vr:ldvr:work:lwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #geevxWithbalanc:jobvl:jobvr:sense:n:a:lda:w:vl:ldvl:vr:ldvr:scale:abnrm:rconde:rcondv:work:lwork:rwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #gehrdWithn:a:lda:tau:!processing-hessenberg!public! !
+!LapackLibrary categoriesFor: #gehrdWithn:ilo:ihi:a:lda:tau:!processing-hessenberg!public! !
+!LapackLibrary categoriesFor: #gehrdWithn:ilo:ihi:a:lda:tau:work:lwork:!processing-hessenberg!public! !
+!LapackLibrary categoriesFor: #gelqfWithm:n:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #gelsdWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelsdWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:iwork:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelsdWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:rwork:iwork:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelssWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelssWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelssWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:rwork:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelsWithtrans:m:n:nrhs:a:lda:b:ldb:work:lwork:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelsxWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelsxWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:rwork:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelsyWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelsyWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:lwork:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gelsyWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:lwork:rwork:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #geqlfWithm:n:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #geqp3Withm:n:a:lda:jpvt:tau:!processing-qr!public! !
+!LapackLibrary categoriesFor: #geqp3Withm:n:a:lda:jpvt:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #geqp3Withm:n:a:lda:jpvt:tau:work:lwork:rwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #geqrfWithm:n:a:lda:tau:!processing-qr!public! !
+!LapackLibrary categoriesFor: #geqrfWithm:n:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #gerqfWithm:n:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #gesddWithjobz:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:iwork:!processing-schur!public! !
+!LapackLibrary categoriesFor: #gesddWithjobz:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:rwork:iwork:!processing-schur!public! !
+!LapackLibrary categoriesFor: #gesvdWithjobu:jobvt:m:n:a:lda:s:u:ldu:vt:ldvt:!processing-svd!public! !
+!LapackLibrary categoriesFor: #gesvdWithjobu:jobvt:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:!processing-svd!public! !
+!LapackLibrary categoriesFor: #gesvdWithjobu:jobvt:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:rwork:!processing-svd!public! !
+!LapackLibrary categoriesFor: #gesvWithn:nrhs:a:lda:ipiv:b:ldb:!processing-solve!public! !
+!LapackLibrary categoriesFor: #getrfWithm:n:a:lda:ipiv:!processing-solve!public! !
+!LapackLibrary categoriesFor: #getriWithn:a:lda:ipiv:!processing-solve!public! !
+!LapackLibrary categoriesFor: #getriWithn:a:lda:ipiv:work:lwork:!processing-solve!public! !
+!LapackLibrary categoriesFor: #getrsWithtrans:n:nrhs:a:lda:ipiv:b:ldb:!processing-solve!public! !
+!LapackLibrary categoriesFor: #ggbakWithjob:side:n:ilo:ihi:lscale:rscale:m:v:ldv:!processing-balance!public! !
+!LapackLibrary categoriesFor: #ggbalWithjob:n:a:lda:b:ldb:ilo:ihi:lscale:rscale:work:!processing-balance!public! !
+!LapackLibrary categoriesFor: #ggevWithjobvl:jobvr:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #ggevWithjobvl:jobvr:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:work:lwork:rwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #ggevWithjobvl:jobvr:n:a:lda:b:ldb:alphar:alphai:beta:vl:ldvl:vr:ldvr:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #ggevWithjobvl:jobvr:n:a:lda:b:ldb:alphar:alphai:beta:vl:ldvl:vr:ldvr:work:lwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #ggevxWithbalanc:jobvl:jobvr:sense:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:lscale:rscale:abnrm:bbnrm:rconde:rcondv:work:lwork:rwork:iwork:bwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #ggevxWithbalanc:jobvl:jobvr:sense:n:a:lda:b:ldb:alphar:alphai:beta:vl:ldvl:vr:ldvr:lscale:rscale:abnrm:bbnrm:rconde:rcondv:work:lwork:iwork:bwork:!processing-eigenvalue!public! !
 !LapackLibrary categoriesFor: #ggglmWithn:m:p:a:lda:b:ldb:d:x:y:work:lwork:!public! !
-!LapackLibrary categoriesFor: #gghrdWithcompq:compz:n:ilo:ihi:a:lda:b:ldb:q:ldq:z:ldz:!public! !
-!LapackLibrary categoriesFor: #gglseWithm:n:p:a:lda:b:ldb:c:d:x:work:lwork:!public! !
-!LapackLibrary categoriesFor: #ggqrfWithn:m:p:a:lda:taua:b:ldb:taub:work:lwork:!public! !
-!LapackLibrary categoriesFor: #ggrqfWithm:p:n:a:lda:taua:b:ldb:taub:work:lwork:!public! !
-!LapackLibrary categoriesFor: #ggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:iwork:!public! !
-!LapackLibrary categoriesFor: #ggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:rwork:iwork:!public! !
-!LapackLibrary categoriesFor: #heconWithuplo:n:a:lda:ipiv:anorm:rcond:work:!public! !
-!LapackLibrary categoriesFor: #heevdWithjobz:uplo:n:a:lda:w:!public! !
-!LapackLibrary categoriesFor: #heevdWithjobz:uplo:n:a:lda:w:work:lwork:rwork:lrwork:iwork:liwork:!public! !
-!LapackLibrary categoriesFor: #heevrWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:isuppz:work:lwork:rwork:iwork:!public! !
-!LapackLibrary categoriesFor: #heevWithjobz:uplo:n:a:lda:w:!public! !
-!LapackLibrary categoriesFor: #heevWithjobz:uplo:n:a:lda:w:work:lwork:rwork:!public! !
-!LapackLibrary categoriesFor: #heevxWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:rwork:iwork:ifail:!public! !
-!LapackLibrary categoriesFor: #hegvdWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:rwork:lrwork:iwork:liwork:!public! !
-!LapackLibrary categoriesFor: #hegvWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:rwork:!public! !
-!LapackLibrary categoriesFor: #hegvxWithitype:jobz:range:uplo:n:a:lda:b:ldb:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:rwork:iwork:ifail:!public! !
+!LapackLibrary categoriesFor: #gghrdWithcompq:compz:n:ilo:ihi:a:lda:b:ldb:q:ldq:z:ldz:!processing-hessenberg!public! !
+!LapackLibrary categoriesFor: #gglseWithm:n:p:a:lda:b:ldb:c:d:x:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #gglseWithm:n:p:a:lda:b:ldb:c:d:x:work:lwork:!processing-least squares!public! !
+!LapackLibrary categoriesFor: #ggqrfWithn:m:p:a:lda:taua:b:ldb:taub:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #ggrqfWithm:p:n:a:lda:taua:b:ldb:taub:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #ggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:!processing-svd!public! !
+!LapackLibrary categoriesFor: #ggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:iwork:!processing-svd!public! !
+!LapackLibrary categoriesFor: #ggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:rwork:iwork:!processing-svd!public! !
+!LapackLibrary categoriesFor: #heconWithuplo:n:a:lda:ipiv:anorm:rcond:work:!processing-condition number!public! !
+!LapackLibrary categoriesFor: #heevdWithjobz:uplo:n:a:lda:w:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #heevdWithjobz:uplo:n:a:lda:w:work:lwork:rwork:lrwork:iwork:liwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #heevrWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:isuppz:work:lwork:rwork:iwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #heevWithjobz:uplo:n:a:lda:w:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #heevWithjobz:uplo:n:a:lda:w:work:lwork:rwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #heevxWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:rwork:iwork:ifail:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #hegvdWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:rwork:lrwork:iwork:liwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #hegvWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:rwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #hegvxWithitype:jobz:range:uplo:n:a:lda:b:ldb:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:rwork:iwork:ifail:!processing-eigenvalue!public! !
 !LapackLibrary categoriesFor: #hesvWithuplo:n:nrhs:a:lda:ipiv:b:ldb:!public! !
 !LapackLibrary categoriesFor: #hesvWithuplo:n:nrhs:a:lda:ipiv:b:ldb:work:lwork:!public! !
-!LapackLibrary categoriesFor: #hetrfWithuplo:n:a:lda:ipiv:!public! !
-!LapackLibrary categoriesFor: #hetrfWithuplo:n:a:lda:ipiv:work:lwork:!public! !
-!LapackLibrary categoriesFor: #hetriWithuplo:n:a:lda:ipiv:!public! !
-!LapackLibrary categoriesFor: #hetriWithuplo:n:a:lda:ipiv:work:!public! !
-!LapackLibrary categoriesFor: #hetrsWithuplo:n:nrhs:a:lda:ipiv:b:ldb:!public! !
-!LapackLibrary categoriesFor: #ilaenvWithispec:name:opts:n1:n2:n3:n4:!public! !
-!LapackLibrary categoriesFor: #ilaenvWithispec:name:opts:n1:n2:n3:n4:length:length:!public! !
-!LapackLibrary categoriesFor: #isComplex!public! !
-!LapackLibrary categoriesFor: #isDoublePrecision!public! !
-!LapackLibrary categoriesFor: #isReal!public! !
-!LapackLibrary categoriesFor: #isSinglePrecision!public! !
-!LapackLibrary categoriesFor: #ithEigenValuesInterval!public! !
-!LapackLibrary categoriesFor: #lacgvWithn:x:incx:!public! !
-!LapackLibrary categoriesFor: #lacpyWithuplo:m:n:a:lda:b:ldb:!public! !
-!LapackLibrary categoriesFor: #lamch:!public! !
-!LapackLibrary categoriesFor: #langeWithnorm:m:n:a:lda:!public! !
-!LapackLibrary categoriesFor: #langeWithnorm:m:n:a:lda:work:!public! !
-!LapackLibrary categoriesFor: #lanheWithnorm:uplo:n:a:lda:!public! !
-!LapackLibrary categoriesFor: #lanheWithnorm:uplo:n:a:lda:work:!public! !
-!LapackLibrary categoriesFor: #lansyWithnorm:uplo:n:a:lda:!public! !
-!LapackLibrary categoriesFor: #lansyWithnorm:uplo:n:a:lda:work:!public! !
-!LapackLibrary categoriesFor: #lantrWithnorm:uplo:diag:m:n:a:lda:!public! !
-!LapackLibrary categoriesFor: #lantrWithnorm:uplo:diag:m:n:a:lda:work:!public! !
-!LapackLibrary categoriesFor: #larnvWithidist:iseed:n:x:!public! !
-!LapackLibrary categoriesFor: #lasetWithuplo:m:n:alpha:beta:a:lda:!public! !
+!LapackLibrary categoriesFor: #hetrfWithuplo:n:a:lda:ipiv:!processing-solve!public! !
+!LapackLibrary categoriesFor: #hetrfWithuplo:n:a:lda:ipiv:work:lwork:!processing-solve!public! !
+!LapackLibrary categoriesFor: #hetriWithuplo:n:a:lda:ipiv:!processing-solve!public! !
+!LapackLibrary categoriesFor: #hetriWithuplo:n:a:lda:ipiv:work:!processing-solve!public! !
+!LapackLibrary categoriesFor: #hetrsWithuplo:n:nrhs:a:lda:ipiv:b:ldb:!processing-solve!public! !
+!LapackLibrary categoriesFor: #ilaenvWithispec:name:opts:n1:n2:n3:n4:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #ilaenvWithispec:name:opts:n1:n2:n3:n4:length:length:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #isComplex!public!testing! !
+!LapackLibrary categoriesFor: #isDoublePrecision!public!testing! !
+!LapackLibrary categoriesFor: #isReal!public!testing! !
+!LapackLibrary categoriesFor: #isSinglePrecision!public!testing! !
+!LapackLibrary categoriesFor: #ithEigenValuesInterval!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #lacgvWithn:x:incx:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #lacpyWithuplo:m:n:a:lda:b:ldb:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #lamch:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #langeWithnorm:m:n:a:lda:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #langeWithnorm:m:n:a:lda:work:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #lanheWithnorm:uplo:n:a:lda:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #lanheWithnorm:uplo:n:a:lda:work:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #lansyWithnorm:uplo:n:a:lda:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #lansyWithnorm:uplo:n:a:lda:work:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #lantrWithnorm:uplo:diag:m:n:a:lda:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #lantrWithnorm:uplo:diag:m:n:a:lda:work:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #larnvWithidist:iseed:n:x:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #lasetWithuplo:m:n:alpha:beta:a:lda:!processing-auxiliary!public! !
 !LapackLibrary categoriesFor: #lower!public! !
 !LapackLibrary categoriesFor: #maxAbs!public! !
-!LapackLibrary categoriesFor: #nonUnit!public! !
+!LapackLibrary categoriesFor: #nonUnit!accessing!public! !
 !LapackLibrary categoriesFor: #norm1!public! !
 !LapackLibrary categoriesFor: #normal01!public! !
 !LapackLibrary categoriesFor: #normF!public! !
 !LapackLibrary categoriesFor: #normI!public! !
-!LapackLibrary categoriesFor: #noSingularVector!public! !
+!LapackLibrary categoriesFor: #noSingularVector!processing-svd!public! !
 !LapackLibrary categoriesFor: #notTransposed!public! !
-!LapackLibrary categoriesFor: #orghrWithn:ilo:ihi:a:lda:tau:!public! !
-!LapackLibrary categoriesFor: #orghrWithn:ilo:ihi:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #orglqWithm:n:k:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #orgqlWithm:n:k:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #orgqrWithm:n:k:a:lda:tau:!public! !
-!LapackLibrary categoriesFor: #orgqrWithm:n:k:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #orgrqWithm:n:k:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #retrieveLengthQueryAnswerFrom:!public! !
-!LapackLibrary categoriesFor: #schurDoNotSort!public! !
-!LapackLibrary categoriesFor: #schurDoSort!public! !
-!LapackLibrary categoriesFor: #schurSelectFunction!public! !
-!LapackLibrary categoriesFor: #selectAbsLessThanUnity!public! !
-!LapackLibrary categoriesFor: #selectAbsStriclyLessThanUnity!public! !
-!LapackLibrary categoriesFor: #selectNegativeReal!public! !
-!LapackLibrary categoriesFor: #selectNone!public! !
-!LapackLibrary categoriesFor: #selectStrictlyNegativeReal!public! !
-!LapackLibrary categoriesFor: #slamch:length:!public! !
-!LapackLibrary categoriesFor: #someSingularVector!public! !
-!LapackLibrary categoriesFor: #syconWithuplo:n:a:lda:ipiv:anorm:rcond:work:!public! !
-!LapackLibrary categoriesFor: #syconWithuplo:n:a:lda:ipiv:anorm:rcond:work:iwork:!public! !
-!LapackLibrary categoriesFor: #syevdWithjobz:uplo:n:a:lda:w:!public! !
-!LapackLibrary categoriesFor: #syevdWithjobz:uplo:n:a:lda:w:work:lwork:iwork:liwork:!public! !
-!LapackLibrary categoriesFor: #syevrWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:isuppz:work:lwork:iwork:liwork:!public! !
-!LapackLibrary categoriesFor: #syevWithjobz:uplo:n:a:lda:w:!public! !
-!LapackLibrary categoriesFor: #syevWithjobz:uplo:n:a:lda:w:work:lwork:!public! !
-!LapackLibrary categoriesFor: #syevxWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:iwork:ifail:!public! !
-!LapackLibrary categoriesFor: #sygvdWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:iwork:liwork:!public! !
-!LapackLibrary categoriesFor: #sygvWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:!public! !
-!LapackLibrary categoriesFor: #sygvxWithitype:jobz:range:uplo:n:a:lda:b:ldb:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:iwork:ifail:!public! !
+!LapackLibrary categoriesFor: #orghrWithn:ilo:ihi:a:lda:tau:!processing-hessenberg!public! !
+!LapackLibrary categoriesFor: #orghrWithn:ilo:ihi:a:lda:tau:work:lwork:!processing-hessenberg!public! !
+!LapackLibrary categoriesFor: #orglqWithm:n:k:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #orgqlWithm:n:k:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #orgqrWithm:n:k:a:lda:tau:!processing-qr!public! !
+!LapackLibrary categoriesFor: #orgqrWithm:n:k:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #orgrqWithm:n:k:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #retrieveLengthQueryAnswerFrom:!private! !
+!LapackLibrary categoriesFor: #schurDoNotSort!processing-schur!public! !
+!LapackLibrary categoriesFor: #schurDoSort!processing-schur!public! !
+!LapackLibrary categoriesFor: #schurSelectFunction!processing-schur!public! !
+!LapackLibrary categoriesFor: #selectAbsLessThanUnity!processing-schur!public! !
+!LapackLibrary categoriesFor: #selectAbsStriclyLessThanUnity!processing-schur!public! !
+!LapackLibrary categoriesFor: #selectNegativeReal!processing-schur!public! !
+!LapackLibrary categoriesFor: #selectNone!processing-schur!public! !
+!LapackLibrary categoriesFor: #selectStrictlyNegativeReal!processing-schur!public! !
+!LapackLibrary categoriesFor: #slamch:length:!processing-auxiliary!public! !
+!LapackLibrary categoriesFor: #someSingularVector!processing-svd!public! !
+!LapackLibrary categoriesFor: #syconWithuplo:n:a:lda:ipiv:anorm:rcond:work:!processing-condition number!public! !
+!LapackLibrary categoriesFor: #syconWithuplo:n:a:lda:ipiv:anorm:rcond:work:iwork:!processing-condition number!public! !
+!LapackLibrary categoriesFor: #syevdWithjobz:uplo:n:a:lda:w:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #syevdWithjobz:uplo:n:a:lda:w:work:lwork:iwork:liwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #syevrWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:isuppz:work:lwork:iwork:liwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #syevWithjobz:uplo:n:a:lda:w:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #syevWithjobz:uplo:n:a:lda:w:work:lwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #syevxWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:iwork:ifail:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #sygvdWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:iwork:liwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #sygvWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #sygvxWithitype:jobz:range:uplo:n:a:lda:b:ldb:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:iwork:ifail:!processing-eigenvalue!public! !
 !LapackLibrary categoriesFor: #sysvWithuplo:n:nrhs:a:lda:ipiv:b:ldb:work:lwork:!public! !
-!LapackLibrary categoriesFor: #sytrfWithuplo:n:a:lda:ipiv:!public! !
-!LapackLibrary categoriesFor: #sytrfWithuplo:n:a:lda:ipiv:work:lwork:!public! !
-!LapackLibrary categoriesFor: #sytriWithuplo:n:a:lda:ipiv:!public! !
-!LapackLibrary categoriesFor: #sytriWithuplo:n:a:lda:ipiv:work:!public! !
-!LapackLibrary categoriesFor: #sytrsWithuplo:n:nrhs:a:lda:ipiv:b:ldb:!public! !
-!LapackLibrary categoriesFor: #tgexcWithwantq:wantz:n:a:lda:b:ldb:q:ldq:z:ldz:ifst:ilst:!public! !
-!LapackLibrary categoriesFor: #tgexcWithwantq:wantz:n:a:lda:b:ldb:q:ldq:z:ldz:ifst:ilst:work:lwork:!public! !
-!LapackLibrary categoriesFor: #tgsenWithijob:wantq:wantz:select:n:a:lda:b:ldb:alpha:beta:q:ldq:z:ldz:m:dif:work:lwork:iwork:liwork:!public! !
-!LapackLibrary categoriesFor: #tgsenWithijob:wantq:wantz:select:n:a:lda:b:ldb:alphar:alphai:beta:q:ldq:z:ldz:m:dif:work:lwork:iwork:liwork:!public! !
-!LapackLibrary categoriesFor: #tgsylWithtrans:ijob:m:n:a:lda:b:ldb:c:ldc:d:ldd:e:lde:f:ldf:dif:scale:work:lwork:iwork:!public! !
-!LapackLibrary categoriesFor: #transposeConjugated!public! !
-!LapackLibrary categoriesFor: #transposed!public! !
-!LapackLibrary categoriesFor: #trconWithnorm:uplo:diag:n:a:lda:rcond:work:iwork:!public! !
-!LapackLibrary categoriesFor: #trconWithnorm:uplo:diag:n:a:lda:rcond:work:rwork:!public! !
-!LapackLibrary categoriesFor: #trexcWithcompq:n:t:ldt:q:ldq:ifst:ilst:!public! !
-!LapackLibrary categoriesFor: #trexcWithcompq:n:t:ldt:q:ldq:ifst:ilst:work:!public! !
-!LapackLibrary categoriesFor: #trsenWithjob:compq:select:n:t:ldt:q:ldq:w:m:s:sep:work:lwork:!public! !
-!LapackLibrary categoriesFor: #trsenWithjob:compq:select:n:t:ldt:q:ldq:wr:wi:m:s:sep:work:lwork:iwork:liwork:!public! !
-!LapackLibrary categoriesFor: #trsylWithtrana:tranb:isgn:m:n:a:lda:b:ldb:c:ldc:scale:!public! !
+!LapackLibrary categoriesFor: #sytrfWithuplo:n:a:lda:ipiv:!processing-solve!public! !
+!LapackLibrary categoriesFor: #sytrfWithuplo:n:a:lda:ipiv:work:lwork:!processing-solve!public! !
+!LapackLibrary categoriesFor: #sytriWithuplo:n:a:lda:ipiv:!processing-solve!public! !
+!LapackLibrary categoriesFor: #sytriWithuplo:n:a:lda:ipiv:work:!processing-solve!public! !
+!LapackLibrary categoriesFor: #sytrsWithuplo:n:nrhs:a:lda:ipiv:b:ldb:!processing-solve!public! !
+!LapackLibrary categoriesFor: #tgexcWithwantq:wantz:n:a:lda:b:ldb:q:ldq:z:ldz:ifst:ilst:!processing-schur!public! !
+!LapackLibrary categoriesFor: #tgexcWithwantq:wantz:n:a:lda:b:ldb:q:ldq:z:ldz:ifst:ilst:work:lwork:!processing-schur!public! !
+!LapackLibrary categoriesFor: #tgsenWithijob:wantq:wantz:select:n:a:lda:b:ldb:alpha:beta:q:ldq:z:ldz:m:dif:work:lwork:iwork:liwork:!processing-schur!public! !
+!LapackLibrary categoriesFor: #tgsenWithijob:wantq:wantz:select:n:a:lda:b:ldb:alphar:alphai:beta:q:ldq:z:ldz:m:dif:work:lwork:iwork:liwork:!processing-schur!public! !
+!LapackLibrary categoriesFor: #tgsylWithtrans:ijob:m:n:a:lda:b:ldb:c:ldc:d:ldd:e:lde:f:ldf:dif:scale:work:lwork:iwork:!processing-sylvester!public! !
+!LapackLibrary categoriesFor: #transposeConjugated!accessing!public! !
+!LapackLibrary categoriesFor: #transposed!accessing!public! !
+!LapackLibrary categoriesFor: #trconWithnorm:uplo:diag:n:a:lda:rcond:work:iwork:!processing-condition number!public! !
+!LapackLibrary categoriesFor: #trconWithnorm:uplo:diag:n:a:lda:rcond:work:rwork:!processing-condition number!public! !
+!LapackLibrary categoriesFor: #trexcWithcompq:n:t:ldt:q:ldq:ifst:ilst:!processing-schur!public! !
+!LapackLibrary categoriesFor: #trexcWithcompq:n:t:ldt:q:ldq:ifst:ilst:work:!processing-schur!public! !
+!LapackLibrary categoriesFor: #trsenWithjob:compq:select:n:t:ldt:q:ldq:w:m:s:sep:work:lwork:!processing-schur!public! !
+!LapackLibrary categoriesFor: #trsenWithjob:compq:select:n:t:ldt:q:ldq:wr:wi:m:s:sep:work:lwork:iwork:liwork:!processing-schur!public! !
+!LapackLibrary categoriesFor: #trsylWithtrana:tranb:isgn:m:n:a:lda:b:ldb:c:ldc:scale:!processing-sylvester!public! !
 !LapackLibrary categoriesFor: #trtriWithuplo:diag:n:a:lda:!public! !
 !LapackLibrary categoriesFor: #trtrsWithuplo:trans:diag:n:nrhs:a:lda:b:ldb:!public! !
-!LapackLibrary categoriesFor: #unghrWithn:ilo:ihi:a:lda:tau:!public! !
-!LapackLibrary categoriesFor: #unghrWithn:ilo:ihi:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #unglqWithm:n:k:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #ungqlWithm:n:k:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #ungqrWithm:n:k:a:lda:tau:!public! !
-!LapackLibrary categoriesFor: #ungqrWithm:n:k:a:lda:tau:work:lwork:!public! !
-!LapackLibrary categoriesFor: #ungrqWithm:n:k:a:lda:tau:work:lwork:!public! !
+!LapackLibrary categoriesFor: #unghrWithn:ilo:ihi:a:lda:tau:!processing-hessenberg!public! !
+!LapackLibrary categoriesFor: #unghrWithn:ilo:ihi:a:lda:tau:work:lwork:!processing-hessenberg!public! !
+!LapackLibrary categoriesFor: #unglqWithm:n:k:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #ungqlWithm:n:k:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #ungqrWithm:n:k:a:lda:tau:!processing-qr!public! !
+!LapackLibrary categoriesFor: #ungqrWithm:n:k:a:lda:tau:work:lwork:!processing-qr!public! !
+!LapackLibrary categoriesFor: #ungrqWithm:n:k:a:lda:tau:work:lwork:!processing-qr!public! !
 !LapackLibrary categoriesFor: #uniform01!public! !
 !LapackLibrary categoriesFor: #uniform11!public! !
 !LapackLibrary categoriesFor: #uniformCircle!public! !
 !LapackLibrary categoriesFor: #uniformDisc!public! !
-!LapackLibrary categoriesFor: #upper!public! !
-!LapackLibrary categoriesFor: #valueEigenValuesInterval!public! !
-!LapackLibrary categoriesFor: #xgebakWithjob:side:n:ilo:ihi:scale:m:v:ldv:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xgebalWithjob:n:a:lda:ilo:ihi:scale:info:length:!public! !
-!LapackLibrary categoriesFor: #xgeconWithnorm:n:a:lda:anorm:rcond:work:iwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xgeconWithnorm:n:a:lda:anorm:rcond:work:rwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xgeesWithjobvs:sort:select:n:a:lda:sdim:w:vs:ldvs:work:lwork:rwork:bwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xgeesWithjobvs:sort:select:n:a:lda:sdim:wr:wi:vs:ldvs:work:lwork:bwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xgeevWithjobvl:jobvr:n:a:lda:w:vl:ldvl:vr:ldvr:work:lwork:rwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xgeevWithjobvl:jobvr:n:a:lda:wr:wi:vl:ldvl:vr:ldvr:work:lwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xgeevxWithbalanc:jobvl:jobvr:sense:n:a:lda:w:vl:ldvl:vr:ldvr:scale:abnrm:rconde:rcondv:work:lwork:rwork:info:length:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xgehrdWithn:ilo:ihi:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xgelqfWithm:n:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xgelsdWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:iwork:info:!public! !
-!LapackLibrary categoriesFor: #xgelsdWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:rwork:iwork:info:!public! !
-!LapackLibrary categoriesFor: #xgelssWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xgelssWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:rwork:info:!public! !
-!LapackLibrary categoriesFor: #xgelsWithtrans:m:n:nrhs:a:lda:b:ldb:work:lwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xgelsxWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:info:!public! !
-!LapackLibrary categoriesFor: #xgelsxWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:rwork:info:!public! !
-!LapackLibrary categoriesFor: #xgelsyWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xgelsyWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:lwork:rwork:info:!public! !
-!LapackLibrary categoriesFor: #xgeqlfWithm:n:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xgeqp3Withm:n:a:lda:jpvt:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xgeqp3Withm:n:a:lda:jpvt:tau:work:lwork:rwork:info:!public! !
-!LapackLibrary categoriesFor: #xgeqrfWithm:n:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xgerqfWithm:n:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xgesddWithjobz:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:iwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xgesddWithjobz:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:rwork:iwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xgesvdWithjobu:jobvt:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xgesvdWithjobu:jobvt:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:rwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xgesvWithn:nrhs:a:lda:ipiv:b:ldb:info:!public! !
-!LapackLibrary categoriesFor: #xgetrfWithm:n:a:lda:ipiv:info:!public! !
-!LapackLibrary categoriesFor: #xgetriWithn:a:lda:ipiv:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xgetrsWithtrans:n:nrhs:a:lda:ipiv:b:ldb:info:length:!public! !
-!LapackLibrary categoriesFor: #xggbakWithjob:side:n:ilo:ihi:lscale:rscale:m:v:ldv:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xggbalWithjob:n:a:lda:b:ldb:ilo:ihi:lscale:rscale:work:info:length:!public! !
-!LapackLibrary categoriesFor: #xggevWithjobvl:jobvr:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:work:lwork:rwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xggevWithjobvl:jobvr:n:a:lda:b:ldb:alphar:alphai:beta:vl:ldvl:vr:ldvr:work:lwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xggevxWithbalanc:jobvl:jobvr:sense:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:lscale:rscale:abnrm:bbnrm:rconde:rcondv:work:lwork:rwork:bwork:info:length:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xggevxWithbalanc:jobvl:jobvr:sense:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:lscale:rscale:abnrm:bbnrm:rconde:rcondv:work:lwork:rwork:iwork:bwork:info:length:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xggevxWithbalanc:jobvl:jobvr:sense:n:a:lda:b:ldb:alphar:alphai:beta:vl:ldvl:vr:ldvr:lscale:rscale:abnrm:bbnrm:rconde:rcondv:work:lwork:iwork:bwork:info:length:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xggglmWithn:m:p:a:lda:b:ldb:d:x:y:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xgghrdWithcompq:compz:n:ilo:ihi:a:lda:b:ldb:q:ldq:z:ldz:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xgglseWithm:n:p:a:lda:b:ldb:c:d:x:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xggqrfWithn:m:p:a:lda:taua:b:ldb:taub:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xggrqfWithm:p:n:a:lda:taua:b:ldb:taub:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:iwork:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:rwork:iwork:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xheconWithuplo:n:a:lda:ipiv:anorm:rcond:work:info:length:!public! !
-!LapackLibrary categoriesFor: #xheevdWithjobz:uplo:n:a:lda:w:work:lwork:rwork:lrwork:iwork:liwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xheevrWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:isuppz:work:lwork:rwork:iwork:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xheevWithjobz:uplo:n:a:lda:w:work:lwork:rwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xheevxWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:rwork:iwork:ifail:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xhegvdWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:rwork:lrwork:iwork:liwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xhegvWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:rwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xhegvxWithitype:jobz:range:uplo:n:a:lda:b:ldb:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:rwork:iwork:ifail:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xhesvWithuplo:n:nrhs:a:lda:ipiv:b:ldb:work:lwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xhetrfWithuplo:n:a:lda:ipiv:work:lwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xhetriWithuplo:n:a:lda:ipiv:work:info:length:!public! !
-!LapackLibrary categoriesFor: #xhetrsWithuplo:n:nrhs:a:lda:ipiv:b:ldb:info:length:!public! !
-!LapackLibrary categoriesFor: #xlacgvWithn:x:incx:!public! !
-!LapackLibrary categoriesFor: #xlacpyWithuplo:m:n:a:lda:b:ldb:length:!public! !
-!LapackLibrary categoriesFor: #xlamchWithcmach:length:!public! !
-!LapackLibrary categoriesFor: #xlangeWithnorm:m:n:a:lda:work:length:!public! !
-!LapackLibrary categoriesFor: #xlanheWithnorm:uplo:n:a:lda:work:length:length:!public! !
-!LapackLibrary categoriesFor: #xlanhpWithnorm:uplo:n:ap:work:length:length:!public! !
-!LapackLibrary categoriesFor: #xlanspWithnorm:uplo:n:ap:work:length:length:!public! !
-!LapackLibrary categoriesFor: #xlansyWithnorm:uplo:n:a:lda:work:length:length:!public! !
-!LapackLibrary categoriesFor: #xlantpWithnorm:uplo:diag:n:ap:work:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xlantrWithnorm:uplo:diag:m:n:a:lda:work:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xlarnvWithidist:iseed:n:x:!public! !
-!LapackLibrary categoriesFor: #xlasetWithuplo:m:n:alpha:beta:a:lda:length:!public! !
-!LapackLibrary categoriesFor: #xorghrWithn:ilo:ihi:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xorglqWithm:n:k:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xorgqlWithm:n:k:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xorgqrWithm:n:k:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xorgrqWithm:n:k:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xpotrfWithuplo:n:a:lda:info:length:!public! !
-!LapackLibrary categoriesFor: #xsyconWithuplo:n:a:lda:ipiv:anorm:rcond:work:info:length:!public! !
-!LapackLibrary categoriesFor: #xsyconWithuplo:n:a:lda:ipiv:anorm:rcond:work:iwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xsyevdWithjobz:uplo:n:a:lda:w:work:lwork:iwork:liwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xsyevrWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:isuppz:work:lwork:iwork:liwork:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xsyevWithjobz:uplo:n:a:lda:w:work:lwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xsyevxWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:iwork:ifail:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xsygvdWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:iwork:liwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xsygvWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xsygvxWithitype:jobz:range:uplo:n:a:lda:b:ldb:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:iwork:ifail:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xsysvWithuplo:n:nrhs:a:lda:ipiv:b:ldb:work:lwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xsytrfWithuplo:n:a:lda:ipiv:work:lwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xsytriWithuplo:n:a:lda:ipiv:work:info:length:!public! !
-!LapackLibrary categoriesFor: #xsytrsWithuplo:n:nrhs:a:lda:ipiv:b:ldb:info:length:!public! !
-!LapackLibrary categoriesFor: #xtgexcWithwantq:wantz:n:a:lda:b:ldb:q:ldq:z:ldz:ifst:ilst:info:!public! !
-!LapackLibrary categoriesFor: #xtgexcWithwantq:wantz:n:a:lda:b:ldb:q:ldq:z:ldz:ifst:ilst:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xtgsenWithijob:wantq:wantz:select:n:a:lda:b:ldb:alpha:beta:q:ldq:z:ldz:m:dif:work:lwork:iwork:liwork:info:!public! !
-!LapackLibrary categoriesFor: #xtgsenWithijob:wantq:wantz:select:n:a:lda:b:ldb:alphar:alphai:beta:q:ldq:z:ldz:m:dif:work:lwork:iwork:liwork:info:!public! !
-!LapackLibrary categoriesFor: #xtgsylWithtrans:ijob:m:n:a:lda:b:ldb:c:ldc:d:ldd:e:lde:f:ldf:dif:scale:work:lwork:iwork:info:length:!public! !
-!LapackLibrary categoriesFor: #xtpconWithnorm:uplo:diag:n:ap:rcond:work:iwork:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xtpconWithnorm:uplo:diag:n:ap:rcond:work:rwork:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xtptriWithuplo:diag:n:ap:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xtptrsWithuplo:trans:diag:n:nrhs:ap:b:ldb:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xtrconWithnorm:uplo:diag:n:a:lda:rcond:work:iwork:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xtrconWithnorm:uplo:diag:n:a:lda:rcond:work:rwork:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xtrexcWithcompq:n:t:ldt:q:ldq:ifst:ilst:info:length:!public! !
-!LapackLibrary categoriesFor: #xtrexcWithcompq:n:t:ldt:q:ldq:ifst:ilst:work:info:length:!public! !
-!LapackLibrary categoriesFor: #xtrsenWithjob:compq:select:n:t:ldt:q:ldq:w:m:s:sep:work:lwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xtrsenWithjob:compq:select:n:t:ldt:q:ldq:wr:wi:m:s:sep:work:lwork:iwork:liwork:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xtrsylWithtrana:tranb:isgn:m:n:a:lda:b:ldb:c:ldc:scale:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xtrtriWithuplo:diag:n:a:lda:info:length:length:!public! !
-!LapackLibrary categoriesFor: #xtrtrsWithuplo:trans:diag:n:nrhs:a:lda:b:ldb:info:length:length:length:!public! !
-!LapackLibrary categoriesFor: #xunghrWithn:ilo:ihi:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xunglqWithm:n:k:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xungqlWithm:n:k:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xungqrWithm:n:k:a:lda:tau:work:lwork:info:!public! !
-!LapackLibrary categoriesFor: #xungrqWithm:n:k:a:lda:tau:work:lwork:info:!public! !
+!LapackLibrary categoriesFor: #upper!accessing!public! !
+!LapackLibrary categoriesFor: #valueEigenValuesInterval!processing-eigenvalue!public! !
+!LapackLibrary categoriesFor: #wantQ:!processing-svd!public! !
+!LapackLibrary categoriesFor: #wantU:!processing-svd!public! !
+!LapackLibrary categoriesFor: #wantV:!processing-svd!public! !
+!LapackLibrary categoriesFor: #xgebakWithjob:side:n:ilo:ihi:scale:m:v:ldv:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xgebalWithjob:n:a:lda:ilo:ihi:scale:info:length:!private! !
+!LapackLibrary categoriesFor: #xgeconWithnorm:n:a:lda:anorm:rcond:work:iwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xgeconWithnorm:n:a:lda:anorm:rcond:work:rwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xgeesWithjobvs:sort:select:n:a:lda:sdim:w:vs:ldvs:work:lwork:rwork:bwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xgeesWithjobvs:sort:select:n:a:lda:sdim:wr:wi:vs:ldvs:work:lwork:bwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xgeevWithjobvl:jobvr:n:a:lda:w:vl:ldvl:vr:ldvr:work:lwork:rwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xgeevWithjobvl:jobvr:n:a:lda:wr:wi:vl:ldvl:vr:ldvr:work:lwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xgeevxWithbalanc:jobvl:jobvr:sense:n:a:lda:w:vl:ldvl:vr:ldvr:scale:abnrm:rconde:rcondv:work:lwork:rwork:info:length:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xgehrdWithn:ilo:ihi:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xgelqfWithm:n:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xgelsdWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:iwork:info:!private! !
+!LapackLibrary categoriesFor: #xgelsdWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:rwork:iwork:info:!private! !
+!LapackLibrary categoriesFor: #xgelssWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xgelssWithm:n:nrhs:a:lda:b:ldb:s:rcond:rank:work:lwork:rwork:info:!private! !
+!LapackLibrary categoriesFor: #xgelsWithtrans:m:n:nrhs:a:lda:b:ldb:work:lwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xgelsxWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:info:!private! !
+!LapackLibrary categoriesFor: #xgelsxWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:rwork:info:!private! !
+!LapackLibrary categoriesFor: #xgelsyWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xgelsyWithm:n:nrhs:a:lda:b:ldb:jpvt:rcond:rank:work:lwork:rwork:info:!private! !
+!LapackLibrary categoriesFor: #xgeqlfWithm:n:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xgeqp3Withm:n:a:lda:jpvt:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xgeqp3Withm:n:a:lda:jpvt:tau:work:lwork:rwork:info:!private! !
+!LapackLibrary categoriesFor: #xgeqrfWithm:n:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xgerqfWithm:n:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xgesddWithjobz:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:iwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xgesddWithjobz:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:rwork:iwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xgesvdWithjobu:jobvt:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xgesvdWithjobu:jobvt:m:n:a:lda:s:u:ldu:vt:ldvt:work:lwork:rwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xgesvWithn:nrhs:a:lda:ipiv:b:ldb:info:!private! !
+!LapackLibrary categoriesFor: #xgetrfWithm:n:a:lda:ipiv:info:!private! !
+!LapackLibrary categoriesFor: #xgetriWithn:a:lda:ipiv:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xgetrsWithtrans:n:nrhs:a:lda:ipiv:b:ldb:info:length:!private! !
+!LapackLibrary categoriesFor: #xggbakWithjob:side:n:ilo:ihi:lscale:rscale:m:v:ldv:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xggbalWithjob:n:a:lda:b:ldb:ilo:ihi:lscale:rscale:work:info:length:!private! !
+!LapackLibrary categoriesFor: #xggevWithjobvl:jobvr:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:work:lwork:rwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xggevWithjobvl:jobvr:n:a:lda:b:ldb:alphar:alphai:beta:vl:ldvl:vr:ldvr:work:lwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xggevxWithbalanc:jobvl:jobvr:sense:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:lscale:rscale:abnrm:bbnrm:rconde:rcondv:work:lwork:rwork:bwork:info:length:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xggevxWithbalanc:jobvl:jobvr:sense:n:a:lda:b:ldb:alpha:beta:vl:ldvl:vr:ldvr:lscale:rscale:abnrm:bbnrm:rconde:rcondv:work:lwork:rwork:iwork:bwork:info:length:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xggevxWithbalanc:jobvl:jobvr:sense:n:a:lda:b:ldb:alphar:alphai:beta:vl:ldvl:vr:ldvr:lscale:rscale:abnrm:bbnrm:rconde:rcondv:work:lwork:iwork:bwork:info:length:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xggglmWithn:m:p:a:lda:b:ldb:d:x:y:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xgghrdWithcompq:compz:n:ilo:ihi:a:lda:b:ldb:q:ldq:z:ldz:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xgglseWithm:n:p:a:lda:b:ldb:c:d:x:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xggqrfWithn:m:p:a:lda:taua:b:ldb:taub:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xggrqfWithm:p:n:a:lda:taua:b:ldb:taub:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:iwork:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:rwork:iwork:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xheconWithuplo:n:a:lda:ipiv:anorm:rcond:work:info:length:!private! !
+!LapackLibrary categoriesFor: #xheevdWithjobz:uplo:n:a:lda:w:work:lwork:rwork:lrwork:iwork:liwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xheevrWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:isuppz:work:lwork:rwork:iwork:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xheevWithjobz:uplo:n:a:lda:w:work:lwork:rwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xheevxWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:rwork:iwork:ifail:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xhegvdWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:rwork:lrwork:iwork:liwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xhegvWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:rwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xhegvxWithitype:jobz:range:uplo:n:a:lda:b:ldb:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:rwork:iwork:ifail:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xhesvWithuplo:n:nrhs:a:lda:ipiv:b:ldb:work:lwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xhetrfWithuplo:n:a:lda:ipiv:work:lwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xhetriWithuplo:n:a:lda:ipiv:work:info:length:!private! !
+!LapackLibrary categoriesFor: #xhetrsWithuplo:n:nrhs:a:lda:ipiv:b:ldb:info:length:!private! !
+!LapackLibrary categoriesFor: #xlacgvWithn:x:incx:!private! !
+!LapackLibrary categoriesFor: #xlacpyWithuplo:m:n:a:lda:b:ldb:length:!private! !
+!LapackLibrary categoriesFor: #xlamchWithcmach:length:!private! !
+!LapackLibrary categoriesFor: #xlangeWithnorm:m:n:a:lda:work:length:!private! !
+!LapackLibrary categoriesFor: #xlanheWithnorm:uplo:n:a:lda:work:length:length:!private! !
+!LapackLibrary categoriesFor: #xlanhpWithnorm:uplo:n:ap:work:length:length:!private! !
+!LapackLibrary categoriesFor: #xlanspWithnorm:uplo:n:ap:work:length:length:!private! !
+!LapackLibrary categoriesFor: #xlansyWithnorm:uplo:n:a:lda:work:length:length:!private! !
+!LapackLibrary categoriesFor: #xlantpWithnorm:uplo:diag:n:ap:work:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xlantrWithnorm:uplo:diag:m:n:a:lda:work:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xlarnvWithidist:iseed:n:x:!private! !
+!LapackLibrary categoriesFor: #xlasetWithuplo:m:n:alpha:beta:a:lda:length:!private! !
+!LapackLibrary categoriesFor: #xorghrWithn:ilo:ihi:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xorglqWithm:n:k:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xorgqlWithm:n:k:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xorgqrWithm:n:k:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xorgrqWithm:n:k:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xpotrfWithuplo:n:a:lda:info:length:!private! !
+!LapackLibrary categoriesFor: #xsyconWithuplo:n:a:lda:ipiv:anorm:rcond:work:info:length:!private! !
+!LapackLibrary categoriesFor: #xsyconWithuplo:n:a:lda:ipiv:anorm:rcond:work:iwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xsyevdWithjobz:uplo:n:a:lda:w:work:lwork:iwork:liwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xsyevrWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:isuppz:work:lwork:iwork:liwork:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xsyevWithjobz:uplo:n:a:lda:w:work:lwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xsyevxWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:iwork:ifail:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xsygvdWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:iwork:liwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xsygvWithitype:jobz:uplo:n:a:lda:b:ldb:w:work:lwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xsygvxWithitype:jobz:range:uplo:n:a:lda:b:ldb:vl:vu:il:iu:abstol:m:w:z:ldz:work:lwork:iwork:ifail:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xsysvWithuplo:n:nrhs:a:lda:ipiv:b:ldb:work:lwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xsytrfWithuplo:n:a:lda:ipiv:work:lwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xsytriWithuplo:n:a:lda:ipiv:work:info:length:!private! !
+!LapackLibrary categoriesFor: #xsytrsWithuplo:n:nrhs:a:lda:ipiv:b:ldb:info:length:!private! !
+!LapackLibrary categoriesFor: #xtgexcWithwantq:wantz:n:a:lda:b:ldb:q:ldq:z:ldz:ifst:ilst:info:!private! !
+!LapackLibrary categoriesFor: #xtgexcWithwantq:wantz:n:a:lda:b:ldb:q:ldq:z:ldz:ifst:ilst:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xtgsenWithijob:wantq:wantz:select:n:a:lda:b:ldb:alpha:beta:q:ldq:z:ldz:m:dif:work:lwork:iwork:liwork:info:!private! !
+!LapackLibrary categoriesFor: #xtgsenWithijob:wantq:wantz:select:n:a:lda:b:ldb:alphar:alphai:beta:q:ldq:z:ldz:m:dif:work:lwork:iwork:liwork:info:!private! !
+!LapackLibrary categoriesFor: #xtgsylWithtrans:ijob:m:n:a:lda:b:ldb:c:ldc:d:ldd:e:lde:f:ldf:dif:scale:work:lwork:iwork:info:length:!private! !
+!LapackLibrary categoriesFor: #xtpconWithnorm:uplo:diag:n:ap:rcond:work:iwork:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xtpconWithnorm:uplo:diag:n:ap:rcond:work:rwork:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xtptriWithuplo:diag:n:ap:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xtptrsWithuplo:trans:diag:n:nrhs:ap:b:ldb:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xtrconWithnorm:uplo:diag:n:a:lda:rcond:work:iwork:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xtrconWithnorm:uplo:diag:n:a:lda:rcond:work:rwork:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xtrexcWithcompq:n:t:ldt:q:ldq:ifst:ilst:info:length:!private! !
+!LapackLibrary categoriesFor: #xtrexcWithcompq:n:t:ldt:q:ldq:ifst:ilst:work:info:length:!private! !
+!LapackLibrary categoriesFor: #xtrsenWithjob:compq:select:n:t:ldt:q:ldq:w:m:s:sep:work:lwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xtrsenWithjob:compq:select:n:t:ldt:q:ldq:wr:wi:m:s:sep:work:lwork:iwork:liwork:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xtrsylWithtrana:tranb:isgn:m:n:a:lda:b:ldb:c:ldc:scale:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xtrtriWithuplo:diag:n:a:lda:info:length:length:!private! !
+!LapackLibrary categoriesFor: #xtrtrsWithuplo:trans:diag:n:nrhs:a:lda:b:ldb:info:length:length:length:!private! !
+!LapackLibrary categoriesFor: #xunghrWithn:ilo:ihi:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xunglqWithm:n:k:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xungqlWithm:n:k:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xungqrWithm:n:k:a:lda:tau:work:lwork:info:!private! !
+!LapackLibrary categoriesFor: #xungrqWithm:n:k:a:lda:tau:work:lwork:info:!private! !
 
 !LapackLibrary class methodsFor!
 
 fileName
 	"Answer the host system file name for the library"
 
-	^'LAPACK'! !
+	^'LAPACK30'! !
 !LapackLibrary class categoriesFor: #fileName!public! !
 
 ArrayCLibrary guid: (GUID fromString: '{6C2FEBF8-5C7C-4A85-9B75-9B969DCB8A9F}')!
@@ -7852,7 +8095,7 @@ xggrqfWithm: m p: p n: n a: a lda: lda taua: taua b: b ldb: ldb taub: taub work:
 	<cdecl: SDWORD 'cggrqf_'  SDWORD * SDWORD * SDWORD * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD * SDWORD * >
 	^self invalidCall!
 
-xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work rwork: rwork iwork: iwork length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
+xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work rwork: rwork iwork: iwork info: info length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
 	"
 *  Purpose
 *  =======
@@ -7917,7 +8160,7 @@ xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: ld
 *                              (  0 inv(R) )
 "
 
-	<cdecl: SDWORD 'cggsvd_'  char * char * char * SDWORD * SDWORD * SDWORD * SDWORD * SDWORD * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * SDWORD * float * float * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * float * SDWORD * SDWORD SDWORD SDWORD >
+	<cdecl: SDWORD 'cggsvd_'  char * char * char * SDWORD * SDWORD * SDWORD * SDWORD * SDWORD * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * SDWORD * float * float * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * float * SDWORD * SDWORD * SDWORD SDWORD SDWORD >
 	^self invalidCall!
 
 xheconWithuplo: uplo n: n a: a lda: lda ipiv: ipiv anorm: anorm rcond: rcond work: work info: info length: lengthOfuplo 
@@ -8648,7 +8891,7 @@ xungrqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork info: in
 !LapackCLibrary categoriesFor: #xgglseWithm:n:p:a:lda:b:ldb:c:d:x:work:lwork:info:!public! !
 !LapackCLibrary categoriesFor: #xggqrfWithn:m:p:a:lda:taua:b:ldb:taub:work:lwork:info:!public! !
 !LapackCLibrary categoriesFor: #xggrqfWithm:p:n:a:lda:taua:b:ldb:taub:work:lwork:info:!public! !
-!LapackCLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:rwork:iwork:length:length:length:!public! !
+!LapackCLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:rwork:iwork:info:length:length:length:!public! !
 !LapackCLibrary categoriesFor: #xheconWithuplo:n:a:lda:ipiv:anorm:rcond:work:info:length:!public! !
 !LapackCLibrary categoriesFor: #xheevdWithjobz:uplo:n:a:lda:w:work:lwork:rwork:lrwork:iwork:liwork:info:length:length:!public! !
 !LapackCLibrary categoriesFor: #xheevrWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:isuppz:work:lwork:rwork:iwork:info:length:length:length:!public! !
@@ -9552,7 +9795,7 @@ xggrqfWithm: m p: p n: n a: a lda: lda taua: taua b: b ldb: ldb taub: taub work:
 	<cdecl: SDWORD 'dggrqf_' SDWORD * SDWORD * SDWORD * double * SDWORD * double * double * SDWORD * double * double * SDWORD * SDWORD *>
 	^self invalidCall!
 
-xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work iwork: iwork length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
+xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work iwork: iwork info: info length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
 	"
 *  Purpose
 *  =======
@@ -9617,7 +9860,7 @@ xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: ld
 *                             ( 0 inv(R) ).
 "
 
-	<cdecl: SDWORD 'dggsvd_'  char * char * char * SDWORD * SDWORD * SDWORD * SDWORD * SDWORD * double * SDWORD * double * SDWORD * double * double * double * SDWORD * double * SDWORD * double * SDWORD * double * SDWORD * SDWORD SDWORD SDWORD >
+	<cdecl: SDWORD 'dggsvd_'  char * char * char * SDWORD * SDWORD * SDWORD * SDWORD * SDWORD * double * SDWORD * double * SDWORD * double * double * double * SDWORD * double * SDWORD * double * SDWORD * double * SDWORD * SDWORD * SDWORD SDWORD SDWORD >
 	^self invalidCall!
 
 xhesvWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb work: work lwork: lwork info: info length: lengthOfuplo 
@@ -10820,7 +11063,7 @@ xtrtrsWithuplo: uplo trans: trans diag: diag n: n nrhs: nrhs a: a lda: lda b: b 
 !LapackDLibrary categoriesFor: #xgglseWithm:n:p:a:lda:b:ldb:c:d:x:work:lwork:info:!public! !
 !LapackDLibrary categoriesFor: #xggqrfWithn:m:p:a:lda:taua:b:ldb:taub:work:lwork:info:!public! !
 !LapackDLibrary categoriesFor: #xggrqfWithm:p:n:a:lda:taua:b:ldb:taub:work:lwork:info:!public! !
-!LapackDLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:iwork:length:length:length:!public! !
+!LapackDLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:iwork:info:length:length:length:!public! !
 !LapackDLibrary categoriesFor: #xhesvWithuplo:n:nrhs:a:lda:ipiv:b:ldb:work:lwork:info:length:!public! !
 !LapackDLibrary categoriesFor: #xhetrfWithuplo:n:a:lda:ipiv:work:lwork:info:length:!public! !
 !LapackDLibrary categoriesFor: #xhetriWithuplo:n:a:lda:ipiv:work:info:length:!public! !
@@ -11540,7 +11783,7 @@ xggrqfWithm: m p: p n: n a: a lda: lda taua: taua b: b ldb: ldb taub: taub work:
 	<cdecl: SDWORD 'sggrqf_'  SDWORD * SDWORD * SDWORD * float * SDWORD * float * float * SDWORD * float * float * SDWORD * SDWORD * >
 	^self invalidCall!
 
-xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work iwork: iwork length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
+xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work iwork: iwork info: info length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
 	"
 *  Purpose
 *  =======
@@ -11605,7 +11848,7 @@ xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: ld
 *                             ( 0 inv(R) ).
 "
 
-	<cdecl: SDWORD 'sggsvd_'  char * char * char * SDWORD * SDWORD * SDWORD * SDWORD * SDWORD * float * SDWORD * float * SDWORD * float * float * float * SDWORD * float * SDWORD * float * SDWORD * float * SDWORD * SDWORD SDWORD SDWORD >
+	<cdecl: SDWORD 'sggsvd_'  char * char * char * SDWORD * SDWORD * SDWORD * SDWORD * SDWORD * float * SDWORD * float * SDWORD * float * float * float * SDWORD * float * SDWORD * float * SDWORD * float * SDWORD * SDWORD * SDWORD SDWORD SDWORD >
 	^self invalidCall!
 
 xhesvWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb work: work lwork: lwork info: info length: lengthOfuplo 
@@ -12312,7 +12555,7 @@ xtrtrsWithuplo: uplo trans: trans diag: diag n: n nrhs: nrhs a: a lda: lda b: b 
 !LapackSLibrary categoriesFor: #xgglseWithm:n:p:a:lda:b:ldb:c:d:x:work:lwork:info:!public! !
 !LapackSLibrary categoriesFor: #xggqrfWithn:m:p:a:lda:taua:b:ldb:taub:work:lwork:info:!public! !
 !LapackSLibrary categoriesFor: #xggrqfWithm:p:n:a:lda:taua:b:ldb:taub:work:lwork:info:!public! !
-!LapackSLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:iwork:length:length:length:!public! !
+!LapackSLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:iwork:info:length:length:length:!public! !
 !LapackSLibrary categoriesFor: #xhesvWithuplo:n:nrhs:a:lda:ipiv:b:ldb:work:lwork:info:length:!public! !
 !LapackSLibrary categoriesFor: #xhetrfWithuplo:n:a:lda:ipiv:work:lwork:info:length:!public! !
 !LapackSLibrary categoriesFor: #xhetriWithuplo:n:a:lda:ipiv:work:info:length:!public! !
@@ -13057,7 +13300,7 @@ xggrqfWithm: m p: p n: n a: a lda: lda taua: taua b: b ldb: ldb taub: taub work:
 	<cdecl: SDWORD 'zggrqf_'  SDWORD * SDWORD * SDWORD * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD * SDWORD * >
 	^self invalidCall!
 
-xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work rwork: rwork iwork: iwork length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
+xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work rwork: rwork iwork: iwork info: info length: lengthOfjobu length: lengthOfjobv length: lengthOfjobq 
 	"
 *  Purpose
 *  =======
@@ -13122,7 +13365,7 @@ xggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: ld
 *                              (  0 inv(R) )
 "
 
-	<cdecl: SDWORD 'zggsvd_'  char * char * char * SDWORD * SDWORD * SDWORD * SDWORD * SDWORD * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * SDWORD * double * double * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * double * SDWORD * SDWORD SDWORD SDWORD >
+	<cdecl: SDWORD 'zggsvd_'  char * char * char * SDWORD * SDWORD * SDWORD * SDWORD * SDWORD * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * SDWORD * double * double * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * double * SDWORD * SDWORD * SDWORD SDWORD SDWORD >
 	^self invalidCall!
 
 xheconWithuplo: uplo n: n a: a lda: lda ipiv: ipiv anorm: anorm rcond: rcond work: work info: info length: lengthOfuplo 
@@ -13927,7 +14170,7 @@ xungrqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork info: in
 !LapackZLibrary categoriesFor: #xgglseWithm:n:p:a:lda:b:ldb:c:d:x:work:lwork:info:!public! !
 !LapackZLibrary categoriesFor: #xggqrfWithn:m:p:a:lda:taua:b:ldb:taub:work:lwork:info:!public! !
 !LapackZLibrary categoriesFor: #xggrqfWithm:p:n:a:lda:taua:b:ldb:taub:work:lwork:info:!public! !
-!LapackZLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:rwork:iwork:length:length:length:!public! !
+!LapackZLibrary categoriesFor: #xggsvdWithjobu:jobv:jobq:m:n:p:k:l:a:lda:b:ldb:alpha:beta:u:ldu:v:ldv:q:ldq:work:rwork:iwork:info:length:length:length:!public! !
 !LapackZLibrary categoriesFor: #xheconWithuplo:n:a:lda:ipiv:anorm:rcond:work:info:length:!public! !
 !LapackZLibrary categoriesFor: #xheevdWithjobz:uplo:n:a:lda:w:work:lwork:rwork:lrwork:iwork:liwork:info:length:length:!public! !
 !LapackZLibrary categoriesFor: #xheevrWithjobz:range:uplo:n:a:lda:vl:vu:il:iu:abstol:m:w:z:ldz:isuppz:work:lwork:rwork:iwork:info:length:length:length:!public! !
@@ -14106,7 +14349,6 @@ castToRealWithArrayOffsetBy: anInteger
 	(anInteger > (self size * 2) or: [anInteger < 0]) ifTrue: [self error: 'array offset point out of memory'].
 	subAddress := bytes yourAddress + (anInteger * self elementSize // 2).
 	subArray := DOUBLEArray fromAddress: subAddress length: self size * 2 - anInteger.
-	subArray beUnfinalizable.
 	^subArray!
 
 elementClass
@@ -14134,7 +14376,7 @@ uncheckedAt: anInteger put: aComplex
 !DOUBLECOMPLEXArray categoriesFor: #castToRealWithArrayOffsetBy:!converting!public! !
 !DOUBLECOMPLEXArray categoriesFor: #elementClass!constants!public! !
 !DOUBLECOMPLEXArray categoriesFor: #uncheckedAt:!accessing!private! !
-!DOUBLECOMPLEXArray categoriesFor: #uncheckedAt:put:!accessing!public! !
+!DOUBLECOMPLEXArray categoriesFor: #uncheckedAt:put:!accessing!private! !
 
 !DOUBLECOMPLEXArray class methodsFor!
 
@@ -14154,7 +14396,6 @@ castToRealWithArrayOffsetBy: anInteger
 	(anInteger > (self size * 2) or: [anInteger < 0]) ifTrue: [self error: 'array offset point out of memory'].
 	subAddress := bytes yourAddress + (anInteger * self elementSize // 2).
 	subArray := FLOATArray fromAddress: subAddress length: self size * 2 - anInteger.
-	subArray beUnfinalizable.
 	^subArray!
 
 elementClass
