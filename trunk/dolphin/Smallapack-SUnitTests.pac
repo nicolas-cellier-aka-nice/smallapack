@@ -1,7 +1,7 @@
 | package |
 package := Package name: 'Smallapack-SUnitTests'.
 package paxVersion: 1;
-	basicComment: ''.
+	basicComment: 'Smallapack-SUnitTests implement some tests for the Smallapack library'.
 
 
 package classNames
@@ -16,9 +16,10 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: '..\..\WINDOWS\Profiles\nicolas\Mes Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\Documents and Settings\cellier\Mes documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: 'Smallapack-Algorithm';
 	add: 'Smallapack-Matrix';
-	add: '..\..\WINDOWS\Profiles\nicolas\Mes Documents\Dolphin Smalltalk X6\Camp Smalltalk\SUnit\SUnit';
+	add: '..\..\Documents and Settings\cellier\Mes documents\Dolphin Smalltalk X6\Camp Smalltalk\SUnit\SUnit';
 	yourself).
 
 package!
@@ -179,6 +180,68 @@ testHessenberg
 	m := LapackDGEMatrix rows: #(#(3 2 4) #(2 -5 -1) #(1 -2 2)).
 	hess := m hessenbergDecomposition.
 	self assert: (hess q * hess h * hess q transposeConjugated - m) absMax 	< 1.0d-12!
+
+testLeastSquareWithEqualityConstraints
+
+	| a b c d x dx lsqec minimum cInv iseed x1 |
+	a := LapackDGEMatrix rows: #(#(3 2 4) #(2 -5 -1) #(1 -2 2)).
+	b := LapackDGEMatrix rows: #(#(1) (2) (3)).
+	c := LapackDGEMatrix rows: #(#(1 1 0) #(0 1 -1)).
+	d := LapackDGEMatrix rows: #(#(0) #(2)).
+	
+	lsqec := LapackLeastSquareProblemWithEqualityConstraints
+		minimizeTimesX: a
+		minus: b
+		subjectToTimesX: c
+		equal: d.
+	x := lsqec solution.
+	minimum := lsqec residuals norm2.
+	
+	self assert: lsqec equalityResiduals norm2 < 1.0e-12 description: 'equality constraints should be feasible'.
+	cInv := c pseudoInverse.
+	iseed := Array 
+				with: 3
+				with: 5
+				with: 7
+				with: 11.
+	10 timesRepeat: [
+		dx := 0.1*(LapackDGEMatrix randUniform: x dimensions withSeed: iseed).
+		"displacement with respect to constraints c*dx=0"
+		dx := dx - (cInv*(c*dx)).
+		x1 := x + dx.
+		self assert: (c*x1-d) norm2 < 1.0e-12 description: 'equality constraints should be feasible'.
+		self assert: (a*x1-b) norm2 >= minimum description: 'least square solution should be minimum'].
+	!
+
+testLowerTriangle
+	"Unlike #upperTriangle: , #smallLowerTriangle: can be of smaller size than receiver"
+	
+	(LapackGeneralMatrix allSubclasses copyWith: AbstractMatrix) do: [:matrixClass |
+		| m33 m36 m63 |
+		m33 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33)).
+		m36 := matrixClass rows: #(#(11 12 13 14 15 16) #(21 22 23 24 25 26) #(31 32 33 34 35 36)).
+		m63 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63)).
+	
+		self assert: (m33 lowerTriangle: -2) = (matrixClass rows: #(#(0 0 0) #(0 0 0) #(31 0 0))).
+		self assert: (m33 lowerTriangle: -1) = (matrixClass rows: #(#(0 0 0) #(21 0 0) #(31 32 0))).
+		self assert: (m33 lowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33))).
+		self assert: (m33 lowerTriangle: 1) = (matrixClass rows: #(#(11 12 0) #(21 22 23) #(31 32 33))).
+		self assert: (m33 lowerTriangle: 2) = m33.
+	
+		self assert: (m36 lowerTriangle: -2) = (matrixClass rows: #(#(0 0 0 0 0 0) #(0 0 0 0 0 0) #(31 0 0 0 0 0))).
+		self assert: (m36 lowerTriangle: -1) = (matrixClass rows: #(#(0 0 0 0 0 0) #(21 0 0 0 0 0) #(31 32 0 0 0 0))).
+		self assert: (m36 lowerTriangle: 0) = (matrixClass rows: #(#(11 0 0 0 0 0) #(21 22 0 0 0 0) #(31 32 33 0 0 0))).
+		self assert: (m36 lowerTriangle: 1) = (matrixClass rows: #(#(11 12 0 0 0 0) #(21 22 23 0 0 0) #(31 32 33 34 0 0))).
+		self assert: (m36 lowerTriangle: 2) = (matrixClass rows: #(#(11 12 13 0 0 0) #(21 22 23 24 0 0) #(31 32 33 34 35 0))).
+		self assert: (m36 lowerTriangle: 5) = m36.
+	
+		self assert: (m63 lowerTriangle: 2) = m63.
+		self assert: (m63 lowerTriangle: 1) = (matrixClass rows: #(#(11 12 0) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63))).
+		self assert: (m63 lowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63))).
+		self assert: (m63 lowerTriangle: -1) = (matrixClass rows: #(#(0 0 0) #(21 0 0) #(31 32 0) #(41 42 43) #(51 52 53) #(61 62 63))).
+		self assert: (m63 lowerTriangle: -2) = (matrixClass rows: #(#(0 0 0) #(0 0 0) #(31 0 0) #(41 42 0) #(51 52 53) #(61 62 63))).
+		self assert: (m63 lowerTriangle: -3) = (matrixClass rows: #(#(0 0 0) #(0 0 0) #(0 0 0) #(41 0 0) #(51 52 0) #(61 62 63))).
+		self assert: (m63 lowerTriangle: -4) = (matrixClass rows: #(#(0 0 0) #(0 0 0) #(0 0 0) #(0 0 0) #(51 0 0) #(61 62 0)))]!
 
 testMatrixDiagonal
 
@@ -382,6 +445,33 @@ testSingularValues
 	sigma setDiagonal: svd s.
 	self assert: (svd u * sigma * svd vt - a) absMax < 1.0d-12.!
 
+testSmallLowerTriangle
+	"Unlike #upperTriangle: , #smallLowerTriangle: can be of smaller size than receiver"
+	
+	(LapackGeneralMatrix allSubclasses copyWith: AbstractMatrix) do: [:matrixClass |
+		| m33 m36 m63 |
+		m33 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33)).
+		m36 := matrixClass rows: #(#(11 12 13 14 15 16) #(21 22 23 24 25 26) #(31 32 33 34 35 36)).
+		m63 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63)).
+	
+		self assert: (m33 smallLowerTriangle: -1) = (matrixClass rows: #(#(21 0) #(31 32 ))).
+		self assert: (m33 smallLowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33))).
+		self assert: (m33 smallLowerTriangle: 1) = (matrixClass rows: #(#(11 12 0) #(21 22 23) #(31 32 33))).
+		self assert: (m33 smallLowerTriangle: 2) = m33.
+	
+		self assert: (m36 smallLowerTriangle: -1) = (matrixClass rows: #(#(21 0) #(31 32))).
+		self assert: (m36 smallLowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33))).
+		self assert: (m36 smallLowerTriangle: 1) = (matrixClass rows: #(#(11 12 0 0) #(21 22 23 0) #(31 32 33 34))).
+		self assert: (m36 smallLowerTriangle: 5) = m36.
+	
+		self assert: (m63 smallLowerTriangle: 2) = m63.
+		self assert: (m63 smallLowerTriangle: 1) = (matrixClass rows: #(#(11 12 0) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63))).
+		self assert: (m63 smallLowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63))).
+		self assert: (m63 smallLowerTriangle: -1) = (matrixClass rows: #(#(21 0 0) #(31 32 0) #(41 42 43) #(51 52 53) #(61 62 63))).
+		self assert: (m63 smallLowerTriangle: -2) = (matrixClass rows: #(#(31 0 0) #(41 42 0) #(51 52 53) #(61 62 63))).
+		self assert: (m63 smallLowerTriangle: -3) = (matrixClass rows: #(#(41 0 0) #(51 52 0) #(61 62 63))).
+		self assert: (m63 smallLowerTriangle: -4) = (matrixClass rows: #(#(51 0) #(61 62)))]!
+
 testSmallPackAccessing
 	"Borrowed to Smallpack"
 
@@ -513,6 +603,31 @@ testSmallPackAugmenting
 	self assert: ((i3 ,, zeros43) hasShape: 7 by: 3).
 	self assert: ((((vec03 ,, vec03) ,, vec03) ,, vec03) = zeros43).!
 
+testSmallUpperTriangle
+	"Unlike #upperTriangle: , #smallUpperTriangle: can be of smaller size than receiver"
+	
+	(LapackGeneralMatrix allSubclasses copyWith: AbstractMatrix) do: [:matrixClass |
+		| m33 m36 m63 |
+		m33 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33)).
+		m36 := matrixClass rows: #(#(11 12 13 14 15 16) #(21 22 23 24 25 26) #(31 32 33 34 35 36)).
+		m63 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63)).
+	
+		self assert: (m33 smallUpperTriangle: -2) = m33.
+		self assert: (m33 smallUpperTriangle: -1) = (matrixClass rows: #(#(11 12 13 ) #(21 22 23 ) #(0 32 33 ))).
+		self assert: (m33 smallUpperTriangle: 0) = (matrixClass rows: #(#(11 12 13) #(0 22 23) #(0 0 33))).
+		self assert: (m33 smallUpperTriangle: 1) = (matrixClass rows: #(#(12 13) #(0 23))).
+	
+		self assert: (m36 smallUpperTriangle: -2) = m36.
+		self assert: (m36 smallUpperTriangle: -1) = (matrixClass rows: #(#(11 12 13 14 15 16 ) #(21 22 23 24 25 26 ) #(0 32 33 34 35 36 ))).
+		self assert: (m36 smallUpperTriangle: 0) = (matrixClass rows: #(#(11 12 13 14 15 16 ) #(0 22 23 24 25 26 ) #(0 0 33 34 35 36 ))).
+		self assert: (m36 smallUpperTriangle: 1) = (matrixClass rows: #(#(12 13 14 15 16 ) #(0 23 24 25 26 ) #(0 0 34 35 36 ))).
+		self assert: (m36 smallUpperTriangle: 4) = (matrixClass rows: #(#(15 16 ) #(0 26 ))).
+	
+		self assert: (m63 smallUpperTriangle: -5) = m63.
+		self assert: (m63 smallUpperTriangle: -1) = (matrixClass rows: #(#(11 12 13 ) #(21 22 23 ) #(0 32 33 ) #(0 0 43 ))).
+		self assert: (m63 smallUpperTriangle: 0) = (matrixClass rows: #(#(11 12 13) #(0 22 23) #(0 0 33))).
+		self assert: (m63 smallUpperTriangle: 1) = (matrixClass rows: #(#(12 13) #(0 23)))]!
+
 testSum
 	| aSmallapackArray aMatrix bMatrix md ms mdmd mdms msmd msms |
 	aSmallapackArray := DOUBLEArray new: 3 * 2.
@@ -538,7 +653,77 @@ testSum
 	self assert: msms isSinglePrecisionMatrix.
 	self assert: ((1 to: mdmd size) allSatisfy: [:i | (mdmd at: i) = (mdms at: i)]).
 	self assert: ((1 to: mdmd size) allSatisfy: [:i | (mdmd at: i) = (msmd at: i)]).
-	self assert: ((1 to: mdmd size) allSatisfy: [:i | (mdmd at: i) asFloat = (msms at: i)]).! !
+	self assert: ((1 to: mdmd size) allSatisfy: [:i | (mdmd at: i) asFloat = (msms at: i)]).!
+
+testTransposed
+
+	(Array with: LapackDGEMatrix with: LapackSGEMatrix with: LapackCGEMatrix with: LapackZGEMatrix) do: [:mclass |
+		| v vt ge get  |
+		v := mclass rows: #( (7  11  13) ).
+		vt := v transposed.
+		self assert: v nrow = vt ncol.
+		self assert: v ncol = vt nrow.
+		self assert: (vt = (mclass columns: #( (7  11  13) ))).
+		self assert: vt transposed = v.
+		
+		ge := mclass rows: #( (5  7  11)  (13  17  19) ).
+		get := ge transposed.
+		self assert: (get = (mclass columns: #( (5  7  11)  (13  17  19) ))).
+		self assert: get transposed = ge].
+	
+	(Array with: LapackDTRMatrix with: LapackSTRMatrix with: LapackCTRMatrix with: LapackZTRMatrix) do: [:mclass |
+		| tr trt |
+		tr := mclass rows: #( (5  7  11)  (0  13  17)  (0  0  19) ).
+		trt := tr transposed.
+		self assert: trt class = tr class.
+		self assert: trt isUpper = tr isLower.
+		self assert: trt transposed class = tr class.
+		self assert: trt transposed = tr].
+	
+	(Array with: LapackDSYMatrix with: LapackSSYMatrix with: LapackCHEMatrix with: LapackZHEMatrix) do: [:mclass |
+		| sy syt |
+		sy := mclass rows: #( (5  7  11)  (7  13  17)  (11  17  19) ).
+		syt := sy transposed.
+		self assert: syt class = sy class.
+		self assert: syt = sy].!
+
+testUpperTriangle
+	"Unlike #upperTriangle: , #smallUpperTriangle: can be of smaller size than receiver"
+	
+	(LapackGeneralMatrix allSubclasses copyWith: AbstractMatrix) do: [:matrixClass |
+		| m33 m35 m37 m53 m73 |
+		m33 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33)).
+		m35 := matrixClass rows: #(#(11 12 13 14 15 ) #(21 22 23 24 25 ) #(31 32 33 34 35 )).
+		m37 := matrixClass rows: #(#(11 12 13 14 15 16 17) #(21 22 23 24 25 26 27) #(31 32 33 34 35 36 37)).
+		m53 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) ).
+		m73 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63) #(71 72 73)).
+	
+		self assert: (m33 upperTriangle: -2) = m33.
+		self assert: (m33 upperTriangle: -1) = (matrixClass rows: #(#(11 12 13 ) #(21 22 23 ) #(0 32 33 ))).
+		self assert: (m33 upperTriangle: 0) = (matrixClass rows: #(#(11 12 13) #(0 22 23) #(0 0 33))).
+		self assert: (m33 upperTriangle: 1) = (matrixClass rows: #(#(0 12 13) #(0 0 23) #(0 0 0))).
+	
+		self assert: (m35 upperTriangle: -2) = m35.
+		self assert: (m35 upperTriangle: -1) = (matrixClass rows: #(#(11 12 13 14 15) #(21 22 23 24 25) #(0 32 33 34 35))).
+		self assert: (m35 upperTriangle: 0) = (matrixClass rows: #(#(11 12 13 14 15) #(0 22 23 24 25) #(0 0 33 34 35))).
+		self assert: (m35 upperTriangle: 1) = (matrixClass rows: #(#(0 12 13 14 15) #(0 0 23 24 25) #(0 0 0 34 35))).
+		self assert: (m35 upperTriangle: 4) = (matrixClass rows: #(#(0 0 0 0 15) #(0 0 0 0 0) #(0 0 0 0 0))).
+
+		self assert: (m37 upperTriangle: -2) = m37.
+		self assert: (m37 upperTriangle: -1) = (matrixClass rows: #(#(11 12 13 14 15 16 17) #(21 22 23 24 25 26 27) #(0 32 33 34 35 36 37))).
+		self assert: (m37 upperTriangle: 0) = (matrixClass rows: #(#(11 12 13 14 15 16 17) #(0 22 23 24 25 26 27) #(0 0 33 34 35 36 37))).
+		self assert: (m37 upperTriangle: 1) = (matrixClass rows: #(#(0 12 13 14 15 16 17) #(0 0 23 24 25 26 27) #(0 0 0 34 35 36 37))).
+		self assert: (m37 upperTriangle: 4) = (matrixClass rows: #(#(0 0 0 0 15 16 17) #(0 0 0 0 0 26 27) #(0 0 0 0 0 0 37))).
+	
+		self assert: (m53 upperTriangle: -5) = m53.
+		self assert: (m53 upperTriangle: -1) = (matrixClass rows: #(#(11 12 13) #(21 22 23) #(0 32 33) #(0 0 43) #(0 0 0))).
+		self assert: (m53 upperTriangle: 0) = (matrixClass rows: #(#(11 12 13) #(0 22 23) #(0 0 33) #(0 0 0) #(0 0 0))).
+		self assert: (m53 upperTriangle: 1) = (matrixClass rows: #(#(0 12 13) #(0 0 23) #(0 0 0) #(0 0 0) #(0 0 0))).
+	
+		self assert: (m73 upperTriangle: -6) = m73.
+		self assert: (m73 upperTriangle: -1) = (matrixClass rows: #(#(11 12 13) #(21 22 23) #(0 32 33) #(0 0 43) #(0 0 0) #(0 0 0) #(0 0 0))).
+		self assert: (m73 upperTriangle: 0) = (matrixClass rows: #(#(11 12 13) #(0 22 23) #(0 0 33) #(0 0 0) #(0 0 0) #(0 0 0) #(0 0 0))).
+		self assert: (m73 upperTriangle: 1) = (matrixClass rows: #(#(0 12 13) #(0 0 23) #(0 0 0) #(0 0 0) #(0 0 0) #(0 0 0) #(0 0 0)))]! !
 !TestLapackMatrix categoriesFor: #setUp!public! !
 !TestLapackMatrix categoriesFor: #testComplex!public! !
 !TestLapackMatrix categoriesFor: #testConcatenation!public! !
@@ -546,6 +731,8 @@ testSum
 !TestLapackMatrix categoriesFor: #testDeterminant!public! !
 !TestLapackMatrix categoriesFor: #testEigenValues!public! !
 !TestLapackMatrix categoriesFor: #testHessenberg!public! !
+!TestLapackMatrix categoriesFor: #testLeastSquareWithEqualityConstraints!public!running! !
+!TestLapackMatrix categoriesFor: #testLowerTriangle!public!running! !
 !TestLapackMatrix categoriesFor: #testMatrixDiagonal!public! !
 !TestLapackMatrix categoriesFor: #testMatrixOperation!public! !
 !TestLapackMatrix categoriesFor: #testMatrixProduct!public! !
@@ -555,10 +742,14 @@ testSum
 !TestLapackMatrix categoriesFor: #testQR!public! !
 !TestLapackMatrix categoriesFor: #testReciprocal!public! !
 !TestLapackMatrix categoriesFor: #testSingularValues!public! !
+!TestLapackMatrix categoriesFor: #testSmallLowerTriangle!public!running! !
 !TestLapackMatrix categoriesFor: #testSmallPackAccessing!public! !
 !TestLapackMatrix categoriesFor: #testSmallPackArithmetic!public! !
 !TestLapackMatrix categoriesFor: #testSmallPackAugmenting!public! !
+!TestLapackMatrix categoriesFor: #testSmallUpperTriangle!public!running! !
 !TestLapackMatrix categoriesFor: #testSum!public! !
+!TestLapackMatrix categoriesFor: #testTransposed!public!running! !
+!TestLapackMatrix categoriesFor: #testUpperTriangle!public!running! !
 
 TestRandMatrix guid: (GUID fromString: '{30B2F9AD-6C51-4ACD-9067-99977CF6031C}')!
 TestRandMatrix comment: ''!
