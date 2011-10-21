@@ -1,7 +1,7 @@
 | package |
 package := Package name: 'Smallapack-ComplexExtensions'.
 package paxVersion: 1;
-	basicComment: ''.
+	basicComment: 'This add a few messages to Complex required by Smallapack'.
 
 
 package methodNames
@@ -20,7 +20,7 @@ package globalAliases: (Set new
 
 package setPrerequisites: (IdentitySet new
 	add: '..\Dolphin Smalltalk 5.1\Burning River\Complex\Complex';
-	add: '..\..\WINDOWS\Profiles\nicolas\Mes Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\Documents and Settings\cellier\Mes documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
 	yourself).
 
 package!
