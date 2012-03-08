@@ -3,20 +3,41 @@
 
 = Introduction =
 
-Installing Smallapack on Squeak and Pharo is not fully automated. Some information about packages to load and load order are necessary.
+Installing Smallapack on Squeak and Pharo is now automated with Metacello tool, at least in latest Squeak4.4 and Pharo1.4 versions. However the BLAS/LAPACK dynamic link library are a pre-requisite.
 
+{{{
+"In Squeak"
+Installer ss
+       project: 'MetacelloRepository';
+       install: 'ConfigurationOfSmallapack'.
+((Smalltalk at: #ConfigurationOfSmallapack) project version: #development) load.
+}}}
+
+{{{
+"In Pharo"
+Gofer new
+       squeaksource: 'MetacelloRepository';
+       package: 'ConfigurationOfSmallapack';
+       load.
+((Smalltalk at: #ConfigurationOfSmallapack) project version: #development) load.
+}}}
 
 = Details =
 
-All code can be found on http://www.squeaksource.com/Smallapack.html and is loadable via Monticello tool. But there are a few tricks:
+The Metacello tools solves the following problems:
 
 *The problem of FFI calls with 15 arguments*
 
- Some LAPACK functions have more than 15 arguments, while Squeak/Pharo currently do not support invoking a Smalltalk method with more than 15 arguments. However, FFI can invoke a function with more than 15 arguments by simply passing an Array. It would have been possible to reify the external procedure, forming an Array of arguments and explicitely invoking the procedure object with the array of arguments, but that would have lead to even more unreadable and bad code. Instead, a trick has been implemented on Squeak/Pharo to let the compiler perform this single Array argument trick transparently when it encounters a method with 16 args or more. A Compiler version can be found in Squeaksource with ad hoc changes.
+ Some LAPACK functions have more than 15 arguments, while Squeak/Pharo currently do not support invoking a Smalltalk method with more than 15 arguments. However, FFI can invoke a function with more than 15 arguments by simply passing an Array. It would have been possible to reify the external procedure, forming an Array of arguments and explicitely invoking the procedure object with the array of arguments, but that would have lead to even more unreadable and bad code. Instead, a trick has been implemented on Squeak/Pharo to let the compiler perform this single Array argument trick transparently when it encounters a method with 16 args or more. Two options are available for implementing the trick:
+  * use a compiler override (the configuration version 1.0 did that)
+  * use a specific compiler for Smallapack (implemented in version 1.1)
+
+The later solution is a bit easier to maintain, and is thus preferred. But any class wishing to send a message with 16 or more arguments have to implement a class side #compilerClass message returning SmallapackCompiler.
 
 *The presence of Complex and required extensions*
 
- Squeak contains a Complex class. But this class lacks a few methods. These can be found in http://www.squeaksource.com/NumberExtensions.html and http://www.squeaksource.com/ComplexExtensions.html - but the version must be chosen based in Squeak version (I recommend using Squeak trunk >= 4.3). Pharo does not provide a Complex class, so you might pick the one in Squeak and import it in Pharo first.
+ Squeak contains a Complex class. But this class lacks a few methods. These will be loaded automatically (I recommend using Squeak trunk >= 4.3).
+ Pharo does not provide a Complex class, and the configuration will load it from http//www.squeaksource.com/Complex package.
 
 *The Smallapack packages*
 
@@ -26,6 +47,10 @@ All code can be found on http://www.squeaksource.com/Smallapack.html and is load
   * Smallapack-Algorithm
   * Smallapack-Matrix
   * Smallapack-SUnitTests
+
+With the Smallapack-Compiler solution, two additional prerequisites are mandatory due to Monticello limitations concerning alternate compilerClass support.
+  * Smallapack-ExternalPrereq
+  * Smallapack-AlgorithmPrereq
 
  You may have to replay manually some LapackMatrix initializations, handling how Monticello works with this respect is not a pleasure.
 
