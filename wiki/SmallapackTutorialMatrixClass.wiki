@@ -7,8 +7,8 @@ Smallapack brings several matrix classes. Here is a review of these classes.
 
 = Details =
 
-All matrix classes in Smallapack are based on an abstract class named {{{AbstractMatrix}}}. This class defines a good part of the matrix protocol, but does not provide any accelerated part. It ha three instance variables:
-  * *array* which acts for storage of matrix contents;
+All matrix classes in Smallapack are based on an abstract class named {{{AbstractMatrix}}}. This class defines a good part of the matrix protocol, but does not provide any accelerated part. It has three instance variables:
+  * *array* which provides storage of matrix contents;
   * *nrow* which is the number of rows of the matrix (and is expected to be a positive integer);
   * *ncol* which is the number of columns of the matrix (also a positive integer).
 The array is expected to be a {{{SequenceableCollection}}} of *nrow* {{{*}}} *ncol* elements. The matrix contents is stored columnwise.
