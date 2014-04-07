@@ -3,7 +3,7 @@
 
 = Introduction =
 
-Installing Smallapack on Squeak and Pharo is now automated with Metacello tool, at least in latest Squeak4.4 and Pharo1.4 versions. However the BLAS/LAPACK dynamic link library are a pre-requisite.
+Installing Smallapack on Squeak and Pharo is now automated with Metacello tool, at least in latest Squeak4.5 and Pharo1.4, 2.0 and 3.0 versions. However the BLAS/LAPACK dynamic link library are a pre-requisite.
 
 {{{
 "In Squeak"
