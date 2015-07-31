@@ -18,3 +18,15 @@ The drawback is that BLAS and LAPACK must be available as a Dynamic Link Library
 Netlib provides a default implementation of the BLAS library. But this default implementation is not specifically optimized for you hardware. It is better to obtain an optimized BLAS, either from a vendor, or from the ATLAS project (See http://math-atlas.sourceforge.net/ ). Once more, it will be necessary to obtain or build a DLL.
 
 Note that Mac OSX provides an optimized BLAS/LAPACK in the veclib framework, and this should be installed along with XCode.
+
+= about xerbla =
+
+Blas executes the function xerbla when it detects an error in function parameters.
+
+The default implementation for xerbla is to stop the program, which is not suitable for Smalltalk read/eval/print style.
+
+Thus Smallapack will try to load a replacement library (xerbla.dll or libxerbla.so or libxerbla.dylib) containing an alternative xerbla function.
+
+This is a pre-requisite for Smallapack that you need to build before testing Smallapack.
+
+An example of implementation for the function can be found in the sources (see xerbla), as well as example Xcode for compiling on Mac OSX.
