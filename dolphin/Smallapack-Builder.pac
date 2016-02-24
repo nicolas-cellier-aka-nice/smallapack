@@ -16,7 +16,7 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: '..\..\WINDOWS\Profiles\nicolas\Mes Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	add: 'Smallapack-External';
 	yourself).
 
@@ -138,8 +138,7 @@ compileCode: code forClass: aClass classified: aProtocol
 		ifTrue: 
 			[aClass 
 				compile: code
-				classified: aProtocol
-				notifying: nil]!
+				classified: aProtocol]!
 
 cTypeFor: aString 
 	(IntegerTypeExpr matchesPrefix: aString) ifTrue: [^'long'].
@@ -255,14 +254,13 @@ generateWrapperFunction
 generateWrapperFunctionForDolphin
 	"at this level, we only allocate non array input variables and info output variable"
 
-	| pattern locals alloc call free code lenArg retval |
+	| pattern locals alloc call code lenArg retval |
 	pattern := String new writeStream.
 	locals := String new writeStream.
 	alloc := String new writeStream.
 	call := String new writeStream.
 	lenArg := String new writeStream.
 	retval := String new writeStream.
-	free := String new writeStream.
 	pattern
 		nextPutAll: self shortName;
 		nextPutAll: 'With'.
@@ -287,11 +285,10 @@ generateWrapperFunctionForDolphin
 						nextPutAll: ' := self cIntegerPointerOn: 0.';
 						crtab.
 					call nextPutAll: arg cAllocatedName.
-					self codeStream: free free: arg.
-					free crtab: 2.
 					retval
 						nextPut: $.;
 						crtab;
+						nextPut: $^;
 						nextPutAll: arg cAllocatedName;
 						nextPutAll: ' sdwordAtOffset: 0']
 				ifFalse: 
@@ -303,9 +300,7 @@ generateWrapperFunctionForDolphin
 								nextPutAll: arg cAllocatedName.
 							self codeStream: alloc allocate: arg.
 							alloc crtab.
-							call nextPutAll: arg cAllocatedName.
-							self codeStream: free free: arg.
-							free crtab: 2]
+							call nextPutAll: arg cAllocatedName]
 						ifFalse: [call nextPutAll: arg lowercaseName]].
 			arg hasExtraLengthArgument 
 				ifTrue: 
@@ -323,16 +318,10 @@ generateWrapperFunctionForDolphin
 		space;
 		nextPut: $|;
 		crtab;
-		nextPut: $^;
-		crtab;
-		nextPut: $[;
 		nextPutAll: alloc contents;
 		nextPutAll: call contents;
 		nextPutAll: lenArg contents;
-		nextPutAll: retval contents;
-		nextPutAll: '] ensure: [';
-		nextPutAll: free contents;
-		nextPut: $].
+		nextPutAll: retval contents.
 	self 
 		compileCode: code contents
 		forClass: self destinationSubclass
