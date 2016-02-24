@@ -58,7 +58,7 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: '..\..\Documents and Settings\cellier\Mes documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	yourself).
 
 package!
@@ -642,7 +642,7 @@ decompose: aLapackMatrix	"This message is not appropriated because	the least s
 
 initialize	super initialize.	self solveBySVD!
 
-matrix: aLapackMatrix rhsMatrix: bMatrix 	"This will find x minimizing :	( aLapackMatrix * x -  bMatrix ) norm2"	sourceMatrix := aLapackMatrix.	rhsMatrix := bMatrix!
+matrix: aLapackMatrix rhsMatrix: bMatrix 	"This will find x minimizing :	( aLapackMatrix * x -  bMatrix ) norm2"	sourceMatrix := aLapackMatrix.	rhsMatrix := bMatrix.	self reset!
 
 processDivideAndConquerSVD
 	"solve by SVD using faster divide and conquer algorithm"
@@ -794,6 +794,11 @@ solveBySVD	algorithm := #processSVD! !
 !LapackLeastSquareProblem categoriesFor: #solveByDivideAndConquerSVD!accessing!public! !
 !LapackLeastSquareProblem categoriesFor: #solveByOrthogonalFactorization!accessing!public! !
 !LapackLeastSquareProblem categoriesFor: #solveBySVD!accessing!public! !
+
+!LapackLeastSquareProblem class methodsFor!
+
+matrix: aLapackMatrix rhsMatrix: bMatrix 	^self new matrix: aLapackMatrix rhsMatrix: bMatrix ! !
+!LapackLeastSquareProblem class categoriesFor: #matrix:rhsMatrix:!public! !
 
 LapackPLUdecomposition guid: (GUID fromString: '{86E38315-298A-4A65-95F7-051D75DA774E}')!
 LapackPLUdecomposition comment: 'LapackPLUdecomposition perform a Lower Upper (LU) decomposition of a LapackMatrix using LAPACK interface
@@ -1164,9 +1169,9 @@ Instance Variables:
 !LapackSVDecomposition categoriesForClass!Smallapack-Algorithm! !
 !LapackSVDecomposition methodsFor!
 
-checkLeftSingularVectors	whichLeftVector == #noSinguarVector 		ifTrue: 			[whichLeftVector := #allSinguarVector.			isComputed := false].	self checkDecomposition!
+checkLeftSingularVectors	whichLeftVector == #noSingularVector 		ifTrue: 			[whichLeftVector := #allSingularVector.			isComputed := false].	self checkDecomposition!
 
-checkRightSingularVectors	whichRightVector == #noSinguarVector 		ifTrue: 			[whichRightVector := #allSinguarVector.			isComputed := false].	self checkDecomposition!
+checkRightSingularVectors	whichRightVector == #noSingularVector 		ifTrue: 			[whichRightVector := #allSingularVector.			isComputed := false].	self checkDecomposition!
 
 checkSingularValues	self checkDecomposition!
 
@@ -2143,11 +2148,14 @@ solveA: A B: B Q: Q R: R
 	sourceMatrix1 := B * Rinv * B transposed.
 	sourceMatrix2 := A.
 	self reset.
-	self postAction: nil! !
+	self postAction: nil!
+
+solveA: A B: B Q: Q R: R S: S 	"Solve the feedback gain problem under the classical form of LQR/LQE in Control Theory"	| Rinv |	Rinv := R reciprocal.	sourceMatrix := Q - (S * Rinv * S transposed).	sourceMatrix1 := B * Rinv * B transposed.	sourceMatrix2 := A - (B * Rinv * S transposed).	self reset.	self postAction: 			[solution := Rinv * (B transposed negated * solution - S transposed)]! !
 !LapackContinuousRiccatiProblem categoriesFor: #decompose!processing!public! !
 !LapackContinuousRiccatiProblem categoriesFor: #processDiagonalizationAlgorithm!processing!public! !
 !LapackContinuousRiccatiProblem categoriesFor: #processSchurDecompositionAlgorithm!processing!public! !
 !LapackContinuousRiccatiProblem categoriesFor: #solveA:B:Q:R:!initialize/release!public! !
+!LapackContinuousRiccatiProblem categoriesFor: #solveA:B:Q:R:S:!public! !
 
 LapackDiscreteRiccatiProblem guid: (GUID fromString: '{D68C6B61-DDFA-4C1D-A8CC-14E08BD0B53F}')!
 LapackDiscreteRiccatiProblem comment: 'LapackDiscreteRiccatiProblem is for solving Riccati equations for discrete system, that is:
