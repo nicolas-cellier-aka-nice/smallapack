@@ -754,7 +754,7 @@ dotProduct: n elementsIncrement: incx with: aMatrix increment: incy
 	| sx sy |
 	sx := incx positive ifTrue: [1] ifFalse: [(1 - n) * incx + 1].
 	sy := incy positive ifTrue: [ 1] ifFalse: [(1 - n) * incy +1].
-	^(1 to: n) sum: 
+	^(1 to: n) sumOf: 
 			[:i | 
 			(self at: (i - 1) * incx + sx) 
 				* (aMatrix at: (i - 1) * incy + sy)]!
@@ -803,7 +803,7 @@ fill: m elementsWithStride: incy withSelfScaledBy: beta plusScalar: alpha timesM
 					[:i | 
 					self at: (i - 1) * incy + sy
 						put: alpha * ((1 to: n) 
-										sum: [:j | (a rowAt: j columnAt: i) * (x at: (j - 1) * incx + sx)]) 
+										sumOf: [:j | (a rowAt: j columnAt: i) * (x at: (j - 1) * incx + sx)]) 
 								+ (beta * (self at: (i - 1) * incy + sy))]]
 		ifFalse: 
 			[1 to: m
@@ -811,7 +811,7 @@ fill: m elementsWithStride: incy withSelfScaledBy: beta plusScalar: alpha timesM
 					[:i | 
 					self at: (i - 1) * incy + sy
 						put: alpha * ((1 to: n) 
-										sum: [:j | (a rowAt: i columnAt: j) * (x at: (j - 1) * incx + sx)]) 
+										sumOf: [:j | (a rowAt: i columnAt: j) * (x at: (j - 1) * incx + sx)]) 
 								+ (beta * (self at: (i - 1) * incy + sy))]]!
 
 fillM: m byN: n withScalar: alpha timesColumnVector: x stride: incx timesRowVector: y stride: incy 
@@ -847,7 +847,7 @@ fillM: m byN: n withSelfScaledBy: beta plusScalar: alpha timesLeftMatrix: a tran
 								rowAt: i
 								columnAt: j
 								put: alpha * ((1 to: k) 
-												sum: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: j columnAt: kk)]) 
+												sumOf: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: j columnAt: kk)]) 
 										+ (beta * (self rowAt: i columnAt: j))]]]
 				ifFalse: 
 					[1 to: n do: [:j | 
@@ -856,7 +856,7 @@ fillM: m byN: n withSelfScaledBy: beta plusScalar: alpha timesLeftMatrix: a tran
 								rowAt: i
 								columnAt: j
 								put: alpha * ((1 to: k) 
-												sum: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: kk columnAt: j)]) 
+												sumOf: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: kk columnAt: j)]) 
 										+ (beta * (self rowAt: i columnAt: j))]]]]
 		ifFalse: 
 			[transb 
@@ -867,7 +867,7 @@ fillM: m byN: n withSelfScaledBy: beta plusScalar: alpha timesLeftMatrix: a tran
 								rowAt: i
 								columnAt: j
 								put: alpha * ((1 to: k) 
-												sum: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: j columnAt: kk)]) 
+												sumOf: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: j columnAt: kk)]) 
 										+ (beta * (self rowAt: i columnAt: j))]]]
 				ifFalse: 
 					[1 to: n do: [:j | 
@@ -876,7 +876,7 @@ fillM: m byN: n withSelfScaledBy: beta plusScalar: alpha timesLeftMatrix: a tran
 								rowAt: i
 								columnAt: j
 								put: alpha * ((1 to: k) 
-												sum: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: kk columnAt: j)]) 
+												sumOf: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: kk columnAt: j)]) 
 										+ (beta * (self rowAt: i columnAt: j))]]]]!
 
 findMax	"answer the index of the max of all elements  "	| max index |	self isEmpty ifTrue: [^0].	index := 1.	max := self at: 1.	2 to: self size		do: 			[:i | 			| tmp |			(tmp := self at: i) > max 				ifTrue: 					[max := tmp.					index := i]].	^index!
@@ -1268,7 +1268,7 @@ sumFromMatrix: aMatrix 	| res |	(nrow = aMatrix nrow and: [ncol = aMatrix ncol
 
 sumOf: aBlock 	| sum |	self isEmpty ifTrue: [^0].	sum := aBlock value: (self at: 1).	2 to: self size do: [:i | sum := sum + (aBlock value: (self at: i))].	^sum!
 
-sumOf: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: 1.			1 to: nrow				do: 					[:ir | 					res at: ir						put: ((1 to: ncol) 								sum: [:jc | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: 1 ncol: ncol.			1 to: ncol				do: 					[:jc | 					res at: jc						put: ((1 to: nrow) 								sum: [:ir | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
+sumOf: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: 1.			1 to: nrow				do: 					[:ir | 					res at: ir						put: ((1 to: ncol) 								sumOf: [:jc | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: 1 ncol: ncol.			1 to: ncol				do: 					[:jc | 					res at: jc						put: ((1 to: nrow) 								sumOf: [:ir | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
 
 swap: r1 at: c1 with: r2 at: c2 	"Squeak compatible protocol"	^self swapRowAt: r1 columnAt: c1 withRowAt: r2 columnAt: c2!
 
