@@ -581,24 +581,24 @@ shortName
 	shortName isNil 
 		ifTrue: [shortName := name asLowercase copyFrom: 2 to: name size].
 	^shortName! !
-!LapackInterfaceBuilder categoriesFor: #baseFunctionPattern!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #cAllocationMethodFor:!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #codeStream:addPatternArgument:!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #codeStream:allocate:!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #codeStream:free:!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #compileCode:forClass:classified:!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #cTypeFor:!code generation!public! !
+!LapackInterfaceBuilder categoriesFor: #baseFunctionPattern!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #cAllocationMethodFor:!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #codeStream:addPatternArgument:!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #codeStream:allocate:!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #codeStream:free:!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #compileCode:forClass:classified:!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #cTypeFor:!code generation!private! !
 !LapackInterfaceBuilder categoriesFor: #destinationSubclass!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateAbstractBaseFunction!code generation!public! !
+!LapackInterfaceBuilder categoriesFor: #generateAbstractBaseFunction!code generation!private! !
 !LapackInterfaceBuilder categoriesFor: #generateCode!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunction!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunctionForDolphin!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunctionForSqueak!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateWrapperFunction!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForDolphin!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForSqueak!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForVW!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateWrapperWrapperFunction!code generation!public! !
+!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunction!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunctionForDolphin!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunctionForSqueak!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateWrapperFunction!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForDolphin!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForSqueak!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForVW!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateWrapperWrapperFunction!code generation!private! !
 !LapackInterfaceBuilder categoriesFor: #genericName!accessing!public! !
 !LapackInterfaceBuilder categoriesFor: #isComplex!accessing!public! !
 !LapackInterfaceBuilder categoriesFor: #isDoublePrecision!accessing!public! !

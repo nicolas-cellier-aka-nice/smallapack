@@ -1,7 +1,9 @@
 | package |
 package := Package name: 'Smallapack-Builder'.
 package paxVersion: 1;
-	basicComment: ''.
+	basicComment: 'This package is used to analyze Lapack FORTRAN source code and automatically generate Smalltalk wrapper.
+Note that the code is generated into a file using classical Smalltalk chunk format.
+This is preferred to direct compilation because it enables performing further text editions manually.'.
 
 
 package classNames
@@ -622,24 +624,24 @@ shortName
 	shortName isNil 
 		ifTrue: [shortName := name asLowercase copyFrom: 2 to: name size].
 	^shortName! !
-!LapackInterfaceBuilder categoriesFor: #baseFunctionPattern!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #cAllocationMethodFor:!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #codeStream:addPatternArgument:!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #codeStream:allocate:!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #codeStream:free:!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #compileCode:forClass:classified:!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #cTypeFor:!code generation!public! !
+!LapackInterfaceBuilder categoriesFor: #baseFunctionPattern!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #cAllocationMethodFor:!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #codeStream:addPatternArgument:!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #codeStream:allocate:!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #codeStream:free:!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #compileCode:forClass:classified:!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #cTypeFor:!code generation!private! !
 !LapackInterfaceBuilder categoriesFor: #destinationSubclass!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateAbstractBaseFunction!code generation!public! !
+!LapackInterfaceBuilder categoriesFor: #generateAbstractBaseFunction!code generation!private! !
 !LapackInterfaceBuilder categoriesFor: #generateCode!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunction!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunctionForDolphin!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunctionForSqueak!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateWrapperFunction!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForDolphin!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForSqueak!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForVW!code generation!public! !
-!LapackInterfaceBuilder categoriesFor: #generateWrapperWrapperFunction!code generation!public! !
+!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunction!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunctionForDolphin!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateConcreteBaseFunctionForSqueak!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateWrapperFunction!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForDolphin!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForSqueak!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateWrapperFunctionForVW!code generation!private! !
+!LapackInterfaceBuilder categoriesFor: #generateWrapperWrapperFunction!code generation!private! !
 !LapackInterfaceBuilder categoriesFor: #genericName!accessing!public! !
 !LapackInterfaceBuilder categoriesFor: #isComplex!accessing!public! !
 !LapackInterfaceBuilder categoriesFor: #isDoublePrecision!accessing!public! !
@@ -795,14 +797,14 @@ type: anObject
 !LapackInterfaceBuilderArgument categoriesFor: #extraLengthArgumentKey!accessing!public! !
 !LapackInterfaceBuilderArgument categoriesFor: #extraLengthArgumentName!accessing!public! !
 !LapackInterfaceBuilderArgument categoriesFor: #extraLengthArgumentType!accessing!public! !
-!LapackInterfaceBuilderArgument categoriesFor: #hasExtraLengthArgument!accessing!public! !
+!LapackInterfaceBuilderArgument categoriesFor: #hasExtraLengthArgument!public!testing! !
 !LapackInterfaceBuilderArgument categoriesFor: #inout!accessing!public! !
 !LapackInterfaceBuilderArgument categoriesFor: #inout:!accessing!public! !
-!LapackInterfaceBuilderArgument categoriesFor: #isArray!accessing!public! !
-!LapackInterfaceBuilderArgument categoriesFor: #isInput!accessing!public! !
-!LapackInterfaceBuilderArgument categoriesFor: #isInputOutput!accessing!public! !
-!LapackInterfaceBuilderArgument categoriesFor: #isOutput!accessing!public! !
-!LapackInterfaceBuilderArgument categoriesFor: #isWorkspace!accessing!public! !
+!LapackInterfaceBuilderArgument categoriesFor: #isArray!public!testing! !
+!LapackInterfaceBuilderArgument categoriesFor: #isInput!public!testing! !
+!LapackInterfaceBuilderArgument categoriesFor: #isInputOutput!public!testing! !
+!LapackInterfaceBuilderArgument categoriesFor: #isOutput!public!testing! !
+!LapackInterfaceBuilderArgument categoriesFor: #isWorkspace!public!testing! !
 !LapackInterfaceBuilderArgument categoriesFor: #lengthSpec!accessing!public! !
 !LapackInterfaceBuilderArgument categoriesFor: #lengthSpec:!accessing!public! !
 !LapackInterfaceBuilderArgument categoriesFor: #lowercaseName!accessing!public! !

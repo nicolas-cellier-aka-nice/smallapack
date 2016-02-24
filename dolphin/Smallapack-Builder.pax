@@ -1,7 +1,9 @@
 | package |
 package := Package name: 'Smallapack-Builder'.
 package paxVersion: 1;
-	basicComment: ''.
+	basicComment: 'This package is used to analyze Lapack FORTRAN source code and automatically generate Smalltalk wrapper.
+Note that the code is generated into a file using classical Smalltalk chunk format.
+This is preferred to direct compilation because it enables performing further text editions manually.'.
 
 
 package classNames
