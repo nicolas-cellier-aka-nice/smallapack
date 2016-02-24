@@ -1,7 +1,11 @@
 | package |
 package := Package name: 'Smallapack-External'.
 package paxVersion: 1;
-	basicComment: ''.
+	basicComment: 'Smallapack-External defines the BLAS-LAPACK external libraries.
+
+These libraries are for doing LINEAR ALGEBRA on numerical matrices
+- single or double precision floating point
+- in real or complex field'.
 
 
 package classNames
@@ -39,7 +43,7 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: '..\..\WINDOWS\Profiles\nicolas\Mes Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	yourself).
 
 package!

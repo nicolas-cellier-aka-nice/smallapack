@@ -43,7 +43,7 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: 'E:\Documents and Settings\nicolas\My Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	yourself).
 
 package!
@@ -292,11 +292,11 @@ BlasLibrary comment: ''!
 
 asumWithn: n x: x incx: incx 	"||real(x)||_1 + ||imag(x)||_1"	self subclassResponsibility!
 
-asumWithN: N X: X incX: incX 	| cARGn cARGincx |	^	[cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	self 		asumWithn: cARGn		x: X		incx: cARGincx] 			ensure: 				[self free: cARGn.				self free: cARGincx]!
+asumWithN: N X: X incX: incX 	| cARGn cARGincx |	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	^self 		asumWithn: cARGn		x: X		incx: cARGincx!
 
 axpyWithn: n alpha: alpha x: x incx: incx y: y incy: incy 	"y := alpha*x+y"	self subclassResponsibility!
 
-axpyWithN: N alpha: alpha X: X incX: incX Y: Y incY: incY 	| cARGincx cARGincy cARGn cARGalpha |	^	[cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGn := self cIntegerPointerOn: N.	cARGalpha := self cElementPointerOn: alpha.	self 		axpyWithn: cARGn		alpha: cARGalpha		x: X		incx: cARGincx		y: Y		incy: cARGincy] 			ensure: 				[self free: cARGincx.				self free: cARGincy.				self free: cARGn.				self free: cARGalpha]!
+axpyWithN: N alpha: alpha X: X incX: incX Y: Y incY: incY 	| cARGincx cARGincy cARGn cARGalpha |	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGn := self cIntegerPointerOn: N.	cARGalpha := self cElementPointerOn: alpha.	^self 		axpyWithn: cARGn		alpha: cARGalpha		x: X		incx: cARGincx		y: Y		incy: cARGincy!
 
 cComplexPointerOn: aComplex 	^self subclassResponsibility!
 
@@ -304,47 +304,47 @@ cElementPointerOn: aComplex 	^self subclassResponsibility!
 
 copyWithn: n x: x incx: incx y: y incy: incy 	"y := x"	self subclassResponsibility!
 
-copyWithN: N X: X incX: incX Y: Y incY: incY 	| cARGn cARGincx cARGincy |	^	[cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	self 		copyWithn: cARGn		x: X		incx: cARGincx		y: Y		incy: cARGincy] 			ensure: 				[self free: cARGn.				self free: cARGincx.				self free: cARGincy]!
+copyWithN: N X: X incX: incX Y: Y incY: incY 	| cARGn cARGincx cARGincy |	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	^self 		copyWithn: cARGn		x: X		incx: cARGincx		y: Y		incy: cARGincy!
 
 cRealPointerOn: aComplex 	^self subclassResponsibility!
 
 dotcWithn: n x: x incx: incx y: y incy: incy 	self subclassResponsibility!
 
-dotcWithN: N X: X incX: incX Y: Y incY: incY 	| cARGincx cARGincy cARGn |	^	[cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGn := self cIntegerPointerOn: N.	self 		dotcWithn: cARGn		x: X		incx: cARGincx		y: Y		incy: cARGincy] 			ensure: 				[self free: cARGincx.				self free: cARGincy.				self free: cARGn]!
+dotcWithN: N X: X incX: incX Y: Y incY: incY 	| cARGincx cARGincy cARGn |	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGn := self cIntegerPointerOn: N.	^self 		dotcWithn: cARGn		x: X		incx: cARGincx		y: Y		incy: cARGincy!
 
 dotuWithn: n x: x incx: incx y: y incy: incy 	self subclassResponsibility!
 
-dotuWithN: N X: X incX: incX Y: Y incY: incY 	| cARGincx cARGincy cARGn |	^	[cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGn := self cIntegerPointerOn: N.	self 		dotuWithn: cARGn		x: X		incx: cARGincx		y: Y		incy: cARGincy] 			ensure: 				[self free: cARGincx.				self free: cARGincy.				self free: cARGn]!
+dotuWithN: N X: X incX: incX Y: Y incY: incY 	| cARGincx cARGincy cARGn |	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGn := self cIntegerPointerOn: N.	^self 		dotuWithn: cARGn		x: X		incx: cARGincx		y: Y		incy: cARGincy!
 
-dotWithN: N X: X incX: incX Y: Y incY: incY 	| cARGincx cARGincy cARGn |	^	[cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGn := self cIntegerPointerOn: N.	self 		dotuWithn: cARGn		x: X		incx: cARGincx		y: Y		incy: cARGincy] 			ensure: 				[self free: cARGincx.				self free: cARGincy.				self free: cARGn]!
+dotWithN: N X: X incX: incX Y: Y incY: incY 	| cARGincx cARGincy cARGn |	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGn := self cIntegerPointerOn: N.	^self 		dotuWithn: cARGn		x: X		incx: cARGincx		y: Y		incy: cARGincy!
 
-gemmWithTransA: TransA TransB: TransB M: M N: N K: K alpha: alpha A: A lda: lda B: B ldb: ldb beta: beta C: C ldc: ldc 	| cARGtransa cARGtransb cARGm cARGn cARGk cARGalpha cARGbeta cARGldc cARGlda cARGldb |	^	[cARGm := self cIntegerPointerOn: M.	cARGk := self cIntegerPointerOn: K.	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGldb := self cIntegerPointerOn: ldb.	cARGldc := self cIntegerPointerOn: ldc.	cARGtransa := self cCharPointerOn: TransA.	cARGtransb := self cCharPointerOn: TransB.	cARGalpha := self cElementPointerOn: alpha.	cARGbeta := self cElementPointerOn: beta.	self 		gemmWithtransa: cARGtransa		transb: cARGtransb		m: cARGm		n: cARGn		k: cARGk		alpha: cARGalpha		a: A		lda: cARGlda		b: B		ldb: cARGldb		beta: cARGbeta		c: C		ldc: cARGldc		length: 1		length: 1] 			ensure: 				[self free: cARGm.				self free: cARGk.				self free: cARGn.				self free: cARGlda.				self free: cARGldb.				self free: cARGldc.				self free: cARGtransa.				self free: cARGtransb.				self free: cARGalpha.				self free: cARGbeta]!
+gemmWithTransA: TransA TransB: TransB M: M N: N K: K alpha: alpha A: A lda: lda B: B ldb: ldb beta: beta C: C ldc: ldc 	| cARGtransa cARGtransb cARGm cARGn cARGk cARGalpha cARGbeta cARGldc cARGlda cARGldb |	cARGm := self cIntegerPointerOn: M.	cARGk := self cIntegerPointerOn: K.	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGldb := self cIntegerPointerOn: ldb.	cARGldc := self cIntegerPointerOn: ldc.	cARGtransa := self cCharPointerOn: TransA.	cARGtransb := self cCharPointerOn: TransB.	cARGalpha := self cElementPointerOn: alpha.	cARGbeta := self cElementPointerOn: beta.	^self 		gemmWithtransa: cARGtransa		transb: cARGtransb		m: cARGm		n: cARGn		k: cARGk		alpha: cARGalpha		a: A		lda: cARGlda		b: B		ldb: cARGldb		beta: cARGbeta		c: C		ldc: cARGldc		length: 1		length: 1!
 
 gemmWithtransa: transa transb: transb m: m n: n k: k alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc length: ltransa length: ltransb 	"C:=alpha*op(A)*op(B)+beta*C  , C has dimension (m,n)"	self subclassResponsibility!
 
 gemvWithtrans: trans m: m n: n alpha: alpha a: a lda: lda x: x incx: incx beta: beta y: y incy: incy length: l 	"y=alpha*op(X)+beta*y op=yourself, transpose, transposeConjugated"	self subclassResponsibility!
 
-gemvWithTransA: TransA M: M N: N alpha: alpha A: A lda: lda X: X incX: incX beta: beta Y: Y incY: incY 	| cARGtransa cARGm cARGn cARGincx cARGincy cARGalpha cARGbeta cARGlda |	^	[cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGtransa := self cCharPointerOn: TransA.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	cARGbeta := self cElementPointerOn: beta.	self 		gemvWithtrans: cARGtransa		m: cARGm		n: cARGn		alpha: cARGalpha		a: A		lda: cARGlda		x: X		incx: cARGincx		beta: cARGbeta		y: Y		incy: cARGincy		length: 1] 			ensure: 				[self free: cARGm.				self free: cARGn.				self free: cARGlda.				self free: cARGincx.				self free: cARGincy.				self free: cARGtransa.				self free: cARGalpha.				self free: cARGbeta]!
+gemvWithTransA: TransA M: M N: N alpha: alpha A: A lda: lda X: X incX: incX beta: beta Y: Y incY: incY 	| cARGtransa cARGm cARGn cARGincx cARGincy cARGalpha cARGbeta cARGlda |	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGtransa := self cCharPointerOn: TransA.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	cARGbeta := self cElementPointerOn: beta.	^self 		gemvWithtrans: cARGtransa		m: cARGm		n: cARGn		alpha: cARGalpha		a: A		lda: cARGlda		x: X		incx: cARGincx		beta: cARGbeta		y: Y		incy: cARGincy		length: 1!
 
 gercWithm: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transposeConjugated(y)+A"	self subclassResponsibility!
 
-gercWithM: M N: N alpha: alpha X: X incX: incX Y: Y incY: incY A: A lda: lda 	| cARGm cARGn cARGalpha cARGlda cARGincx cARGincy |	^	[cARGlda := self cIntegerPointerOn: lda.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	self 		gercWithm: cARGm		n: cARGn		alpha: cARGalpha		x: X		incx: cARGincx		y: Y		incy: cARGincy		a: A		lda: cARGlda] 			ensure: 				[self free: cARGlda.				self free: cARGm.				self free: cARGn.				self free: cARGincx.				self free: cARGincy.				self free: cARGalpha]!
+gercWithM: M N: N alpha: alpha X: X incX: incX Y: Y incY: incY A: A lda: lda 	| cARGm cARGn cARGalpha cARGlda cARGincx cARGincy |	cARGlda := self cIntegerPointerOn: lda.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	^self 		gercWithm: cARGm		n: cARGn		alpha: cARGalpha		x: X		incx: cARGincx		y: Y		incy: cARGincy		a: A		lda: cARGlda!
 
 geruWithm: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transpose(y)+A"	self subclassResponsibility!
 
-geruWithM: M N: N alpha: alpha X: X incX: incX Y: Y incY: incY A: A lda: lda 	| cARGm cARGn cARGalpha cARGlda cARGincx cARGincy |	^	[cARGlda := self cIntegerPointerOn: lda.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	self 		geruWithm: cARGm		n: cARGn		alpha: cARGalpha		x: X		incx: cARGincx		y: Y		incy: cARGincy		a: A		lda: cARGlda] 			ensure: 				[self free: cARGlda.				self free: cARGm.				self free: cARGn.				self free: cARGincx.				self free: cARGincy.				self free: cARGalpha]!
+geruWithM: M N: N alpha: alpha X: X incX: incX Y: Y incY: incY A: A lda: lda 	| cARGm cARGn cARGalpha cARGlda cARGincx cARGincy |	cARGlda := self cIntegerPointerOn: lda.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	^self 		geruWithm: cARGm		n: cARGn		alpha: cARGalpha		x: X		incx: cARGincx		y: Y		incy: cARGincy		a: A		lda: cARGlda!
 
-gerWithM: M N: N alpha: alpha X: X incX: incX Y: Y incY: incY A: A lda: lda 	| cARGm cARGn cARGalpha cARGlda cARGincx cARGincy |	^	[cARGlda := self cIntegerPointerOn: lda.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	self 		geruWithm: cARGm		n: cARGn		alpha: cARGalpha		x: X		incx: cARGincx		y: Y		incy: cARGincy		a: A		lda: cARGlda] 			ensure: 				[self free: cARGlda.				self free: cARGm.				self free: cARGn.				self free: cARGincx.				self free: cARGincy.				self free: cARGalpha]!
+gerWithM: M N: N alpha: alpha X: X incX: incX Y: Y incY: incY A: A lda: lda 	| cARGm cARGn cARGalpha cARGlda cARGincx cARGincy |	cARGlda := self cIntegerPointerOn: lda.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	^self 		geruWithm: cARGm		n: cARGn		alpha: cARGalpha		x: X		incx: cARGincx		y: Y		incy: cARGincy		a: A		lda: cARGlda!
 
-hemmWithSide: Side Uplo: Uplo M: M N: N alpha: alpha A: A lda: lda B: B ldb: ldb beta: beta C: C ldc: ldc 	| cARGm cARGn cARGalpha cARGbeta cARGldc cARGlda cARGldb cARGside cARGuplo |	^	[cARGside := self cCharPointerOn: Side.	cARGuplo := self cCharPointerOn: Uplo.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGldb := self cIntegerPointerOn: ldb.	cARGldc := self cIntegerPointerOn: ldc.	cARGalpha := self cElementPointerOn: alpha.	cARGbeta := self cElementPointerOn: beta.	self 		hemmWithside: cARGside		uplo: cARGuplo		m: cARGm		n: cARGn		alpha: cARGalpha		a: A		lda: cARGlda		b: B		ldb: cARGldb		beta: cARGbeta		c: C		ldc: cARGldc		length: 1		length: 1] 			ensure: 				[self free: cARGm.				self free: cARGn.				self free: cARGlda.				self free: cARGldb.				self free: cARGldc.				self free: cARGside.				self free: cARGuplo.				self free: cARGalpha.				self free: cARGbeta]!
+hemmWithSide: Side Uplo: Uplo M: M N: N alpha: alpha A: A lda: lda B: B ldb: ldb beta: beta C: C ldc: ldc 	| cARGm cARGn cARGalpha cARGbeta cARGldc cARGlda cARGldb cARGside cARGuplo |	cARGside := self cCharPointerOn: Side.	cARGuplo := self cCharPointerOn: Uplo.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGldb := self cIntegerPointerOn: ldb.	cARGldc := self cIntegerPointerOn: ldc.	cARGalpha := self cElementPointerOn: alpha.	cARGbeta := self cElementPointerOn: beta.	^self 		hemmWithside: cARGside		uplo: cARGuplo		m: cARGm		n: cARGn		alpha: cARGalpha		a: A		lda: cARGlda		b: B		ldb: cARGldb		beta: cARGbeta		c: C		ldc: cARGldc		length: 1		length: 1!
 
 hemmWithside: side uplo: uplo m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc length: sideLength length: uploLength 	"C=alpha*A*B+beta*C"	self subclassResponsibility!
 
-hemvWithUplo: Uplo N: N alpha: alpha A: A lda: lda X: X incX: incX beta: beta Y: Y incY: incY 	| cARGuplo cARGn cARGincx cARGincy cARGalpha cARGbeta cARGlda |	^	[cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGuplo := self cCharPointerOn: Uplo.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	cARGbeta := self cElementPointerOn: beta.	self 		hemvWithuplo: cARGuplo		n: cARGn		alpha: cARGalpha		n: A		lda: cARGlda		x: X		incx: cARGincx		beta: cARGbeta		y: Y		incy: cARGincy		length: 1] 			ensure: 				[self free: cARGn.				self free: cARGlda.				self free: cARGincx.				self free: cARGincy.				self free: cARGuplo.				self free: cARGalpha.				self free: cARGbeta]!
+hemvWithUplo: Uplo N: N alpha: alpha A: A lda: lda X: X incX: incX beta: beta Y: Y incY: incY 	| cARGuplo cARGn cARGincx cARGincy cARGalpha cARGbeta cARGlda |	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGuplo := self cCharPointerOn: Uplo.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	cARGbeta := self cElementPointerOn: beta.	^self 		hemvWithuplo: cARGuplo		n: cARGn		alpha: cARGalpha		n: A		lda: cARGlda		x: X		incx: cARGincx		beta: cARGbeta		y: Y		incy: cARGincy		length: 1!
 
 hemvWithuplo: uplo n: n alpha: alpha n: a lda: lda x: x incx: incx beta: beta y: y incy: incy length: uploLength	"y=alpha*X+beta*y"	self subclassResponsibility!
 
-hpmvWithUplo: Uplo N: N alpha: alpha Ap: Ap X: X incX: incX beta: beta Y: Y incY: incY 	| cARGuplo cARGn cARGincx cARGincy cARGalpha cARGbeta |	^	[cARGn := self cIntegerPointerOn: N.	cARGuplo := self cCharPointerOn: Uplo.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	cARGbeta := self cElementPointerOn: beta.	self 		hpmvWithuplo: cARGuplo		n: cARGn		alpha: cARGalpha		ap: Ap		x: X		incx: cARGincx		beta: cARGbeta		y: Y		incy: cARGincy		length: 1] 			ensure: 				[self free: cARGn.				self free: cARGincx.				self free: cARGincy.				self free: cARGuplo.				self free: cARGalpha.				self free: cARGbeta]!
+hpmvWithUplo: Uplo N: N alpha: alpha Ap: Ap X: X incX: incX beta: beta Y: Y incY: incY 	| cARGuplo cARGn cARGincx cARGincy cARGalpha cARGbeta |	cARGn := self cIntegerPointerOn: N.	cARGuplo := self cCharPointerOn: Uplo.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	cARGalpha := self cElementPointerOn: alpha.	cARGbeta := self cElementPointerOn: beta.	^self 		hpmvWithuplo: cARGuplo		n: cARGn		alpha: cARGalpha		ap: Ap		x: X		incx: cARGincx		beta: cARGbeta		y: Y		incy: cARGincy		length: 1!
 
 hpmvWithuplo: uplo n: n alpha: alpha ap: ap x: x incx: incx beta: beta y: y incy: incy length: uploLength 	"y=alpha*X+beta*y"	self subclassResponsibility!
 
@@ -358,21 +358,21 @@ notTransposed	^$N!
 
 realScalWithn: n alpha: alpha x: x incx: incx	self subclassResponsibility!
 
-realScalWithN: N alpha: alpha X: X incX: incX 	| cARGn cARGincx cARGalpha |	^	[cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGalpha := self cRealPointerOn: alpha.	self 		realScalWithn: cARGn		alpha: cARGalpha		x: X		incx: cARGincx] 			ensure: 				[self free: cARGn.				self free: cARGalpha.				self free: cARGincx]!
+realScalWithN: N alpha: alpha X: X incX: incX 	| cARGn cARGincx cARGalpha |	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGalpha := self cRealPointerOn: alpha.	^self 		realScalWithn: cARGn		alpha: cARGalpha		x: X		incx: cARGincx!
 
 right	^$R!
 
 scalWithn: n alpha: alpha x: x incx: incx	self subclassResponsibility!
 
-scalWithN: N alpha: alpha X: X incX: incX 	| cARGn cARGincx cARGalpha |	^	[cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGalpha := self cElementPointerOn: alpha.	self 		scalWithn: cARGn		alpha: cARGalpha		x: X		incx: cARGincx] 			ensure: 				[self free: cARGn.				self free: cARGalpha.				self free: cARGincx]!
+scalWithN: N alpha: alpha X: X incX: incX 	| cARGn cARGincx cARGalpha |	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGalpha := self cElementPointerOn: alpha.	^self 		scalWithn: cARGn		alpha: cARGalpha		x: X		incx: cARGincx!
 
 swapWithn: n x: x incx: incx y: y incy: incy 	"x <-> y"	self subclassResponsibility!
 
-swapWithN: N X: X incX: incX Y: Y incY: incY 	| cARGn cARGincx cARGincy |	^	[cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	self 		swapWithn: cARGn		x: X		incx: cARGincx		y: Y		incy: cARGincy] 			ensure: 				[self free: cARGn.				self free: cARGincx.				self free: cARGincy]!
+swapWithN: N X: X incX: incX Y: Y incY: incY 	| cARGn cARGincx cARGincy |	cARGn := self cIntegerPointerOn: N.	cARGincx := self cIntegerPointerOn: incX.	cARGincy := self cIntegerPointerOn: incY.	^self 		swapWithn: cARGn		x: X		incx: cARGincx		y: Y		incy: cARGincy!
 
 tpmvWithuplo: uplo trans: trans diag: diag n: n ap: ap x: x incx: incx length: uploLength length: transLength length: diagLength 	"x=op(a)*x op=yourself, transpose, transposeConjugated"	self subclassResponsibility!
 
-tpmvWithUplo: Uplo TransA: TransA Diag: Diag N: N Ap: A X: X incX: incX 	| cARGtransa cARGn cARGincx cARGuplo cARGdiag |	^	[cARGn := self cIntegerPointerOn: N.	cARGtransa := self cCharPointerOn: TransA.	cARGuplo := self cCharPointerOn: Uplo.	cARGdiag := self cCharPointerOn: Diag.	cARGincx := self cIntegerPointerOn: incX.	self 		tpmvWithuplo: cARGuplo		trans: cARGtransa		diag: cARGdiag		n: cARGn		ap: A		x: X		incx: cARGincx		length: 1		length: 1		length: 1] 			ensure: 				[self free: cARGn.				self free: cARGincx.				self free: cARGtransa.				self free: cARGuplo.				self free: cARGdiag]!
+tpmvWithUplo: Uplo TransA: TransA Diag: Diag N: N Ap: A X: X incX: incX 	| cARGtransa cARGn cARGincx cARGuplo cARGdiag |	cARGn := self cIntegerPointerOn: N.	cARGtransa := self cCharPointerOn: TransA.	cARGuplo := self cCharPointerOn: Uplo.	cARGdiag := self cCharPointerOn: Diag.	cARGincx := self cIntegerPointerOn: incX.	^self 		tpmvWithuplo: cARGuplo		trans: cARGtransa		diag: cARGdiag		n: cARGn		ap: A		x: X		incx: cARGincx		length: 1		length: 1		length: 1!
 
 transposeConjugated	^$C!
 
@@ -380,11 +380,15 @@ transposed	^$T!
 
 trmmWithside: side uplo: uplo trans: transa diag: diag m: m n: n alpha: alpha a: A lda: lda b: B ldb: ldb length: lside length: luplo length: ltrans length: ldiag 	self subclassResponsibility!
 
-trmmWithSide: Side Uplo: Uplo TransA: TransA Diag: Diag M: M N: N alpha: alpha A: A lda: lda B: B ldb: ldb 	| cARGm cARGn cARGalpha cARGlda cARGldb cARGside cARGuplo cARGtransa cARGdiag |	^	[cARGside := self cCharPointerOn: Side.	cARGuplo := self cCharPointerOn: Uplo.	cARGtransa := self cCharPointerOn: TransA.	cARGdiag := self cCharPointerOn: Diag.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGldb := self cIntegerPointerOn: ldb.	cARGalpha := self cElementPointerOn: alpha.	self 		trmmWithside: cARGside		uplo: cARGuplo		trans: cARGtransa		diag: cARGdiag		m: cARGm		n: cARGn		alpha: cARGalpha		a: A		lda: cARGlda		b: B		ldb: cARGldb		length: 1		length: 1		length: 1		length: 1] 			ensure: 				[self free: cARGm.				self free: cARGn.				self free: cARGlda.				self free: cARGldb.				self free: cARGside.				self free: cARGuplo.				self free: cARGtransa.				self free: cARGdiag.				self free: cARGalpha]!
+trmmWithSide: Side Uplo: Uplo TransA: TransA Diag: Diag M: M N: N alpha: alpha A: A lda: lda B: B ldb: ldb 	| cARGm cARGn cARGalpha cARGlda cARGldb cARGside cARGuplo cARGtransa cARGdiag |	cARGside := self cCharPointerOn: Side.	cARGuplo := self cCharPointerOn: Uplo.	cARGtransa := self cCharPointerOn: TransA.	cARGdiag := self cCharPointerOn: Diag.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGldb := self cIntegerPointerOn: ldb.	cARGalpha := self cElementPointerOn: alpha.	^self 		trmmWithside: cARGside		uplo: cARGuplo		trans: cARGtransa		diag: cARGdiag		m: cARGm		n: cARGn		alpha: cARGalpha		a: A		lda: cARGlda		b: B		ldb: cARGldb		length: 1		length: 1		length: 1		length: 1!
 
 trmvWithuplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx length: uploLength length: transLength length: diagLength 	"x=op(a)*x op=yourself, transpose, transposeConjugated"	self subclassResponsibility!
 
-trmvWithUplo: Uplo TransA: TransA Diag: Diag N: N A: A lda: lda X: X incX: incX 	| cARGtransa cARGn cARGincx cARGlda cARGuplo cARGdiag |	^	[cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGtransa := self cCharPointerOn: TransA.	cARGuplo := self cCharPointerOn: Uplo.	cARGdiag := self cCharPointerOn: Diag.	cARGincx := self cIntegerPointerOn: incX.	self 		trmvWithuplo: cARGuplo		trans: cARGtransa		diag: cARGdiag		n: cARGn		a: A		lda: cARGlda		x: X		incx: cARGincx		length: 1		length: 1		length: 1] 			ensure: 				[self free: cARGn.				self free: cARGlda.				self free: cARGincx.				self free: cARGtransa.				self free: cARGuplo.				self free: cARGdiag]!
+trmvWithUplo: Uplo TransA: TransA Diag: Diag N: N A: A lda: lda X: X incX: incX 	| cARGtransa cARGn cARGincx cARGlda cARGuplo cARGdiag |	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGtransa := self cCharPointerOn: TransA.	cARGuplo := self cCharPointerOn: Uplo.	cARGdiag := self cCharPointerOn: Diag.	cARGincx := self cIntegerPointerOn: incX.	^self 		trmvWithuplo: cARGuplo		trans: cARGtransa		diag: cARGdiag		n: cARGn		a: A		lda: cARGlda		x: X		incx: cARGincx		length: 1		length: 1		length: 1!
+
+trsmWithside: side uplo: uplo trans: transa diag: diag m: m n: n alpha: alpha a: A lda: lda b: B ldb: ldb length: lside length: luplo length: ltrans length: ldiag 	self subclassResponsibility!
+
+trsmWithSide: Side Uplo: Uplo TransA: TransA Diag: Diag M: M N: N alpha: alpha A: A lda: lda B: B ldb: ldb 	| cARGm cARGn cARGalpha cARGlda cARGldb cARGside cARGuplo cARGtransa cARGdiag |	cARGside := self cCharPointerOn: Side.	cARGuplo := self cCharPointerOn: Uplo.	cARGtransa := self cCharPointerOn: TransA.	cARGdiag := self cCharPointerOn: Diag.	cARGm := self cIntegerPointerOn: M.	cARGn := self cIntegerPointerOn: N.	cARGlda := self cIntegerPointerOn: lda.	cARGldb := self cIntegerPointerOn: ldb.	cARGalpha := self cElementPointerOn: alpha.	^self 		trsmWithside: cARGside		uplo: cARGuplo		trans: cARGtransa		diag: cARGdiag		m: cARGm		n: cARGn		alpha: cARGalpha		a: A		lda: cARGlda		b: B		ldb: cARGldb		length: 1		length: 1		length: 1		length: 1!
 
 unit	^$U!
 
@@ -437,6 +441,8 @@ upper	^$U! !
 !BlasLibrary categoriesFor: #trmmWithSide:Uplo:TransA:Diag:M:N:alpha:A:lda:B:ldb:!public! !
 !BlasLibrary categoriesFor: #trmvWithuplo:trans:diag:n:a:lda:x:incx:length:length:length:!public! !
 !BlasLibrary categoriesFor: #trmvWithUplo:TransA:Diag:N:A:lda:X:incX:!public! !
+!BlasLibrary categoriesFor: #trsmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
+!BlasLibrary categoriesFor: #trsmWithSide:Uplo:TransA:Diag:M:N:alpha:A:lda:B:ldb:!public! !
 !BlasLibrary categoriesFor: #unit!public! !
 !BlasLibrary categoriesFor: #upper!public! !
 
@@ -509,2110 +515,109 @@ dontComputeVector	"used by eigen value or svd decomposition"	^$N!
 
 eps	"return relative machine precision"	^self lamch: $E!
 
-gebakWithjob: job side: side n: n ilo: ilo ihi: ihi scale: scale m: m v: v ldv: ldv 
-	"balance back a general matrix
-	ilo and ihi must be allocated outside this routine"
+gebakWithjob: job side: side n: n ilo: ilo ihi: ihi scale: scale m: m v: v ldv: ldv 	"balance back a general matrix	ilo and ihi must be allocated outside this routine"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgebakWithjob: (self cCharPointerOn: job)		side: (self cCharPointerOn: side)		n: (self cIntegerPointerOn: n)		ilo: ilo		ihi: ihi		scale: scale		m: (self cIntegerPointerOn: m)		v: v		ldv: (self cIntegerPointerOn: ldv)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGjob cARGside cARGn cARGm cARGldv cARGinfo |
-	^
-	[cARGjob := self cCharPointerOn: job.
-	cARGside := self cCharPointerOn: side.
-	cARGn := self cIntegerPointerOn: n.
-	cARGm := self cIntegerPointerOn: m.
-	cARGldv := self cIntegerPointerOn: ldv.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgebakWithjob: cARGjob
-		side: cARGside
-		n: cARGn
-		ilo: ilo
-		ihi: ihi
-		scale: scale
-		m: cARGm
-		v: v
-		ldv: cARGldv
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjob.
-				self free: cARGside.
-				self free: cARGn.
-				self free: cARGm.
-				self free: cARGldv.
-				self free: cARGinfo]!
+gebalWithjob: job n: n a: a lda: lda ilo: ilo ihi: ihi scale: scale 	"balance a general matrix	ilo and ihi must be allocated outside this routine"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgebalWithjob: (self cCharPointerOn: job)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		ilo: ilo		ihi: ihi		scale: scale		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-gebalWithjob: job n: n a: a lda: lda ilo: ilo ihi: ihi scale: scale 
-	"balance a general matrix
-	ilo and ihi must be allocated outside this routine"
+geconWithnorm: norm n: n a: a lda: lda anorm: anorm rcond: rcond work: work iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgeconWithnorm: (self cCharPointerOn: norm)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		anorm: (self cElementPointerOn: anorm)		rcond: rcond		work: work		iwork: iwork		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGjob cARGn cARGlda cARGinfo |
-	^
-	[cARGjob := self cCharPointerOn: job.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgebalWithjob: cARGjob
-		n: cARGn
-		a: a
-		lda: cARGlda
-		ilo: ilo
-		ihi: ihi
-		scale: scale
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjob.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGinfo]!
+geconWithnorm: norm n: n a: a lda: lda anorm: anorm rcond: rcond work: work rwork: rwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgeconWithnorm: (self cCharPointerOn: norm)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		anorm: (self cRealPointerOn: anorm)		rcond: rcond		work: work		rwork: rwork		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-geconWithnorm: norm n: n a: a lda: lda anorm: anorm rcond: rcond work: work iwork: iwork 
-	| cARGnorm cARGn cARGlda cARGanorm cARGinfo |
-	^
-	[cARGnorm := self cCharPointerOn: norm.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGanorm := self cElementPointerOn: anorm.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeconWithnorm: cARGnorm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		anorm: cARGanorm
-		rcond: rcond
-		work: work
-		iwork: iwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGnorm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGanorm.
-				self free: cARGinfo]!
+geesWithjobvs: jobvs sort: sort select: select n: n a: a lda: lda sdim: sdim w: w vs: vs ldvs: ldvs 	"schur decomposition (for complex general matrices)	Note: sdim must be allocated outside	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work rwork bwork lwork |	work := self allocateElementArraySize: 1.	bwork := self allocateLogicalArraySize: n.	rwork := self allocateRealArraySize: n.	(self 		geesWithjobvs: jobvs		sort: sort		select: select		n: n		a: a		lda: lda		sdim: sdim		w: w		vs: vs		ldvs: ldvs		work: work		lwork: -1		rwork: rwork		bwork: bwork) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := 2 * n max: 1].	work := self allocateElementArraySize: lwork.	^self 		geesWithjobvs: jobvs		sort: sort		select: select		n: n		a: a		lda: lda		sdim: sdim		w: w		vs: vs		ldvs: ldvs		work: work		lwork: lwork		rwork: rwork		bwork: bwork!
 
-geconWithnorm: norm n: n a: a lda: lda anorm: anorm rcond: rcond work: work rwork: rwork 
-	| cARGnorm cARGn cARGlda cARGanorm cARGinfo |
-	^
-	[cARGnorm := self cCharPointerOn: norm.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGanorm := self cRealPointerOn: anorm.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeconWithnorm: cARGnorm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		anorm: cARGanorm
-		rcond: rcond
-		work: work
-		rwork: rwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGnorm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGanorm.
-				self free: cARGinfo]!
+geesWithjobvs: jobvs sort: sort select: select n: n a: a lda: lda sdim: sdim w: w vs: vs ldvs: ldvs work: work lwork: lwork rwork: rwork bwork: bwork 	"schur decomposition (for complex general matrices)	Note: sdim must be allocated outsied"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self 		xgeesWithjobvs: (self cCharPointerOn: jobvs)		sort: (self cCharPointerOn: sort)		select: select		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		sdim: sdim		w: w		vs: vs		ldvs: (self cIntegerPointerOn: ldvs)		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		bwork: bwork		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-geesWithjobvs: jobvs sort: sort select: select n: n a: a lda: lda sdim: sdim w: w vs: vs ldvs: ldvs 
-	"schur decomposition (for complex general matrices)
-	Note: sdim must be allocated outside
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+geesWithjobvs: jobvs sort: sort select: select n: n a: a lda: lda sdim: sdim wr: wr wi: wi vs: vs ldvs: ldvs 	"schur decomposition (for real general matrices)	Note: sdim must be allocated outside	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work bwork lwork |	work := self allocateElementArraySize: 1.	bwork := self allocateLogicalArraySize: n.	(self 		geesWithjobvs: jobvs		sort: sort		select: select		n: n		a: a		lda: lda		sdim: sdim		wr: wr		wi: wi		vs: vs		ldvs: ldvs		work: work		lwork: -1		bwork: bwork) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := 3 * n max: 1].	work := self allocateElementArraySize: lwork.	^self 		geesWithjobvs: jobvs		sort: sort		select: select		n: n		a: a		lda: lda		sdim: sdim		wr: wr		wi: wi		vs: vs		ldvs: ldvs		work: work		lwork: lwork		bwork: bwork!
 
-	| work rwork bwork lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	bwork := self allocateLogicalArraySize: n.
-	rwork := self allocateRealArraySize: n.
-	(self 
-		geesWithjobvs: jobvs
-		sort: sort
-		select: select
-		n: n
-		a: a
-		lda: lda
-		sdim: sdim
-		w: w
-		vs: vs
-		ldvs: ldvs
-		work: work
-		lwork: -1
-		rwork: rwork
-		bwork: bwork) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := 2 * n max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		geesWithjobvs: jobvs
-		sort: sort
-		select: select
-		n: n
-		a: a
-		lda: lda
-		sdim: sdim
-		w: w
-		vs: vs
-		ldvs: ldvs
-		work: work
-		lwork: lwork
-		rwork: rwork
-		bwork: bwork] 
-			ensure: 
-				[self free: work.
-				self free: bwork.
-				self free: rwork]!
+geesWithjobvs: jobvs sort: sort select: select n: n a: a lda: lda sdim: sdim wr: wr wi: wi vs: vs ldvs: ldvs work: work lwork: lwork bwork: bwork 	"schur decomposition (for real general matrices)	Note: sdim must be allocated outsied"	| cARGjobvs cARGsort cARGn cARGlda cARGldvs cARGlwork cARGinfo |	cARGjobvs := self cCharPointerOn: jobvs.	cARGsort := self cCharPointerOn: sort.	cARGn := self cIntegerPointerOn: n.	cARGlda := self cIntegerPointerOn: lda.	cARGldvs := self cIntegerPointerOn: ldvs.	cARGlwork := self cIntegerPointerOn: lwork.	cARGinfo := self cIntegerPointerOn: 0.	self 		xgeesWithjobvs: cARGjobvs		sort: cARGsort		select: select		n: cARGn		a: a		lda: cARGlda		sdim: sdim		wr: wr		wi: wi		vs: vs		ldvs: cARGldvs		work: work		lwork: cARGlwork 		bwork: bwork		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-geesWithjobvs: jobvs sort: sort select: select n: n a: a lda: lda sdim: sdim w: w vs: vs ldvs: ldvs work: work lwork: lwork rwork: rwork bwork: bwork 
-	"schur decomposition (for complex general matrices)
-	Note: sdim must be allocated outsied"
+geevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda w: w vl: vl ldvl: ldvl vr: vr ldvr: ldvr 	"eigenvalue/vector decomposition (for complex general matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work rwork lwork |	work := self allocateElementArraySize: 1.	rwork := self allocateRealArraySize: 2 * n.	(self 		geevWithjobvl: jobvl		jobvr: jobvr		n: n		a: a		lda: lda		w: w		vl: vl		ldvl: ldvl		vr: vr		ldvr: ldvr		work: work		lwork: -1		rwork: rwork) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := 2 * n max: 1].	work := self allocateElementArraySize: lwork.	^self 		geevWithjobvl: jobvl		jobvr: jobvr		n: n		a: a		lda: lda		w: w		vl: vl		ldvl: ldvl		vr: vr		ldvr: ldvr		work: work		lwork: lwork		rwork: rwork!
 
-	| cARGjobvs cARGsort cARGn cARGlda cARGldvs cARGlwork cARGinfo |
-	^
-	[cARGjobvs := self cCharPointerOn: jobvs.
-	cARGsort := self cCharPointerOn: sort.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldvs := self cIntegerPointerOn: ldvs.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeesWithjobvs: cARGjobvs
-		sort: cARGsort
-		select: select
-		n: cARGn
-		a: a
-		lda: cARGlda
-		sdim: sdim
-		w: w
-		vs: vs
-		ldvs: cARGldvs
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		bwork: bwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobvs.
-				self free: cARGsort.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldvs.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+geevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda w: w vl: vl ldvl: ldvl vr: vr ldvr: ldvr work: work lwork: lwork rwork: rwork 	"eigenvalue/vector decomposition (for complex general matrices)"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgeevWithjobvl: (self cCharPointerOn: jobvl)		jobvr: (self cCharPointerOn: jobvr)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		w: w		vl: vl		ldvl: (self cIntegerPointerOn: ldvl)		vr: vr		ldvr: (self cIntegerPointerOn: ldvr)		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-geesWithjobvs: jobvs sort: sort select: select n: n a: a lda: lda sdim: sdim wr: wr wi: wi vs: vs ldvs: ldvs 
-	"schur decomposition (for real general matrices)
-	Note: sdim must be allocated outside
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+geevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda wr: wr wi: wi vl: vl ldvl: ldvl vr: vr ldvr: ldvr 	"eigenvalue/vector decomposition (for real general matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		geevWithjobvl: jobvl		jobvr: jobvr		n: n		a: a		lda: lda		wr: wr		wi: wi		vl: vl		ldvl: ldvl		vr: vr		ldvr: ldvr		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := n * n].	work := self allocateElementArraySize: lwork.	^self 		geevWithjobvl: jobvl		jobvr: jobvr		n: n		a: a		lda: lda		wr: wr		wi: wi		vl: vl		ldvl: ldvl		vr: vr		ldvr: ldvr		work: work		lwork: lwork!
 
-	| work bwork lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	bwork := self allocateLogicalArraySize: n.
-	(self 
-		geesWithjobvs: jobvs
-		sort: sort
-		select: select
-		n: n
-		a: a
-		lda: lda
-		sdim: sdim
-		wr: wr
-		wi: wi
-		vs: vs
-		ldvs: ldvs
-		work: work
-		lwork: -1
-		bwork: bwork) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := 3 * n max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		geesWithjobvs: jobvs
-		sort: sort
-		select: select
-		n: n
-		a: a
-		lda: lda
-		sdim: sdim
-		wr: wr
-		wi: wi
-		vs: vs
-		ldvs: ldvs
-		work: work
-		lwork: lwork
-		bwork: bwork] 
-			ensure: 
-				[self free: work.
-				self free: bwork]!
+geevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda wr: wr wi: wi vl: vl ldvl: ldvl vr: vr ldvr: ldvr work: work lwork: lwork 	"eigenvalue/vector decomposition (for real general matrices)"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgeevWithjobvl: (self cCharPointerOn: jobvl)		jobvr: (self cCharPointerOn: jobvr)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		wr: wr		wi: wi		vl: vl		ldvl: (self cIntegerPointerOn: ldvl)		vr: vr		ldvr: (self cIntegerPointerOn: ldvr)		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-geesWithjobvs: jobvs sort: sort select: select n: n a: a lda: lda sdim: sdim wr: wr wi: wi vs: vs ldvs: ldvs work: work lwork: lwork bwork: bwork 
-	"schur decomposition (for real general matrices)
-	Note: sdim must be allocated outsied"
+geevxWithbalanc: balanc jobvl: jobvl jobvr: jobvr sense: sense n: n a: a lda: lda w: w vl: vl ldvl: ldvl vr: vr ldvr: ldvr scale: scale abnrm: abnrm rconde: rconde rcondv: rcondv work: work lwork: lwork rwork: rwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgeevxWithbalanc: (self cCharPointerOn: balanc)		jobvl: (self cCharPointerOn: jobvl)		jobvr: (self cCharPointerOn: jobvr)		sense: (self cCharPointerOn: sense)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		w: w		vl: vl		ldvl: (self cIntegerPointerOn: ldvl)		vr: vr		ldvr: (self cIntegerPointerOn: ldvr)		scale: scale		abnrm: abnrm		rconde: rconde		rcondv: rcondv		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		info: cARGinfo		length: 1		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGjobvs cARGsort cARGn cARGlda cARGldvs cARGlwork cARGinfo |
-	^
-	[cARGjobvs := self cCharPointerOn: jobvs.
-	cARGsort := self cCharPointerOn: sort.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldvs := self cIntegerPointerOn: ldvs.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeesWithjobvs: cARGjobvs
-		sort: cARGsort
-		select: select
-		n: cARGn
-		a: a
-		lda: cARGlda
-		sdim: sdim
-		wr: wr
-		wi: wi
-		vs: vs
-		ldvs: cARGldvs
-		work: work
-		lwork: cARGlwork 
-		bwork: bwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobvs.
-				self free: cARGsort.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldvs.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+gehrdWithn: n a: a lda: lda tau: tau 	"hessenberg decomposition (for real/complex general matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork ilo ihi |	work := self allocateElementArraySize: 1.	ilo := self cIntegerPointerOn: 1.	ihi := self cIntegerPointerOn: n.	(self 		gehrdWithn: n		ilo: ilo		ihi: ihi		a: a		lda: lda		tau: tau		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := n max: 1].	work := self allocateElementArraySize: lwork.	^self 		gehrdWithn: n		ilo: ilo		ihi: ihi		a: a		lda: lda		tau: tau		work: work		lwork: lwork!
 
-geevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda w: w vl: vl ldvl: ldvl vr: vr ldvr: ldvr 
-	"eigenvalue/vector decomposition (for complex general matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+gehrdWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau 	"hessenberg decomposition (for real/complex general matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK	ilo and ihi must be allocated outside"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		gehrdWithn: n		ilo: ilo		ihi: ihi		a: a		lda: lda		tau: tau		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := n max: 1].	work := self allocateElementArraySize: lwork.	^self 		gehrdWithn: n		ilo: ilo		ihi: ihi		a: a		lda: lda		tau: tau		work: work		lwork: lwork!
 
-	| work rwork lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	rwork := self allocateRealArraySize: 2 * n.
-	(self 
-		geevWithjobvl: jobvl
-		jobvr: jobvr
-		n: n
-		a: a
-		lda: lda
-		w: w
-		vl: vl
-		ldvl: ldvl
-		vr: vr
-		ldvr: ldvr
-		work: work
-		lwork: -1
-		rwork: rwork) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := 2 * n max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		geevWithjobvl: jobvl
-		jobvr: jobvr
-		n: n
-		a: a
-		lda: lda
-		w: w
-		vl: vl
-		ldvl: ldvl
-		vr: vr
-		ldvr: ldvr
-		work: work
-		lwork: lwork
-		rwork: rwork] 
-			ensure: 
-				[self free: work.
-				self free: rwork]!
+gehrdWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau work: work lwork: lwork 	"hessenberg decomposition (for real/complex general matrices)	ilo and ihi must be allocated outside this routine"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgehrdWithn: (self cIntegerPointerOn: n)		ilo: ilo		ihi: ihi		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-geevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda w: w vl: vl ldvl: ldvl vr: vr ldvr: ldvr work: work lwork: lwork rwork: rwork 
-	"eigenvalue/vector decomposition (for complex general matrices)"
+gelqfWithm: m n: n a: a lda: lda tau: tau work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgelqfWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGjobvl cARGjobvr cARGn cARGlda cARGldvl cARGldvr cARGlwork cARGinfo |
-	^
-	[cARGjobvl := self cCharPointerOn: jobvl.
-	cARGjobvr := self cCharPointerOn: jobvr.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldvl := self cIntegerPointerOn: ldvl.
-	cARGldvr := self cIntegerPointerOn: ldvr.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeevWithjobvl: cARGjobvl
-		jobvr: cARGjobvr
-		n: cARGn
-		a: a
-		lda: cARGlda
-		w: w
-		vl: vl
-		ldvl: cARGldvl
-		vr: vr
-		ldvr: cARGldvr
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobvl.
-				self free: cARGjobvr.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldvl.
-				self free: cARGldvr.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+gelsdWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank 	"least squares by SVD divide and conquer algorithm	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work rwork lwork iwork smlsiz nlvl minmn |	minmn := 1 max: (m min: n).	^self isComplex 		ifTrue: 			[			smlsiz := self 						ilaenvWithispec: 9						name: 'CGELSD'						opts: ' '						n1: 0						n2: 0						n3: 0						n4: 0.			nlvl := 1 + (minmn / (smlsiz + 1)) floorLog2.			work := self allocateElementArraySize: 1.			iwork := self allocateIntegerArraySize: 3 * minmn * nlvl + (11 * minmn).			rwork := self allocateRealArraySize: (m >= n 								ifTrue: [8 * n + (2 * n * smlsiz) + (8 * n * nlvl) + (n * nrhs)]								ifFalse: [8 * m + (2 * m * smlsiz) + (8 * m * nlvl) + (m * nrhs)]).			(self 				gelsdWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				s: s				rcond: rcond				rank: rank				work: work				lwork: -1				rwork: rwork				iwork: iwork) = 0 				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]				ifFalse: 					[lwork := m >= n 								ifTrue: [1 max: n * (2 + nrhs)]								ifFalse: [1 max: m * (2 + nrhs)]].			work := self allocateElementArraySize: lwork.			self 				gelsdWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				s: s				rcond: rcond				rank: rank				work: work				lwork: lwork				rwork: rwork				iwork: iwork] 		ifFalse: 			[			smlsiz := self 						ilaenvWithispec: 9						name: 'SGELSD'						opts: ' '						n1: 0						n2: 0						n3: 0						n4: 0.			nlvl := 1 + (minmn / (smlsiz + 1)) floorLog2.			work := self allocateElementArraySize: 1.			iwork := self allocateIntegerArraySize: 3 * minmn * nlvl + (11 * minmn).			(self 				gelsdWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				s: s				rcond: rcond				rank: rank				work: work				lwork: lwork				iwork: iwork) = 0 				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]				ifFalse: 					[lwork := m >= n 								ifTrue: [11 * n + (2 * n * smlsiz) + (8 * n * nlvl) + (n * nrhs)]								ifFalse: [11 * m + (2 * m * smlsiz) + (8 * m * nlvl) + (m * nrhs)]].			work := self allocateElementArraySize: lwork.			self 				gelsdWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				s: s				rcond: rcond				rank: rank				work: work				lwork: lwork				iwork: iwork]!
 
-geevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda wr: wr wi: wi vl: vl ldvl: ldvl vr: vr ldvr: ldvr 
-	"eigenvalue/vector decomposition (for real general matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+gelsdWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank work: work lwork: lwork iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgelsdWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		s: s		rcond: (self cElementPointerOn: rcond)		rank: rank		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		geevWithjobvl: jobvl
-		jobvr: jobvr
-		n: n
-		a: a
-		lda: lda
-		wr: wr
-		wi: wi
-		vl: vl
-		ldvl: ldvl
-		vr: vr
-		ldvr: ldvr
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := n * n].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		geevWithjobvl: jobvl
-		jobvr: jobvr
-		n: n
-		a: a
-		lda: lda
-		wr: wr
-		wi: wi
-		vl: vl
-		ldvl: ldvl
-		vr: vr
-		ldvr: ldvr
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
+gelsdWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank work: work lwork: lwork rwork: rwork iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgelsdWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		s: s		rcond: (self cRealPointerOn: rcond)		rank: rank		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		iwork: iwork		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-geevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda wr: wr wi: wi vl: vl ldvl: ldvl vr: vr ldvr: ldvr work: work lwork: lwork 
-	"eigenvalue/vector decomposition (for real general matrices)"
+gelssWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank 	"least squares by SVD	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work rwork lwork |	^self isComplex 		ifTrue: 			[			work := self allocateElementArraySize: 1.			rwork := self allocateRealArraySize: (5 * (m min: n) max: 1).			(self 				gelssWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				s: s				rcond: rcond				rank: rank				work: work				lwork: -1				rwork: rwork) = 0 				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]				ifFalse: [lwork := 1 max: (m min: n) * 2 + (nrhs max: (m max: n))].			work := self allocateElementArraySize: lwork.			self 				gelssWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				s: s				rcond: rcond				rank: rank				work: work				lwork: lwork				rwork: rwork]		ifFalse: 			[			work := self allocateElementArraySize: 1.			(self 				gelssWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				s: s				rcond: rcond				rank: rank				work: work				lwork: -1) = 0 				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]				ifFalse: 					[lwork := 1 								max: (m min: n) * 3 + ((nrhs max: (m max: n)) max: 2 * (m min: n))].			work := self allocateElementArraySize: lwork.			self 				gelssWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				s: s				rcond: rcond				rank: rank				work: work				lwork: lwork]!
 
-	| cARGjobvl cARGjobvr cARGn cARGlda cARGldvl cARGldvr cARGlwork cARGinfo |
-	^
-	[cARGjobvl := self cCharPointerOn: jobvl.
-	cARGjobvr := self cCharPointerOn: jobvr.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldvl := self cIntegerPointerOn: ldvl.
-	cARGldvr := self cIntegerPointerOn: ldvr.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeevWithjobvl: cARGjobvl
-		jobvr: cARGjobvr
-		n: cARGn
-		a: a
-		lda: cARGlda
-		wr: wr
-		wi: wi
-		vl: vl
-		ldvl: cARGldvl
-		vr: vr
-		ldvr: cARGldvr
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobvl.
-				self free: cARGjobvr.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldvl.
-				self free: cARGldvr.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+gelssWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgelssWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		s: s		rcond: (self cElementPointerOn: rcond)		rank: rank		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-geevxWithbalanc: balanc jobvl: jobvl jobvr: jobvr sense: sense n: n a: a lda: lda w: w vl: vl ldvl: ldvl vr: vr ldvr: ldvr scale: scale abnrm: abnrm rconde: rconde rcondv: rcondv work: work lwork: lwork rwork: rwork 
-	| cARGbalanc cARGjobvl cARGjobvr cARGsense cARGn cARGlda cARGldvl cARGldvr cARGlwork cARGinfo |
-	^
-	[cARGbalanc := self cCharPointerOn: balanc.
-	cARGjobvl := self cCharPointerOn: jobvl.
-	cARGjobvr := self cCharPointerOn: jobvr.
-	cARGsense := self cCharPointerOn: sense.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldvl := self cIntegerPointerOn: ldvl.
-	cARGldvr := self cIntegerPointerOn: ldvr.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeevxWithbalanc: cARGbalanc
-		jobvl: cARGjobvl
-		jobvr: cARGjobvr
-		sense: cARGsense
-		n: cARGn
-		a: a
-		lda: cARGlda
-		w: w
-		vl: vl
-		ldvl: cARGldvl
-		vr: vr
-		ldvr: cARGldvr
-		scale: scale
-		abnrm: abnrm
-		rconde: rconde
-		rcondv: rcondv
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGbalanc.
-				self free: cARGjobvl.
-				self free: cARGjobvr.
-				self free: cARGsense.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldvl.
-				self free: cARGldvr.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+gelssWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank work: work lwork: lwork rwork: rwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgelssWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		s: s		rcond: (self cRealPointerOn: rcond)		rank: rank		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-gehrdWithn: n a: a lda: lda tau: tau 
-	"hessenberg decomposition (for real/complex general matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+gelsWithtrans: trans m: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgelsWithtrans: (self cCharPointerOn: trans)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work lwork ilo ihi |
-	^
-	[work := self allocateElementArraySize: 1.
-	ilo := self cIntegerPointerOn: 1.
-	ihi := self cIntegerPointerOn: n.
-	(self 
-		gehrdWithn: n
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := n max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		gehrdWithn: n
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: lwork] 
-			ensure: 
-				[self free: work.
-				self free: ilo.
-				self free: ihi]!
+gelsxWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb jpvt: jpvt rcond: rcond rank: rank work: work 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgelsxWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		jpvt: jpvt		rcond: (self cElementPointerOn: rcond)		rank: rank		work: work		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-gehrdWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau 
-	"hessenberg decomposition (for real/complex general matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK
-	ilo and ihi must be allocated outside"
+gelsxWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb jpvt: jpvt rcond: rcond rank: rank work: work rwork: rwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgelsxWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		jpvt: jpvt		rcond: (self cRealPointerOn: rcond)		rank: rank		work: work		rwork: rwork		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		gehrdWithn: n
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := n max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		gehrdWithn: n
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
+gelsyWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb jpvt: jpvt rcond: rcond rank: rank 	"least squares by complete orthogonalization	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| mn work rwork lwork |	mn := m min: n.	^self isComplex 		ifTrue: 			[			work := self allocateElementArraySize: 1.			rwork := self allocateRealArraySize: (2 * n max: 1).			(self 				gelsyWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				jpvt: jpvt				rcond: rcond				rank: rank				work: work				lwork: -1				rwork: rwork) = 0 				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]				ifFalse: [lwork := 1 max: mn + (2 * mn max: (n + 1 max: mn + nrhs))].			work := self allocateElementArraySize: lwork.			self 				gelsyWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				jpvt: jpvt				rcond: rcond				rank: rank				work: work				lwork: lwork				rwork: rwork]		ifFalse: 			[			work := self allocateElementArraySize: 1.			(self 				gelsyWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				jpvt: jpvt				rcond: rcond				rank: rank				work: work				lwork: -1) = 0 				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]				ifFalse: [lwork := 1 max: (n * 3 + 1 + mn max: mn * 2 + nrhs)].			work := self allocateElementArraySize: lwork.			self 				gelsyWithm: m				n: n				nrhs: nrhs				a: a				lda: lda				b: b				ldb: ldb				jpvt: jpvt				rcond: rcond				rank: rank				work: work				lwork: lwork]!
 
-gehrdWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau work: work lwork: lwork 
-	"hessenberg decomposition (for real/complex general matrices)
-	ilo and ihi must be allocated outside this routine"
+gelsyWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb jpvt: jpvt rcond: rcond rank: rank work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgelsyWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		jpvt: jpvt		rcond: (self cElementPointerOn: rcond)		rank: rank		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgehrdWithn: cARGn
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+gelsyWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb jpvt: jpvt rcond: rcond rank: rank work: work lwork: lwork rwork: rwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgelsyWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		jpvt: jpvt		rcond: (self cRealPointerOn: rcond)		rank: rank		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-gelqfWithm: m n: n a: a lda: lda tau: tau work: work lwork: lwork 
-	| cARGm cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgelqfWithm: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+geqlfWithm: m n: n a: a lda: lda tau: tau work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgeqlfWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-gelsdWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank 
-	"least squares by SVD divide and conquer algorithm
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+geqp3Withm: m n: n a: a lda: lda jpvt: jpvt tau: tau 	"qr decomposition (for real/complex general matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work rwork lwork |	^self isComplex 		ifTrue: 			[			work := self allocateElementArraySize: 1.			rwork := self allocateRealArraySize: 2 * n.			(self 				geqp3Withm: m				n: n				a: a				lda: lda				jpvt: jpvt				tau: tau				work: work				lwork: -1				rwork: rwork) = 0 				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]				ifFalse: [lwork := n + 1].			work := self allocateElementArraySize: lwork.			self 				geqp3Withm: m				n: n				a: a				lda: lda				jpvt: jpvt				tau: tau				work: work				lwork: lwork				rwork: rwork]		ifFalse: 			[			work := self allocateElementArraySize: 1.			(self 				geqp3Withm: m				n: n				a: a				lda: lda				jpvt: jpvt				tau: tau				work: work				lwork: -1) = 0 				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]				ifFalse: [lwork := 3 * n + 1].			work := self allocateElementArraySize: lwork.			self 				geqp3Withm: m				n: n				a: a				lda: lda				jpvt: jpvt				tau: tau				work: work				lwork: lwork]!
 
-	| work rwork lwork iwork smlsiz nlvl minmn |
-	minmn := 1 max: (m min: n).
-	^self isComplex 
-		ifTrue: 
-			[
-			[smlsiz := self 
-						ilaenvWithispec: 9
-						name: 'CGELSD'
-						opts: ' '
-						n1: 0
-						n2: 0
-						n3: 0
-						n4: 0.
-			nlvl := 1 + (minmn / (smlsiz + 1)) floorLog2.
-			work := self allocateElementArraySize: 1.
-			iwork := self allocateIntegerArraySize: 3 * minmn * nlvl + (11 * minmn).
-			rwork := self allocateRealArraySize: (m >= n 
-								ifTrue: [8 * n + (2 * n * smlsiz) + (8 * n * nlvl) + (n * nrhs)]
-								ifFalse: [8 * m + (2 * m * smlsiz) + (8 * m * nlvl) + (m * nrhs)]).
-			(self 
-				gelsdWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				s: s
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: -1
-				rwork: rwork
-				iwork: iwork) = 0 
-				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-				ifFalse: 
-					[lwork := m >= n 
-								ifTrue: [1 max: n * (2 + nrhs)]
-								ifFalse: [1 max: m * (2 + nrhs)]].
-			self free: work.
-			work := self allocateElementArraySize: lwork.
-			self 
-				gelsdWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				s: s
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: lwork
-				rwork: rwork
-				iwork: iwork] 
-					ensure: 
-						[self free: work.
-						self free: rwork.
-						self free: iwork]]
-		ifFalse: 
-			[
-			[smlsiz := self 
-						ilaenvWithispec: 9
-						name: 'SGELSD'
-						opts: ' '
-						n1: 0
-						n2: 0
-						n3: 0
-						n4: 0.
-			nlvl := 1 + (minmn / (smlsiz + 1)) floorLog2.
-			work := self allocateElementArraySize: 1.
-			iwork := self allocateIntegerArraySize: 3 * minmn * nlvl + (11 * minmn).
-			(self 
-				gelsdWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				s: s
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: lwork
-				iwork: iwork) = 0 
-				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-				ifFalse: 
-					[lwork := m >= n 
-								ifTrue: [11 * n + (2 * n * smlsiz) + (8 * n * nlvl) + (n * nrhs)]
-								ifFalse: [11 * m + (2 * m * smlsiz) + (8 * m * nlvl) + (m * nrhs)]].
-			self free: work.
-			work := self allocateElementArraySize: lwork.
-			self 
-				gelsdWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				s: s
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: lwork
-				iwork: iwork] 
-					ensure: 
-						[self free: work.
-						self free: iwork]]!
+geqp3Withm: m n: n a: a lda: lda jpvt: jpvt tau: tau work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgeqp3Withm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		jpvt: jpvt		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-gelsdWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank work: work lwork: lwork iwork: iwork 
-	| cARGm cARGn cARGnrhs cARGlda cARGldb cARGrcond cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGrcond := self cElementPointerOn: rcond.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgelsdWithm: cARGm
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		s: s
-		rcond: cARGrcond
-		rank: rank
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGrcond.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+geqp3Withm: m n: n a: a lda: lda jpvt: jpvt tau: tau work: work lwork: lwork rwork: rwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgeqp3Withm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		jpvt: jpvt		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-gelsdWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank work: work lwork: lwork rwork: rwork iwork: iwork 
-	| cARGm cARGn cARGnrhs cARGlda cARGldb cARGrcond cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGrcond := self cRealPointerOn: rcond.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgelsdWithm: cARGm
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		s: s
-		rcond: cARGrcond
-		rank: rank
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		iwork: iwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGrcond.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+geqrfWithm: m n: n a: a lda: lda tau: tau 	"qr decomposition (for real/complex general matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		geqrfWithm: m		n: n		a: a		lda: lda		tau: tau		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := n max: 1].	work := self allocateElementArraySize: lwork.	^self 		geqrfWithm: m		n: n		a: a		lda: lda		tau: tau		work: work		lwork: lwork!
 
-gelssWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank 
-	"least squares by SVD
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+geqrfWithm: m n: n a: a lda: lda tau: tau work: work lwork: lwork 	"qr decomposition (for real/complex general matrices)"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgeqrfWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work rwork lwork |
-	^self isComplex 
-		ifTrue: 
-			[
-			[work := self allocateElementArraySize: 1.
-			rwork := self allocateRealArraySize: (5 * (m min: n) max: 1).
-			(self 
-				gelssWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				s: s
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: -1
-				rwork: rwork) = 0 
-				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-				ifFalse: [lwork := 1 max: (m min: n) * 2 + (nrhs max: (m max: n))].
-			self free: work.
-			work := self allocateElementArraySize: lwork.
-			self 
-				gelssWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				s: s
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: lwork
-				rwork: rwork] 
-					ensure: 
-						[self free: work.
-						self free: rwork]]
-		ifFalse: 
-			[
-			[work := self allocateElementArraySize: 1.
-			(self 
-				gelssWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				s: s
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: -1) = 0 
-				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-				ifFalse: 
-					[lwork := 1 
-								max: (m min: n) * 3 + ((nrhs max: (m max: n)) max: 2 * (m min: n))].
-			self free: work.
-			work := self allocateElementArraySize: lwork.
-			self 
-				gelssWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				s: s
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: lwork] 
-					ensure: [self free: work]]!
+gerqfWithm: m n: n a: a lda: lda tau: tau work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgerqfWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-gelssWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank work: work lwork: lwork 
-	| cARGm cARGn cARGnrhs cARGlda cARGldb cARGrcond cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGrcond := self cElementPointerOn: rcond.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgelssWithm: cARGm
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		s: s
-		rcond: cARGrcond
-		rank: rank
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGrcond.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+gesddWithjobz: jobz m: m n: n a: a lda: lda s: s u: u ldu: ldu vt: vt ldvt: ldvt work: work lwork: lwork iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgesddWithjobz: (self cCharPointerOn: jobz)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		s: s		u: u		ldu: (self cIntegerPointerOn: ldu)		vt: vt		ldvt: (self cIntegerPointerOn: ldvt)		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-gelssWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb s: s rcond: rcond rank: rank work: work lwork: lwork rwork: rwork 
-	| cARGm cARGn cARGnrhs cARGlda cARGldb cARGrcond cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGrcond := self cRealPointerOn: rcond.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgelssWithm: cARGm
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		s: s
-		rcond: cARGrcond
-		rank: rank
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGrcond.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+gesddWithjobz: jobz m: m n: n a: a lda: lda s: s u: u ldu: ldu vt: vt ldvt: ldvt work: work lwork: lwork rwork: rwork iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgesddWithjobz: (self cCharPointerOn: jobz)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		s: s		u: u		ldu: (self cIntegerPointerOn: ldu)		vt: vt		ldvt: (self cIntegerPointerOn: ldvt)		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		iwork: iwork		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-gelsWithtrans: trans m: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb work: work lwork: lwork 
-	| cARGtrans cARGm cARGn cARGnrhs cARGlda cARGldb cARGlwork cARGinfo |
-	^
-	[cARGtrans := self cCharPointerOn: trans.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgelsWithtrans: cARGtrans
-		m: cARGm
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0 ] 
-			ensure: 
-				[self free: cARGtrans.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+gesvdWithjobu: jobu jobvt: jobvt m: m n: n a: a lda: lda s: s u: u ldu: ldu vt: vt ldvt: ldvt 	"singular value/vector decomposition (for real/complex general matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work rwork lwork |	^self isComplex 		ifTrue: 			[			work := self allocateElementArraySize: 1.			rwork := self allocateRealArraySize: 5 * (m min: n).			(self 				gesvdWithjobu: jobu				jobvt: jobvt				m: m				n: n				a: a				lda: lda				s: s				u: u				ldu: ldu				vt: vt				ldvt: ldvt				work: work				lwork: -1				rwork: rwork) = 0 				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]				ifFalse: [lwork := 2 * (m min: n) + (m max: n)].			work := self allocateElementArraySize: lwork.			self 				gesvdWithjobu: jobu				jobvt: jobvt				m: m				n: n				a: a				lda: lda				s: s				u: u				ldu: ldu				vt: vt				ldvt: ldvt				work: work				lwork: lwork				rwork: rwork]		ifFalse: 			[			work := self allocateElementArraySize: 1.			(self 				gesvdWithjobu: jobu				jobvt: jobvt				m: m				n: n				a: a				lda: lda				s: s				u: u				ldu: ldu				vt: vt				ldvt: ldvt				work: work				lwork: -1) = 0 				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]				ifFalse: [lwork := 3 * (m min: n) + (m max: n) max: 5 * (m min: n)].			work := self allocateElementArraySize: lwork.			self 				gesvdWithjobu: jobu				jobvt: jobvt				m: m				n: n				a: a				lda: lda				s: s				u: u				ldu: ldu				vt: vt				ldvt: ldvt				work: work				lwork: lwork]!
 
-gelsxWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb jpvt: jpvt rcond: rcond rank: rank work: work 
-	| cARGm cARGn cARGnrhs cARGlda cARGldb cARGrcond cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGrcond := self cElementPointerOn: rcond.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgelsxWithm: cARGm
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		jpvt: jpvt
-		rcond: cARGrcond
-		rank: rank
-		work: work
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGrcond.
-				self free: cARGinfo]!
+gesvdWithjobu: jobu jobvt: jobvt m: m n: n a: a lda: lda s: s u: u ldu: ldu vt: vt ldvt: ldvt work: work lwork: lwork 	"singular value/vector decomposition (for real general matrices)"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgesvdWithjobu: (self cCharPointerOn: jobu)		jobvt: (self cCharPointerOn: jobvt)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		s: s		u: u		ldu: (self cIntegerPointerOn: ldu)		vt: vt		ldvt: (self cIntegerPointerOn: ldvt)		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-gelsxWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb jpvt: jpvt rcond: rcond rank: rank work: work rwork: rwork 
-	| cARGm cARGn cARGnrhs cARGlda cARGldb cARGrcond cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGrcond := self cRealPointerOn: rcond.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgelsxWithm: cARGm
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		jpvt: jpvt
-		rcond: cARGrcond
-		rank: rank
-		work: work
-		rwork: rwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGrcond.
-				self free: cARGinfo]!
+gesvdWithjobu: jobu jobvt: jobvt m: m n: n a: a lda: lda s: s u: u ldu: ldu vt: vt ldvt: ldvt work: work lwork: lwork rwork: rwork 	"singular value/vector decomposition (for complex general matrices)"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgesvdWithjobu: (self cCharPointerOn: jobu)		jobvt: (self cCharPointerOn: jobvt)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		s: s		u: u		ldu: (self cIntegerPointerOn: ldu)		vt: vt		ldvt: (self cIntegerPointerOn: ldvt)		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-gelsyWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb jpvt: jpvt rcond: rcond rank: rank 
-	"least squares by complete orthogonalization
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+gesvWithn: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb 	"find x such that a*x=b, that is solve a linear system of equations	on return:		x is stored in b on return		a contains L and U of P*L*U decomposition (diagonal 1 of L not included)		ipiv contains permutations of rows P of P*L*U decomposition	return:		info contains error code is not 0"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgesvWithn: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		b: b		ldb: (self cIntegerPointerOn: ldb)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| mn work rwork lwork |
-	mn := m min: n.
-	^self isComplex 
-		ifTrue: 
-			[
-			[work := self allocateElementArraySize: 1.
-			rwork := self allocateRealArraySize: (2 * n max: 1).
-			(self 
-				gelsyWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				jpvt: jpvt
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: -1
-				rwork: rwork) = 0 
-				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-				ifFalse: [lwork := 1 max: mn + (2 * mn max: (n + 1 max: mn + nrhs))].
-			self free: work.
-			work := self allocateElementArraySize: lwork.
-			self 
-				gelsyWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				jpvt: jpvt
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: lwork
-				rwork: rwork] 
-					ensure: 
-						[self free: work.
-						self free: rwork]]
-		ifFalse: 
-			[
-			[work := self allocateElementArraySize: 1.
-			(self 
-				gelsyWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				jpvt: jpvt
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: -1) = 0 
-				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-				ifFalse: [lwork := 1 max: (n * 3 + 1 + mn max: mn * 2 + nrhs)].
-			self free: work.
-			work := self allocateElementArraySize: lwork.
-			self 
-				gelsyWithm: m
-				n: n
-				nrhs: nrhs
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				jpvt: jpvt
-				rcond: rcond
-				rank: rank
-				work: work
-				lwork: lwork] 
-					ensure: [self free: work]]!
+getrfWithm: m n: n a: a lda: lda ipiv: ipiv 	"P*L*U decomposition of a general matrix	return 0 if OK"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgetrfWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-gelsyWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb jpvt: jpvt rcond: rcond rank: rank work: work lwork: lwork 
-	| cARGm cARGn cARGnrhs cARGlda cARGldb cARGrcond cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGrcond := self cElementPointerOn: rcond.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgelsyWithm: cARGm
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		jpvt: jpvt
-		rcond: cARGrcond
-		rank: rank
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGrcond.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+getriWithn: n a: a lda: lda ipiv: ipiv 	"inverse of a general matrix"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		getriWithn: n		a: a		lda: lda		ipiv: ipiv		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := 10 * n max: 1].	work := self allocateElementArraySize: lwork.	^self 		getriWithn: n		a: a		lda: lda		ipiv: ipiv		work: work		lwork: lwork!
 
-gelsyWithm: m n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb jpvt: jpvt rcond: rcond rank: rank work: work lwork: lwork rwork: rwork 
-	| cARGm cARGn cARGnrhs cARGlda cARGldb cARGrcond cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGrcond := self cRealPointerOn: rcond.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgelsyWithm: cARGm
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		jpvt: jpvt
-		rcond: cARGrcond
-		rank: rank
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGrcond.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+getriWithn: n a: a lda: lda ipiv: ipiv work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgetriWithn: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-geqlfWithm: m n: n a: a lda: lda tau: tau work: work lwork: lwork 
-	| cARGm cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeqlfWithm: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+getrsWithtrans: trans n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb 	"Solve a general system of equations A*x=B in x"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgetrsWithtrans: (self cCharPointerOn: trans)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		b: b		ldb: (self cIntegerPointerOn: ldb)		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-geqp3Withm: m n: n a: a lda: lda jpvt: jpvt tau: tau 
-	"qr decomposition (for real/complex general matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+ggbakWithjob: job side: side n: n ilo: ilo ihi: ihi lscale: lscale rscale: rscale m: m v: v ldv: ldv 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xggbakWithjob: (self cCharPointerOn: job)		side: (self cCharPointerOn: side)		n: (self cIntegerPointerOn: n)		ilo: ilo		ihi: ihi		lscale: lscale		rscale: rscale		m: (self cIntegerPointerOn: m)		v: v		ldv: (self cIntegerPointerOn: ldv)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work rwork lwork |
-	^self isComplex 
-		ifTrue: 
-			[
-			[work := self allocateElementArraySize: 1.
-			rwork := self allocateRealArraySize: 2 * n.
-			(self 
-				geqp3Withm: m
-				n: n
-				a: a
-				lda: lda
-				jpvt: jpvt
-				tau: tau
-				work: work
-				lwork: -1
-				rwork: rwork) = 0 
-				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-				ifFalse: [lwork := n + 1].
-			self free: work.
-			work := self allocateElementArraySize: lwork.
-			self 
-				geqp3Withm: m
-				n: n
-				a: a
-				lda: lda
-				jpvt: jpvt
-				tau: tau
-				work: work
-				lwork: lwork
-				rwork: rwork] 
-					ensure: 
-						[self free: work.
-						self free: rwork]]
-		ifFalse: 
-			[
-			[work := self allocateElementArraySize: 1.
-			(self 
-				geqp3Withm: m
-				n: n
-				a: a
-				lda: lda
-				jpvt: jpvt
-				tau: tau
-				work: work
-				lwork: -1) = 0 
-				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-				ifFalse: [lwork := 3 * n + 1].
-			self free: work.
-			work := self allocateElementArraySize: lwork.
-			self 
-				geqp3Withm: m
-				n: n
-				a: a
-				lda: lda
-				jpvt: jpvt
-				tau: tau
-				work: work
-				lwork: lwork] 
-					ensure: [self free: work]]!
+ggbalWithjob: job n: n a: a lda: lda b: b ldb: ldb ilo: ilo ihi: ihi lscale: lscale rscale: rscale work: work 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xggbalWithjob: (self cCharPointerOn: job)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		ilo: ilo		ihi: ihi		lscale: lscale		rscale: rscale		work: work		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-geqp3Withm: m n: n a: a lda: lda jpvt: jpvt tau: tau work: work lwork: lwork 
-	"qr decomposition (for real general matrices)"
+ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr 	"generalized eigenvalue/vector decomposition (for complex general matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work rwork lwork |	work := self allocateElementArraySize: 1.	rwork := self allocateRealArraySize: 8 * n.	(self 		ggevWithjobvl: jobvl		jobvr: jobvr		n: n		a: a		lda: lda		b: b		ldb: ldb		alpha: alpha		beta: beta		vl: vl		ldvl: ldvl		vr: vr		ldvr: ldvr		work: work		lwork: -1		rwork: rwork) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := 1 max: 2 * n].	work := self allocateElementArraySize: lwork.	^self 		ggevWithjobvl: jobvl		jobvr: jobvr		n: n		a: a		lda: lda		b: b		ldb: ldb		alpha: alpha		beta: beta		vl: vl		ldvl: ldvl		vr: vr		ldvr: ldvr		work: work		lwork: lwork		rwork: rwork!
 
-	| cARGm cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeqp3Withm: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		jpvt: jpvt
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr work: work lwork: lwork rwork: rwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xggevWithjobvl: (self cCharPointerOn: jobvl)		jobvr: (self cCharPointerOn: jobvr)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		alpha: alpha		beta: beta		vl: vl		ldvl: (self cIntegerPointerOn: ldvl)		vr: vr		ldvr: (self cIntegerPointerOn: ldvr)		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-geqp3Withm: m n: n a: a lda: lda jpvt: jpvt tau: tau work: work lwork: lwork rwork: rwork 
-	"qr decomposition (for complex general matrices)"
+ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alphar: alphar alphai: alphai beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr 	"generalized eigenvalue/vector decomposition (for real general matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		ggevWithjobvl: jobvl		jobvr: jobvr		n: n		a: a		lda: lda		b: b		ldb: ldb		alphar: alphar		alphai: alphai		beta: beta		vl: vl		ldvl: ldvl		vr: vr		ldvr: ldvr		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := 1 max: 8 * n * n].	work := self allocateElementArraySize: lwork.	^self 		ggevWithjobvl: jobvl		jobvr: jobvr		n: n		a: a		lda: lda		b: b		ldb: ldb		alphar: alphar		alphai: alphai		beta: beta		vl: vl		ldvl: ldvl		vr: vr		ldvr: ldvr		work: work		lwork: lwork!
 
-	| cARGm cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeqp3Withm: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		jpvt: jpvt
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-geqrfWithm: m n: n a: a lda: lda tau: tau 
-	"qr decomposition (for real/complex general matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
-
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		geqrfWithm: m
-		n: n
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := n max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		geqrfWithm: m
-		n: n
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
-
-geqrfWithm: m n: n a: a lda: lda tau: tau work: work lwork: lwork 
-	"qr decomposition (for real/complex general matrices)"
-
-	| cARGm cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgeqrfWithm: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-gerqfWithm: m n: n a: a lda: lda tau: tau work: work lwork: lwork 
-	| cARGm cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgerqfWithm: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-gesddWithjobz: jobz m: m n: n a: a lda: lda s: s u: u ldu: ldu vt: vt ldvt: ldvt work: work lwork: lwork iwork: iwork 
-	| cARGjobz cARGm cARGn cARGlda cARGldu cARGldvt cARGlwork cARGinfo |
-	^
-	[cARGjobz := self cCharPointerOn: jobz.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldu := self cIntegerPointerOn: ldu.
-	cARGldvt := self cIntegerPointerOn: ldvt.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgesddWithjobz: cARGjobz
-		m: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		s: s
-		u: u
-		ldu: cARGldu
-		vt: vt
-		ldvt: cARGldvt
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobz.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldu.
-				self free: cARGldvt.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-gesddWithjobz: jobz m: m n: n a: a lda: lda s: s u: u ldu: ldu vt: vt ldvt: ldvt work: work lwork: lwork rwork: rwork iwork: iwork 
-	| cARGjobz cARGm cARGn cARGlda cARGldu cARGldvt cARGlwork cARGinfo |
-	^
-	[cARGjobz := self cCharPointerOn: jobz.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldu := self cIntegerPointerOn: ldu.
-	cARGldvt := self cIntegerPointerOn: ldvt.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgesddWithjobz: cARGjobz
-		m: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		s: s
-		u: u
-		ldu: cARGldu
-		vt: vt
-		ldvt: cARGldvt
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		iwork: iwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobz.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldu.
-				self free: cARGldvt.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-gesvdWithjobu: jobu jobvt: jobvt m: m n: n a: a lda: lda s: s u: u ldu: ldu vt: vt ldvt: ldvt 
-	"singular value/vector decomposition (for real/complex general matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
-
-	| work rwork lwork |
-	^self isComplex 
-		ifTrue: 
-			[
-			[work := self allocateElementArraySize: 1.
-			rwork := self allocateRealArraySize: 5 * (m min: n).
-			(self 
-				gesvdWithjobu: jobu
-				jobvt: jobvt
-				m: m
-				n: n
-				a: a
-				lda: lda
-				s: s
-				u: u
-				ldu: ldu
-				vt: vt
-				ldvt: ldvt
-				work: work
-				lwork: -1
-				rwork: rwork) = 0 
-				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-				ifFalse: [lwork := 2 * (m min: n) + (m max: n)].
-			self free: work.
-			work := self allocateElementArraySize: lwork.
-			self 
-				gesvdWithjobu: jobu
-				jobvt: jobvt
-				m: m
-				n: n
-				a: a
-				lda: lda
-				s: s
-				u: u
-				ldu: ldu
-				vt: vt
-				ldvt: ldvt
-				work: work
-				lwork: lwork
-				rwork: rwork] 
-					ensure: 
-						[self free: work.
-						self free: rwork]]
-		ifFalse: 
-			[
-			[work := self allocateElementArraySize: 1.
-			(self 
-				gesvdWithjobu: jobu
-				jobvt: jobvt
-				m: m
-				n: n
-				a: a
-				lda: lda
-				s: s
-				u: u
-				ldu: ldu
-				vt: vt
-				ldvt: ldvt
-				work: work
-				lwork: -1) = 0 
-				ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-				ifFalse: [lwork := 3 * (m min: n) + (m max: n) max: 5 * (m min: n)].
-			self free: work.
-			work := self allocateElementArraySize: lwork.
-			self 
-				gesvdWithjobu: jobu
-				jobvt: jobvt
-				m: m
-				n: n
-				a: a
-				lda: lda
-				s: s
-				u: u
-				ldu: ldu
-				vt: vt
-				ldvt: ldvt
-				work: work
-				lwork: lwork] 
-					ensure: [self free: work]]!
-
-gesvdWithjobu: jobu jobvt: jobvt m: m n: n a: a lda: lda s: s u: u ldu: ldu vt: vt ldvt: ldvt work: work lwork: lwork 
-	"singular value/vector decomposition (for real general matrices)"
-
-	| cARGjobu cARGjobvt cARGm cARGn cARGlda cARGldu cARGldvt cARGlwork cARGinfo |
-	^
-	[cARGjobu := self cCharPointerOn: jobu.
-	cARGjobvt := self cCharPointerOn: jobvt.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldu := self cIntegerPointerOn: ldu.
-	cARGldvt := self cIntegerPointerOn: ldvt.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgesvdWithjobu: cARGjobu
-		jobvt: cARGjobvt
-		m: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		s: s
-		u: u
-		ldu: cARGldu
-		vt: vt
-		ldvt: cARGldvt
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobu.
-				self free: cARGjobvt.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldu.
-				self free: cARGldvt.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-gesvdWithjobu: jobu jobvt: jobvt m: m n: n a: a lda: lda s: s u: u ldu: ldu vt: vt ldvt: ldvt work: work lwork: lwork rwork: rwork
-	"singular value/vector decomposition (for complex general matrices)"
-
-	| cARGjobu cARGjobvt cARGm cARGn cARGlda cARGldu cARGldvt cARGlwork cARGinfo |
-	^
-	[cARGjobu := self cCharPointerOn: jobu.
-	cARGjobvt := self cCharPointerOn: jobvt.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldu := self cIntegerPointerOn: ldu.
-	cARGldvt := self cIntegerPointerOn: ldvt.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self
-		xgesvdWithjobu: cARGjobu
-		jobvt: cARGjobvt
-		m: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		s: s
-		u: u
-		ldu: cARGldu
-		vt: vt
-		ldvt: cARGldvt
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobu.
-				self free: cARGjobvt.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldu.
-				self free: cARGldvt.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-gesvWithn: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb 
-	"find x such that a*x=b, that is solve a linear system of equations
-	on return:
-		x is stored in b on return
-		a contains L and U of P*L*U decomposition (diagonal 1 of L not included)
-		ipiv contains permutations of rows P of P*L*U decomposition
-	return:
-		info contains error code is not 0"
-
-	| cARGn cARGlda cARGldb cARGnrhs cARGinfo |
-	^
-	[cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgesvWithn: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		b: b
-		ldb: cARGldb
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGnrhs.
-				self free: cARGinfo]!
-
-getrfWithm: m n: n a: a lda: lda ipiv: ipiv 
-	"P*L*U decomposition of a general matrix
-	return 0 if OK"
-
-	| cARGm cARGn cARGlda cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgetrfWithm: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGinfo]!
-
-getriWithn: n a: a lda: lda ipiv: ipiv 
-	"inverse of a general matrix"
-
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		getriWithn: n
-		a: a
-		lda: lda
-		ipiv: ipiv
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := 10 * n max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		getriWithn: n
-		a: a
-		lda: lda
-		ipiv: ipiv
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
-
-getriWithn: n a: a lda: lda ipiv: ipiv work: work lwork: lwork 
-	| cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgetriWithn: cARGn
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-getrsWithtrans: trans n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb 
-	"Solve a general system of equations A*x=B in x"
-
-	| cARGtrans cARGn cARGnrhs cARGlda cARGldb cARGinfo |
-	^
-	[cARGtrans := self cCharPointerOn: trans.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgetrsWithtrans: cARGtrans
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		b: b
-		ldb: cARGldb
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGtrans.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGinfo]!
-
-ggbakWithjob: job side: side n: n ilo: ilo ihi: ihi lscale: lscale rscale: rscale m: m v: v ldv: ldv 
-	| cARGjob cARGside cARGn cARGm cARGldv cARGinfo |
-	^
-	[cARGjob := self cCharPointerOn: job.
-	cARGside := self cCharPointerOn: side.
-	cARGn := self cIntegerPointerOn: n.
-	cARGm := self cIntegerPointerOn: m.
-	cARGldv := self cIntegerPointerOn: ldv.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xggbakWithjob: cARGjob
-		side: cARGside
-		n: cARGn
-		ilo: ilo
-		ihi: ihi
-		lscale: lscale
-		rscale: rscale
-		m: cARGm
-		v: v
-		ldv: cARGldv
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjob.
-				self free: cARGside.
-				self free: cARGn.
-				self free: cARGm.
-				self free: cARGldv.
-				self free: cARGinfo]!
-
-ggbalWithjob: job n: n a: a lda: lda b: b ldb: ldb ilo: ilo ihi: ihi lscale: lscale rscale: rscale work: work 
-	| cARGjob cARGn cARGlda cARGldb cARGinfo |
-	^
-	[cARGjob := self cCharPointerOn: job.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xggbalWithjob: cARGjob
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		ilo: ilo
-		ihi: ihi
-		lscale: lscale
-		rscale: rscale
-		work: work
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjob.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGinfo]!
-
-ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr 
-	"generalized eigenvalue/vector decomposition (for complex general matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
-
-	| work rwork lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	rwork := self allocateRealArraySize: 8 * n.
-	(self 
-		ggevWithjobvl: jobvl
-		jobvr: jobvr
-		n: n
-		a: a
-		lda: lda
-		b: b
-		ldb: ldb
-		alpha: alpha
-		beta: beta
-		vl: vl
-		ldvl: ldvl
-		vr: vr
-		ldvr: ldvr
-		work: work
-		lwork: -1
-		rwork: rwork) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := 1 max: 2 * n].
-	work free.
-	work := self allocateElementArraySize: lwork.
-	self 
-		ggevWithjobvl: jobvl
-		jobvr: jobvr
-		n: n
-		a: a
-		lda: lda
-		b: b
-		ldb: ldb
-		alpha: alpha
-		beta: beta
-		vl: vl
-		ldvl: ldvl
-		vr: vr
-		ldvr: ldvr
-		work: work
-		lwork: lwork
-		rwork: rwork] 
-			ensure: 
-				[self free: rwork.
-				self free: work]!
-
-ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr work: work lwork: lwork rwork: rwork 
-	| cARGjobvl cARGjobvr cARGn cARGlda cARGldb cARGldvl cARGldvr cARGlwork cARGinfo |
-	^
-	[cARGjobvl := self cCharPointerOn: jobvl.
-	cARGjobvr := self cCharPointerOn: jobvr.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldvl := self cIntegerPointerOn: ldvl.
-	cARGldvr := self cIntegerPointerOn: ldvr.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xggevWithjobvl: cARGjobvl
-		jobvr: cARGjobvr
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		alpha: alpha
-		beta: beta
-		vl: vl
-		ldvl: cARGldvl
-		vr: vr
-		ldvr: cARGldvr
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobvl.
-				self free: cARGjobvr.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldvl.
-				self free: cARGldvr.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alphar: alphar alphai: alphai beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr 
-	"generalized eigenvalue/vector decomposition (for real general matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
-
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		ggevWithjobvl: jobvl
-		jobvr: jobvr
-		n: n
-		a: a
-		lda: lda
-		b: b
-		ldb: ldb
-		alphar: alphar
-		alphai: alphai
-		beta: beta
-		vl: vl
-		ldvl: ldvl
-		vr: vr
-		ldvr: ldvr
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := 1 max: 8 * n * n].
-	work free.
-	work := self allocateElementArraySize: lwork.
-	self 
-		ggevWithjobvl: jobvl
-		jobvr: jobvr
-		n: n
-		a: a
-		lda: lda
-		b: b
-		ldb: ldb
-		alphar: alphar
-		alphai: alphai
-		beta: beta
-		vl: vl
-		ldvl: ldvl
-		vr: vr
-		ldvr: ldvr
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
-
-ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alphar: alphar alphai: alphai beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr work: work lwork: lwork 
-	| cARGjobvl cARGjobvr cARGn cARGlda cARGldb cARGldvl cARGldvr cARGlwork cARGinfo |
-	^
-	[cARGjobvl := self cCharPointerOn: jobvl.
-	cARGjobvr := self cCharPointerOn: jobvr.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldvl := self cIntegerPointerOn: ldvl.
-	cARGldvr := self cIntegerPointerOn: ldvr.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xggevWithjobvl: cARGjobvl
-		jobvr: cARGjobvr
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		alphar: alphar
-		alphai: alphai
-		beta: beta
-		vl: vl
-		ldvl: cARGldvl
-		vr: vr
-		ldvr: cARGldvr
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobvl.
-				self free: cARGjobvr.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldvl.
-				self free: cARGldvr.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+ggevWithjobvl: jobvl jobvr: jobvr n: n a: a lda: lda b: b ldb: ldb alphar: alphar alphai: alphai beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xggevWithjobvl: (self cCharPointerOn: jobvl)		jobvr: (self cCharPointerOn: jobvr)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		alphar: alphar		alphai: alphai		beta: beta		vl: vl		ldvl: (self cIntegerPointerOn: ldvl)		vr: vr		ldvr: (self cIntegerPointerOn: ldvr)		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
 ggevxWithbalanc: balanc jobvl: jobvl jobvr: jobvr sense: sense n: n a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta vl: vl ldvl: ldvl vr: vr ldvr: ldvr lscale: lscale rscale: rscale abnrm: abnrm bbnrm: bbnrm rconde: rconde rcondv: rcondv work: work lwork: lwork rwork: rwork iwork: iwork bwork: bwork 
 	| cARGbalanc cARGjobvl cARGjobvr cARGsense cARGn cARGlda cARGldb cARGldvl cARGldvr cARGlwork cARGinfo |
@@ -2734,1097 +739,59 @@ ggevxWithbalanc: balanc jobvl: jobvl jobvr: jobvr sense: sense n: n a: a lda: ld
 				self free: cARGlwork.
 				self free: cARGinfo]!
 
-ggglmWithn: n m: m p: p a: a lda: lda b: b ldb: ldb d: d x: x y: y work: work lwork: lwork 
-	| cARGn cARGm cARGp cARGlda cARGldb cARGlwork cARGinfo |
-	^
-	[cARGn := self cIntegerPointerOn: n.
-	cARGm := self cIntegerPointerOn: m.
-	cARGp := self cIntegerPointerOn: p.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xggglmWithn: cARGn
-		m: cARGm
-		p: cARGp
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		d: d
-		x: x
-		y: y
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGn.
-				self free: cARGm.
-				self free: cARGp.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+ggglmWithn: n m: m p: p a: a lda: lda b: b ldb: ldb d: d x: x y: y work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xggglmWithn: (self cIntegerPointerOn: n)		m: (self cIntegerPointerOn: m)		p: (self cIntegerPointerOn: p)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		d: d		x: x		y: y		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-gghrdWithcompq: compq compz: compz n: n ilo: ilo ihi: ihi a: a lda: lda b: b ldb: ldb q: q ldq: ldq z: z ldz: ldz 
-	| cARGcompq cARGcompz cARGn cARGilo cARGihi cARGlda cARGldb cARGldq cARGldz cARGinfo |
-	^
-	[cARGcompq := self cCharPointerOn: compq.
-	cARGcompz := self cCharPointerOn: compz.
-	cARGn := self cIntegerPointerOn: n.
-	cARGilo := self cIntegerPointerOn: ilo.
-	cARGihi := self cIntegerPointerOn: ihi.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgghrdWithcompq: cARGcompq
-		compz: cARGcompz
-		n: cARGn
-		ilo: cARGilo
-		ihi: cARGihi
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		q: q
-		ldq: cARGldq
-		z: z
-		ldz: cARGldz
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGcompq.
-				self free: cARGcompz.
-				self free: cARGn.
-				self free: cARGilo.
-				self free: cARGihi.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldq.
-				self free: cARGldz.
-				self free: cARGinfo]!
+gghrdWithcompq: compq compz: compz n: n ilo: ilo ihi: ihi a: a lda: lda b: b ldb: ldb q: q ldq: ldq z: z ldz: ldz 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgghrdWithcompq: (self cCharPointerOn: compq)		compz: (self cCharPointerOn: compz)		n: (self cIntegerPointerOn: n)		ilo: (self cIntegerPointerOn: ilo)		ihi: (self cIntegerPointerOn: ihi)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		q: q		ldq: (self cIntegerPointerOn: ldq)		z: z		ldz: (self cIntegerPointerOn: ldz)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-gglseWithm: m n: n p: p a: a lda: lda b: b ldb: ldb c: c d: d x: x 
-	"least squares subject to equality constraints by orthogonalization
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
-	
-	| work lwork |
-	^ [work := self allocateElementArraySize: 1.
-	(self
-			gglseWithm: m
-			n: n
-			p: p
-			a: a
-			lda: lda
-			b: b
-			ldb: ldb
-			c: c
-			d: d
-			x: x
-			work: work
-			lwork: -1)
-			= 0
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := 1 max: m + n + p].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self
-		gglseWithm: m
-		n: n
-		p: p
-		a: a
-		lda: lda
-		b: b
-		ldb: ldb
-		c: c
-		d: d
-		x: x
-		work: work
-		lwork: lwork]
-		ensure: [self free: work]!
+gglseWithm: m n: n p: p a: a lda: lda b: b ldb: ldb c: c d: d x: x 	"least squares subject to equality constraints by orthogonalization	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"		| work lwork |	work := self allocateElementArraySize: 1.	(self			gglseWithm: m			n: n			p: p			a: a			lda: lda			b: b			ldb: ldb			c: c			d: d			x: x			work: work			lwork: -1)			= 0		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := 1 max: m + n + p].	work := self allocateElementArraySize: lwork.	^self		gglseWithm: m		n: n		p: p		a: a		lda: lda		b: b		ldb: ldb		c: c		d: d		x: x		work: work		lwork: lwork!
 
-gglseWithm: m n: n p: p a: a lda: lda b: b ldb: ldb c: c d: d x: x work: work lwork: lwork 
-	| cARGm cARGn cARGp cARGlda cARGldb cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGp := self cIntegerPointerOn: p.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xgglseWithm: cARGm
-		n: cARGn
-		p: cARGp
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		c: c
-		d: d
-		x: x
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGp.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+gglseWithm: m n: n p: p a: a lda: lda b: b ldb: ldb c: c d: d x: x work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xgglseWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		p: (self cIntegerPointerOn: p)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		c: c		d: d		x: x		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-ggqrfWithn: n m: m p: p a: a lda: lda taua: taua b: b ldb: ldb taub: taub work: work lwork: lwork 
-	| cARGn cARGm cARGp cARGlda cARGldb cARGlwork cARGinfo |
-	^
-	[cARGn := self cIntegerPointerOn: n.
-	cARGm := self cIntegerPointerOn: m.
-	cARGp := self cIntegerPointerOn: p.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xggqrfWithn: cARGn
-		m: cARGm
-		p: cARGp
-		a: a
-		lda: cARGlda
-		taua: taua
-		b: b
-		ldb: cARGldb
-		taub: taub
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGn.
-				self free: cARGm.
-				self free: cARGp.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+ggqrfWithn: n m: m p: p a: a lda: lda taua: taua b: b ldb: ldb taub: taub work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xggqrfWithn: (self cIntegerPointerOn: n)		m: (self cIntegerPointerOn: m)		p: (self cIntegerPointerOn: p)		a: a		lda: (self cIntegerPointerOn: lda)		taua: taua		b: b		ldb: (self cIntegerPointerOn: ldb)		taub: taub		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-ggrqfWithm: m p: p n: n a: a lda: lda taua: taua b: b ldb: ldb taub: taub work: work lwork: lwork 
-	| cARGm cARGp cARGn cARGlda cARGldb cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGp := self cIntegerPointerOn: p.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xggrqfWithm: cARGm
-		p: cARGp
-		n: cARGn
-		a: a
-		lda: cARGlda
-		taua: taua
-		b: b
-		ldb: cARGldb
-		taub: taub
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGp.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+ggrqfWithm: m p: p n: n a: a lda: lda taua: taua b: b ldb: ldb taub: taub work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xggrqfWithm: (self cIntegerPointerOn: m)		p: (self cIntegerPointerOn: p)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		taua: taua		b: b		ldb: (self cIntegerPointerOn: ldb)		taub: taub		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq
-	"Generalized singular value/vector decomposition (for real/complex general matrices)
-	return 0 if OK"
+ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq	"Generalized singular value/vector decomposition (for real/complex general matrices)	return 0 if OK"	| work rwork iwork |	^self isComplex 		ifTrue: 			[work := self allocateElementArraySize: ((3 * n max: m) max: p)+n.			rwork := self allocateRealArraySize: 2 * n.			iwork := self allocateIntegerArraySize: n.			self 				ggsvdWithjobu: jobu				jobv: jobv				jobq: jobq				m: m				n: n				p: p				k: k				l: l				a: a				lda: lda				b: b				ldb: ldb				alpha: alpha				beta: beta				u: u				ldu: ldu				v: v				ldv: ldv				q: q				ldq: ldq				work: work				rwork: rwork				iwork: iwork]		ifFalse: 			[work := self allocateElementArraySize: ((3*n max: m) max: p)+n.			iwork := self allocateIntegerArraySize: n.			self 				ggsvdWithjobu: jobu				jobv: jobv				jobq: jobq				m: m				n: n				p: p				k: k				l: l				a: a				lda: lda				b: b				ldb: ldb				alpha: alpha				beta: beta				u: u				ldu: ldu				v: v				ldv: ldv				q: q				ldq: ldq				work: work				iwork: iwork]!
 
-	| work rwork iwork |
-	^self isComplex 
-		ifTrue: 
-			[
-			[work := self allocateElementArraySize: ((3 * n max: m) max: p)+n.
-			rwork := self allocateRealArraySize: 2 * n.
-			iwork := self allocateIntegerArraySize: n.
-			self 
-				ggsvdWithjobu: jobu
-				jobv: jobv
-				jobq: jobq
-				m: m
-				n: n
-				p: p
-				k: k
-				l: l
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				alpha: alpha
-				beta: beta
-				u: u
-				ldu: ldu
-				v: v
-				ldv: ldv
-				q: q
-				ldq: ldq
-				work: work
-				rwork: rwork
-				iwork: iwork] 
-					ensure: 
-						[self free: work.
-						self free: rwork.
-						self free: iwork]]
-		ifFalse: 
-			[
-			[work := self allocateElementArraySize: ((3*n max: m) max: p)+n.
-			iwork := self allocateIntegerArraySize: n.
-			self 
-				ggsvdWithjobu: jobu
-				jobv: jobv
-				jobq: jobq
-				m: m
-				n: n
-				p: p
-				k: k
-				l: l
-				a: a
-				lda: lda
-				b: b
-				ldb: ldb
-				alpha: alpha
-				beta: beta
-				u: u
-				ldu: ldu
-				v: v
-				ldv: ldv
-				q: q
-				ldq: ldq
-				work: work
-				iwork: iwork] 
-					ensure: 
-						[self free: work.
-						self free: iwork]]!
+ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xggsvdWithjobu: (self cCharPointerOn: jobu)		jobv: (self cCharPointerOn: jobv)		jobq: (self cCharPointerOn: jobq)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		p: (self cIntegerPointerOn: p)		k: k		l: l		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		alpha: alpha		beta: beta		u: u		ldu: (self cIntegerPointerOn: ldu)		v: v		ldv: (self cIntegerPointerOn: ldv)		q: q		ldq: (self cIntegerPointerOn: ldq)		work: work		iwork: iwork		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work iwork: iwork 
-	| cARGjobu cARGjobv cARGjobq cARGm cARGn cARGp cARGlda cARGldb cARGldu cARGldv cARGldq cARGinfo |
-	^
-	[cARGjobu := self cCharPointerOn: jobu.
-	cARGjobv := self cCharPointerOn: jobv.
-	cARGjobq := self cCharPointerOn: jobq.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGp := self cIntegerPointerOn: p.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldu := self cIntegerPointerOn: ldu.
-	cARGldv := self cIntegerPointerOn: ldv.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xggsvdWithjobu: cARGjobu
-		jobv: cARGjobv
-		jobq: cARGjobq
-		m: cARGm
-		n: cARGn
-		p: cARGp
-		k: k
-		l: l
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		alpha: alpha
-		beta: beta
-		u: u
-		ldu: cARGldu
-		v: v
-		ldv: cARGldv
-		q: q
-		ldq: cARGldq
-		work: work
-		iwork: iwork
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0]
-			ensure: 
-				[self free: cARGjobu.
-				self free: cARGjobv.
-				self free: cARGjobq.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGp.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldu.
-				self free: cARGldv.
-				self free: cARGldq.
-				self free: cARGinfo]!
+ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work rwork: rwork iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xggsvdWithjobu: (self cCharPointerOn: jobu)		jobv: (self cCharPointerOn: jobv)		jobq: (self cCharPointerOn: jobq)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		p: (self cIntegerPointerOn: p)		k: k		l: l		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		alpha: alpha		beta: beta		u: u		ldu: (self cIntegerPointerOn: ldu)		v: v		ldv: (self cIntegerPointerOn: ldv)		q: q		ldq: (self cIntegerPointerOn: ldq)		work: work		rwork: rwork		iwork: iwork		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-ggsvdWithjobu: jobu jobv: jobv jobq: jobq m: m n: n p: p k: k l: l a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta u: u ldu: ldu v: v ldv: ldv q: q ldq: ldq work: work rwork: rwork iwork: iwork 
-	| cARGjobu cARGjobv cARGjobq cARGm cARGn cARGp cARGlda cARGldb cARGldu cARGldv cARGldq cARGinfo |
-	^
-	[cARGjobu := self cCharPointerOn: jobu.
-	cARGjobv := self cCharPointerOn: jobv.
-	cARGjobq := self cCharPointerOn: jobq.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGp := self cIntegerPointerOn: p.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldu := self cIntegerPointerOn: ldu.
-	cARGldv := self cIntegerPointerOn: ldv.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xggsvdWithjobu: cARGjobu
-		jobv: cARGjobv
-		jobq: cARGjobq
-		m: cARGm
-		n: cARGn
-		p: cARGp
-		k: k
-		l: l
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		alpha: alpha
-		beta: beta
-		u: u
-		ldu: cARGldu
-		v: v
-		ldv: cARGldv
-		q: q
-		ldq: cARGldq
-		work: work
-		rwork: rwork
-		iwork: iwork
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobu.
-				self free: cARGjobv.
-				self free: cARGjobq.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGp.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldu.
-				self free: cARGldv.
-				self free: cARGldq.
-				self free: cARGinfo]!
+heconWithuplo: uplo n: n a: a lda: lda ipiv: ipiv anorm: anorm rcond: rcond work: work 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xheconWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		anorm: (self cRealPointerOn: anorm)		rcond: rcond		work: work		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-heconWithuplo: uplo n: n a: a lda: lda ipiv: ipiv anorm: anorm rcond: rcond work: work 
-	| cARGuplo cARGn cARGlda cARGanorm cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGanorm := self cRealPointerOn: anorm.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xheconWithuplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		anorm: cARGanorm
-		rcond: rcond
-		work: work
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGanorm.
-				self free: cARGinfo]!
+heevdWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w 	"eigenvalue/vector decomposition (for real hermitian matrices)	use divide and conquer algorithm	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work rwork iwork lwork lrwork liwork |	work := self allocateElementArraySize: 1.	rwork := self allocateRealArraySize: 1.	iwork := self allocateIntegerArraySize: 1.	(self 		heevdWithjobz: jobz		uplo: uplo		n: n		a: a		lda: lda		w: w		work: work		lwork: -1		rwork: rwork		lrwork: -1		iwork: iwork		liwork: -1) = 0 		ifTrue: 			[lwork := self retrieveLengthQueryAnswerFrom: work.			lrwork := self retrieveLengthQueryAnswerFrom: rwork.			liwork := iwork getHandle signedLongAt: 1]		ifFalse: 			[lwork := 1 						max: (jobz = self doComputeVector ifTrue: [n * n + (2 * n)] ifFalse: [n + 1]).			lrwork := 1 max: (jobz = self doComputeVector 								ifTrue: [2 * n * n + (5 * n) + 1]								ifFalse: [n]).			liwork := 1 						max: (jobz = self doComputeVector ifTrue: [5 * n + 3] ifFalse: [1])].	work := self allocateElementArraySize: lwork.	rwork := self allocateRealArraySize: lrwork.	iwork := self allocateIntegerArraySize: liwork.	^self 		heevdWithjobz: jobz		uplo: uplo		n: n		a: a		lda: lda		w: w		work: work		lwork: lwork		rwork: rwork		lrwork: lrwork		iwork: iwork		liwork: liwork!
 
-heevdWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w 
-	"eigenvalue/vector decomposition (for real hermitian matrices)
-	use divide and conquer algorithm
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+heevdWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w work: work lwork: lwork rwork: rwork lrwork: lrwork iwork: iwork liwork: liwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xheevdWithjobz: (self cCharPointerOn: jobz)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		w: w		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		lrwork: (self cIntegerPointerOn: lrwork)		iwork: iwork		liwork: (self cIntegerPointerOn: liwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work rwork iwork lwork lrwork liwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	rwork := self allocateRealArraySize: 1.
-	iwork := self allocateIntegerArraySize: 1.
-	(self 
-		heevdWithjobz: jobz
-		uplo: uplo
-		n: n
-		a: a
-		lda: lda
-		w: w
-		work: work
-		lwork: -1
-		rwork: rwork
-		lrwork: -1
-		iwork: iwork
-		liwork: -1) = 0 
-		ifTrue: 
-			[lwork := self retrieveLengthQueryAnswerFrom: work.
-			lrwork := self retrieveLengthQueryAnswerFrom: rwork.
-			liwork := iwork sdwordAtOffset: 0]
-		ifFalse: 
-			[lwork := 1 
-						max: (jobz = self doComputeVector ifTrue: [n * n + (2 * n)] ifFalse: [n + 1]).
-			lrwork := 1 max: (jobz = self doComputeVector 
-								ifTrue: [2 * n * n + (5 * n) + 1]
-								ifFalse: [n]).
-			liwork := 1 
-						max: (jobz = self doComputeVector ifTrue: [5 * n + 3] ifFalse: [1])].
-	self free: work.
-	self free: rwork.
-	self free: iwork.
-	work := self allocateElementArraySize: lwork.
-	rwork := self allocateRealArraySize: lrwork.
-	iwork := self allocateIntegerArraySize: liwork.
-	self 
-		heevdWithjobz: jobz
-		uplo: uplo
-		n: n
-		a: a
-		lda: lda
-		w: w
-		work: work
-		lwork: lwork
-		rwork: rwork
-		lrwork: lrwork
-		iwork: iwork
-		liwork: liwork] 
-			ensure: 
-				[self free: work.
-				self free: rwork.
-				self free: iwork.]!
+heevrWithjobz: jobz range: range uplo: uplo n: n a: a lda: lda vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz isuppz: isuppz work: work lwork: lwork rwork: rwork iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xheevrWithjobz: (self cCharPointerOn: jobz)		range: (self cCharPointerOn: range)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		vl: (self cRealPointerOn: vl)		vu: (self cRealPointerOn: vu)		il: (self cIntegerPointerOn: il)		iu: (self cIntegerPointerOn: iu)		abstol: (self cRealPointerOn: abstol)		m: m		w: w		z: z		ldz: (self cIntegerPointerOn: ldz)		isuppz: isuppz		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		iwork: iwork		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-heevdWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w work: work lwork: lwork rwork: rwork lrwork: lrwork iwork: iwork liwork: liwork 
-	| cARGjobz cARGuplo cARGn cARGlda cARGlwork cARGlrwork cARGliwork cARGinfo |
-	^
-	[cARGjobz := self cCharPointerOn: jobz.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGlrwork := self cIntegerPointerOn: lrwork.
-	cARGliwork := self cIntegerPointerOn: liwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xheevdWithjobz: cARGjobz
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		w: w
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		lrwork: cARGlrwork
-		iwork: iwork
-		liwork: cARGliwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobz.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGlrwork.
-				self free: cARGliwork.
-				self free: cARGinfo]!
+heevWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w 	"eigenvalue/vector decomposition (for complex hermitian matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work rwork lwork |	work := self allocateElementArraySize: 1.	rwork := self allocateRealArraySize: (3 * n - 2 max: 1).	(self 		heevWithjobz: jobz		uplo: uplo		n: n		a: a		lda: lda		w: w		work: work		lwork: -1		rwork: rwork) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := 2 * n - 1 max: 1].	work := self allocateElementArraySize: lwork.	^self 		heevWithjobz: jobz		uplo: uplo		n: n		a: a		lda: lda		w: w		work: work		lwork: lwork		rwork: rwork!
 
-heevrWithjobz: jobz range: range uplo: uplo n: n a: a lda: lda vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz isuppz: isuppz work: work lwork: lwork rwork: rwork iwork: iwork 
-	| cARGjobz cARGrange cARGuplo cARGn cARGlda cARGvl cARGvu cARGil cARGiu cARGabstol cARGldz cARGlwork cARGinfo |
-	^
-	[cARGjobz := self cCharPointerOn: jobz.
-	cARGrange := self cCharPointerOn: range.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGvl := self cRealPointerOn: vl.
-	cARGvu := self cRealPointerOn: vu.
-	cARGil := self cIntegerPointerOn: il.
-	cARGiu := self cIntegerPointerOn: iu.
-	cARGabstol := self cRealPointerOn: abstol.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xheevrWithjobz: cARGjobz
-		range: cARGrange
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		vl: cARGvl
-		vu: cARGvu
-		il: cARGil
-		iu: cARGiu
-		abstol: cARGabstol
-		m: m
-		w: w
-		z: z
-		ldz: cARGldz
-		isuppz: isuppz
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		iwork: iwork
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobz.
-				self free: cARGrange.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGvl.
-				self free: cARGvu.
-				self free: cARGil.
-				self free: cARGiu.
-				self free: cARGabstol.
-				self free: cARGldz.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+heevWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w work: work lwork: lwork rwork: rwork 	"eigenvalue/vector decomposition (for complex hermitian matrices)"	| cARGjobz cARGuplo cARGn cARGlda cARGlwork cARGinfo |	cARGjobz := self cCharPointerOn: jobz.	cARGuplo := self cCharPointerOn: uplo.	cARGn := self cIntegerPointerOn: n.	cARGlda := self cIntegerPointerOn: lda.	cARGlwork := self cIntegerPointerOn: lwork.	cARGinfo := self cIntegerPointerOn: 0.	self 		xheevWithjobz: cARGjobz		uplo: cARGuplo		n: cARGn		a: a		lda: cARGlda		w: w		work: work		lwork: cARGlwork		rwork: rwork		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-heevWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w 
-	"eigenvalue/vector decomposition (for complex hermitian matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+heevxWithjobz: jobz range: range uplo: uplo n: n a: a lda: lda vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz work: work lwork: lwork rwork: rwork iwork: iwork ifail: ifail 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xheevxWithjobz: (self cCharPointerOn: jobz)		range: (self cCharPointerOn: range)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		vl: (self cRealPointerOn: vl)		vu: (self cRealPointerOn: vu)		il: (self cIntegerPointerOn: il)		iu: (self cIntegerPointerOn: iu)		abstol: (self cRealPointerOn: abstol)		m: m		w: w		z: z		ldz: (self cIntegerPointerOn: ldz)		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		iwork: iwork		ifail: ifail		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work rwork lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	rwork := self allocateRealArraySize: (3 * n - 2 max: 1).
-	(self 
-		heevWithjobz: jobz
-		uplo: uplo
-		n: n
-		a: a
-		lda: lda
-		w: w
-		work: work
-		lwork: -1
-		rwork: rwork) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := 2 * n - 1 max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		heevWithjobz: jobz
-		uplo: uplo
-		n: n
-		a: a
-		lda: lda
-		w: w
-		work: work
-		lwork: lwork
-		rwork: rwork] 
-			ensure: 
-				[self free: work.
-				self free: rwork]!
+hegvdWithitype: itype jobz: jobz uplo: uplo n: n a: a lda: lda b: b ldb: ldb w: w work: work lwork: lwork rwork: rwork lrwork: lrwork iwork: iwork liwork: liwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xhegvdWithitype: (self cIntegerPointerOn: itype)		jobz: (self cCharPointerOn: jobz)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		w: w		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		lrwork: (self cIntegerPointerOn: lrwork)		iwork: iwork		liwork: (self cIntegerPointerOn: liwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-heevWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w work: work lwork: lwork rwork: rwork 
-	"eigenvalue/vector decomposition (for complex hermitian matrices)"
+hegvWithitype: itype jobz: jobz uplo: uplo n: n a: a lda: lda b: b ldb: ldb w: w work: work lwork: lwork rwork: rwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xhegvWithitype: (self cIntegerPointerOn: itype)		jobz: (self cCharPointerOn: jobz)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		w: w		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGjobz cARGuplo cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGjobz := self cCharPointerOn: jobz.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xheevWithjobz: cARGjobz
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		w: w
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobz.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+hegvxWithitype: itype jobz: jobz range: range uplo: uplo n: n a: a lda: lda b: b ldb: ldb vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz work: work lwork: lwork rwork: rwork iwork: iwork ifail: ifail 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xhegvxWithitype: (self cIntegerPointerOn: itype)		jobz: (self cCharPointerOn: jobz)		range: (self cCharPointerOn: range)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		vl: (self cRealPointerOn: vl)		vu: (self cRealPointerOn: vu)		il: (self cIntegerPointerOn: il)		iu: (self cIntegerPointerOn: iu)		abstol: (self cRealPointerOn: abstol)		m: m		w: w		z: z		ldz: (self cIntegerPointerOn: ldz)		work: work		lwork: (self cIntegerPointerOn: lwork)		rwork: rwork		iwork: iwork		ifail: ifail		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-heevxWithjobz: jobz range: range uplo: uplo n: n a: a lda: lda vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz work: work lwork: lwork rwork: rwork iwork: iwork ifail: ifail 
-	| cARGjobz cARGrange cARGuplo cARGn cARGlda cARGvl cARGvu cARGil cARGiu cARGabstol cARGldz cARGlwork cARGinfo |
-	^
-	[cARGjobz := self cCharPointerOn: jobz.
-	cARGrange := self cCharPointerOn: range.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGvl := self cRealPointerOn: vl.
-	cARGvu := self cRealPointerOn: vu.
-	cARGil := self cIntegerPointerOn: il.
-	cARGiu := self cIntegerPointerOn: iu.
-	cARGabstol := self cRealPointerOn: abstol.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xheevxWithjobz: cARGjobz
-		range: cARGrange
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		vl: cARGvl
-		vu: cARGvu
-		il: cARGil
-		iu: cARGiu
-		abstol: cARGabstol
-		m: m
-		w: w
-		z: z
-		ldz: cARGldz
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		iwork: iwork
-		ifail: ifail
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobz.
-				self free: cARGrange.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGvl.
-				self free: cARGvu.
-				self free: cARGil.
-				self free: cARGiu.
-				self free: cARGabstol.
-				self free: cARGldz.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+hesvWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb 	"Solve x such that A*x = B with A hermitian	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		hesvWithuplo: uplo		n: n		nrhs: nrhs		a: a		lda: lda		ipiv: ipiv		b: b		ldb: ldb		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := n * n].	work := self allocateElementArraySize: lwork.	^self 		hesvWithuplo: uplo		n: n		nrhs: nrhs		a: a		lda: lda		ipiv: ipiv		b: b		ldb: ldb		work: work		lwork: lwork!
 
-hegvdWithitype: itype jobz: jobz uplo: uplo n: n a: a lda: lda b: b ldb: ldb w: w work: work lwork: lwork rwork: rwork lrwork: lrwork iwork: iwork liwork: liwork 
-	| cARGitype cARGjobz cARGuplo cARGn cARGlda cARGldb cARGlwork cARGlrwork cARGliwork cARGinfo |
-	^
-	[cARGitype := self cIntegerPointerOn: itype.
-	cARGjobz := self cCharPointerOn: jobz.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGlrwork := self cIntegerPointerOn: lrwork.
-	cARGliwork := self cIntegerPointerOn: liwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xhegvdWithitype: cARGitype
-		jobz: cARGjobz
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		w: w
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		lrwork: cARGlrwork
-		iwork: iwork
-		liwork: cARGliwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGitype.
-				self free: cARGjobz.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGlrwork.
-				self free: cARGliwork.
-				self free: cARGinfo]!
+hesvWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb work: work lwork: lwork 	"find x such that a*x=b, that is solve a linear system of equations	on return:		x is stored in b on return		a contains L and U of P*L*U decomposition (diagonal 1 of L not included)		ipiv contains permutations of rows P of P*L*U decomposition	return:		info contains error code is not 0"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xhesvWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		b: b		ldb: (self cIntegerPointerOn: ldb)		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-hegvWithitype: itype jobz: jobz uplo: uplo n: n a: a lda: lda b: b ldb: ldb w: w work: work lwork: lwork rwork: rwork 
-	| cARGitype cARGjobz cARGuplo cARGn cARGlda cARGldb cARGlwork cARGinfo |
-	^
-	[cARGitype := self cIntegerPointerOn: itype.
-	cARGjobz := self cCharPointerOn: jobz.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xhegvWithitype: cARGitype
-		jobz: cARGjobz
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		w: w
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGitype.
-				self free: cARGjobz.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+hetrfWithuplo: uplo n: n a: a lda: lda ipiv: ipiv 	"P*L*U decomposition of a hermitian matrix	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		hetrfWithuplo: uplo		n: n		a: a		lda: lda		ipiv: ipiv		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := n * n].	work := self allocateElementArraySize: lwork.	^self 		hetrfWithuplo: uplo		n: n		a: a		lda: lda		ipiv: ipiv		work: work		lwork: lwork!
 
-hegvxWithitype: itype jobz: jobz range: range uplo: uplo n: n a: a lda: lda b: b ldb: ldb vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz work: work lwork: lwork rwork: rwork iwork: iwork ifail: ifail 
-	| cARGitype cARGjobz cARGrange cARGuplo cARGn cARGlda cARGldb cARGvl cARGvu cARGil cARGiu cARGabstol cARGldz cARGlwork cARGinfo |
-	^
-	[cARGitype := self cIntegerPointerOn: itype.
-	cARGjobz := self cCharPointerOn: jobz.
-	cARGrange := self cCharPointerOn: range.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGvl := self cRealPointerOn: vl.
-	cARGvu := self cRealPointerOn: vu.
-	cARGil := self cIntegerPointerOn: il.
-	cARGiu := self cIntegerPointerOn: iu.
-	cARGabstol := self cRealPointerOn: abstol.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xhegvxWithitype: cARGitype
-		jobz: cARGjobz
-		range: cARGrange
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		vl: cARGvl
-		vu: cARGvu
-		il: cARGil
-		iu: cARGiu
-		abstol: cARGabstol
-		m: m
-		w: w
-		z: z
-		ldz: cARGldz
-		work: work
-		lwork: cARGlwork
-		rwork: rwork
-		iwork: iwork
-		ifail: ifail
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGitype.
-				self free: cARGjobz.
-				self free: cARGrange.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGvl.
-				self free: cARGvu.
-				self free: cARGil.
-				self free: cARGiu.
-				self free: cARGabstol.
-				self free: cARGldz.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+hetrfWithuplo: uplo n: n a: a lda: lda ipiv: ipiv work: work lwork: lwork 	"P*L*U decomposition of a hermitian matrix	return 0 if OK"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xhetrfWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-hesvWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb 
-	"Solve x such that A*x = B with A hermitian
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+hetriWithuplo: uplo n: n a: a lda: lda ipiv: ipiv 	"inverse of a hermitian matrix"	| work |	work := self allocateElementArraySize: n.	^self 		hetriWithuplo: uplo		n: n		a: a		lda: lda		ipiv: ipiv		work: work!
 
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		hesvWithuplo: uplo
-		n: n
-		nrhs: nrhs
-		a: a
-		lda: lda
-		ipiv: ipiv
-		b: b
-		ldb: ldb
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := n * n].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		hesvWithuplo: uplo
-		n: n
-		nrhs: nrhs
-		a: a
-		lda: lda
-		ipiv: ipiv
-		b: b
-		ldb: ldb
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
+hetriWithuplo: uplo n: n a: a lda: lda ipiv: ipiv work: work 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xhetriWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		work: work		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-hesvWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb work: work lwork: lwork 
-	"find x such that a*x=b, that is solve a linear system of equations
-	on return:
-		x is stored in b on return
-		a contains L and U of P*L*U decomposition (diagonal 1 of L not included)
-		ipiv contains permutations of rows P of P*L*U decomposition
-	return:
-		info contains error code is not 0"
+hetrsWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xhetrsWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		b: b		ldb: (self cIntegerPointerOn: ldb)		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGuplo cARGn cARGnrhs cARGlda cARGldb cARGlwork cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xhesvWithuplo: cARGuplo
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		b: b
-		ldb: cARGldb
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-hetrfWithuplo: uplo n: n a: a lda: lda ipiv: ipiv 
-	"P*L*U decomposition of a hermitian matrix
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
-
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		hetrfWithuplo: uplo
-		n: n
-		a: a
-		lda: lda
-		ipiv: ipiv
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := n * n].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		hetrfWithuplo: uplo
-		n: n
-		a: a
-		lda: lda
-		ipiv: ipiv
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
-
-hetrfWithuplo: uplo n: n a: a lda: lda ipiv: ipiv work: work lwork: lwork 
-	"P*L*U decomposition of a hermitian matrix
-	return 0 if OK"
-
-	| cARGuplo cARGn cARGlda cARGinfo cARGlwork |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xhetrfWithuplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-hetriWithuplo: uplo n: n a: a lda: lda ipiv: ipiv 
-	"inverse of a hermitian matrix"
-
-	| work |
-	^
-	[work := self allocateElementArraySize: n.
-	self 
-		hetriWithuplo: uplo
-		n: n
-		a: a
-		lda: lda
-		ipiv: ipiv
-		work: work] 
-			ensure: [self free: work]!
-
-hetriWithuplo: uplo n: n a: a lda: lda ipiv: ipiv work: work 
-	| cARGuplo cARGn cARGlda cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xhetriWithuplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		work: work
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGinfo]!
-
-hetrsWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb 
-	| cARGuplo cARGn cARGnrhs cARGlda cARGldb cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xhetrsWithuplo: cARGuplo
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		b: b
-		ldb: cARGldb
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGinfo]!
-
-ilaenvWithispec: ispec name: name opts: opts n1: n1 n2: n2 n3: n3 n4: n4 
-	"retrieve needed workspace dimensions for some problems"
-
-	| cARGispec cARGname cARGopts cARGn1 cARGn2 cARGn3 cARGn4 |
-	^
-	[cARGispec := self cIntegerPointerOn: ispec.
-	cARGn1 := self cIntegerPointerOn: n1.
-	cARGn2 := self cIntegerPointerOn: n2.
-	cARGn3 := self cIntegerPointerOn: n3.
-	cARGn4 := self cIntegerPointerOn: n4.
-	cARGname := name copyToHeap.
-	cARGopts := opts copyToHeap.
-	self 
-		ilaenvWithispec: ispec
-		name: name
-		opts: opts
-		n1: n1
-		n2: n2
-		n3: n3
-		n4: n4
-		length: name size
-		length: opts size] 
-			ensure: 
-				[self free: cARGispec.
-				self free: cARGn1.
-				self free: cARGn2.
-				self free: cARGn3.
-				self free: cARGn4.
-				self free: cARGname.
-				self free: cARGopts]!
+ilaenvWithispec: ispec name: name opts: opts n1: n1 n2: n2 n3: n3 n4: n4 	"retrieve needed workspace dimensions for some problems"	| cARGispec cARGname cARGopts cARGn1 cARGn2 cARGn3 cARGn4 |	cARGispec := self cIntegerPointerOn: ispec.	cARGn1 := self cIntegerPointerOn: n1.	cARGn2 := self cIntegerPointerOn: n2.	cARGn3 := self cIntegerPointerOn: n3.	cARGn4 := self cIntegerPointerOn: n4.	cARGname := name copyToHeap.	cARGopts := opts copyToHeap.	^self 		ilaenvWithispec: cARGispec		name: cARGname		opts: cARGopts		n1: cARGn1		n2: cARGn2		n3: cARGn3		n4: cARGn4		length: name size		length: opts size!
 
 ilaenvWithispec: ispec name: name opts: opts n1: n1 n2: n2 n3: n3 n4: n4 length: lengthOfname length: lengthOfopts 
 	"
@@ -3855,280 +822,31 @@ isSinglePrecision	^self isDoublePrecision not!
 
 ithEigenValuesInterval	^$I!
 
-lacgvWithn: n x: x incx: incx 
-	"conjugate a vector"
+lacgvWithn: n x: x incx: incx 	"conjugate a vector"	^self 		xlacgvWithn: (self cIntegerPointerOn: n)		x: x		incx: (self cIntegerPointerOn: incx)!
 
-	| cARGn cARGincx |
-	^
-	[cARGn := self cIntegerPointerOn: n.
-	cARGincx := self cIntegerPointerOn: incx.
-	self 
-		xlacgvWithn: cARGn
-		x: x
-		incx: cARGincx] 
-			ensure: 
-				[self free: cARGn.
-				self free: cARGincx]!
+lacpyWithuplo: uplo m: m n: n a: a lda: lda b: b ldb: ldb 	"copy a into b"	^self		xlacpyWithuplo: (self cCharPointerOn: uplo)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		length: 1!
 
-lacpyWithuplo: uplo m: m n: n a: a lda: lda b: b ldb: ldb 
-	"copy a into b"
+lamch: code 	"extract single precision machine parameters	.	'E' or 'e',   DLAMCH := eps	.	'S' or 's ,   DLAMCH := sfmin	.	'B' or 'b',   DLAMCH := base	.	'P' or 'p',   DLAMCH := eps*base	.	'N' or 'n',   DLAMCH := t	.	'R' or 'r',   DLAMCH := rnd	.	'M' or 'm',   DLAMCH := emin	.	'U' or 'u',   DLAMCH := rmin	.	'L' or 'l',   DLAMCH := emax	.	'O' or 'o',   DLAMCH := rmax	where	.	eps   = relative machine precision	.	sfmin = safe minimum, such that 1/sfmin does not overflow	.	base  = base of the machine	.	prec  = eps*base	.	t     = number of (base) digits in the mantissa	.	rnd   = 1.0 when rounding occurs in addition, 0.0 otherwise	.	emin  = minimum exponent before (gradual) underflow	.	rmin  = underflow threshold - base**(emin-1)	.	emax  = largest exponent before overflow	.	rmax  = overflow threshold  - (base**emax)*(1-eps)"	| cmach |	cmach := self cCharPointerOn: code.	^self isDoublePrecision 		ifTrue: [self dlamch: cmach length: 1]		ifFalse: [self slamch: cmach length: 1]!
 
-	| cARGuplo cARGm cARGn cARGlda cARGldb |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGuplo := self cCharPointerOn: uplo.
-	self 
-		xlacpyWithuplo: cARGuplo
-		m: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		length: 1] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGuplo]!
+langeWithnorm: norm m: m n: n a: a lda: lda 	"compute norm of a general matrix or vector"	| work |	work := self allocateRealArraySize: m.	^self 		langeWithnorm: norm		m: m		n: n		a: a		lda: lda		work: work!
 
-lamch: code 
-	"extract single precision machine parameters
-	.	'E' or 'e',   DLAMCH := eps
-	.	'S' or 's ,   DLAMCH := sfmin
-	.	'B' or 'b',   DLAMCH := base
-	.	'P' or 'p',   DLAMCH := eps*base
-	.	'N' or 'n',   DLAMCH := t
-	.	'R' or 'r',   DLAMCH := rnd
-	.	'M' or 'm',   DLAMCH := emin
-	.	'U' or 'u',   DLAMCH := rmin
-	.	'L' or 'l',   DLAMCH := emax
-	.	'O' or 'o',   DLAMCH := rmax
-	where
-	.	eps   = relative machine precision
-	.	sfmin = safe minimum, such that 1/sfmin does not overflow
-	.	base  = base of the machine
-	.	prec  = eps*base
-	.	t     = number of (base) digits in the mantissa
-	.	rnd   = 1.0 when rounding occurs in addition, 0.0 otherwise
-	.	emin  = minimum exponent before (gradual) underflow
-	.	rmin  = underflow threshold - base**(emin-1)
-	.	emax  = largest exponent before overflow
-	.	rmax  = overflow threshold  - (base**emax)*(1-eps)"
+langeWithnorm: norm m: m n: n a: a lda: lda work: work 	"compute norm of a general matrix or vector"	^self		xlangeWithnorm: (self cCharPointerOn: norm)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		work: work		length: 1!
 
-	| cmach |
-	^
-	[cmach := self cCharPointerOn: code.
-	self isDoublePrecision 
-		ifTrue: [self dlamch: cmach length: 1]
-		ifFalse: [self slamch: cmach length: 1]] 
-			ensure: [self free: cmach]!
+lanheWithnorm: norm uplo: uplo n: n a: a lda: lda 	"compute norm of a hermitian matrix"	| work |	work := self allocateElementArraySize: n.	^self 		lanheWithnorm: norm		uplo: uplo		n: n		a: a		lda: lda		work: work!
 
-langeWithnorm: norm m: m n: n a: a lda: lda 
-	"compute norm of a general matrix or vector"
+lanheWithnorm: norm uplo: uplo n: n a: a lda: lda work: work 	^self		xlanheWithnorm: (self cCharPointerOn: norm)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		work: work		length: 1		length: 1!
 
-	| work |
-	^
-	[work := self allocateRealArraySize: m.
-	self 
-		langeWithnorm: norm
-		m: m
-		n: n
-		a: a
-		lda: lda
-		work: work] 
-			ensure: [self free: work]!
+lansyWithnorm: norm uplo: uplo n: n a: a lda: lda 	"compute norm of a symmetric matrix"	| work |	work := self allocateElementArraySize: n.	^self 		lansyWithnorm: norm		uplo: uplo		n: n		a: a		lda: lda		work: work!
 
-langeWithnorm: norm m: m n: n a: a lda: lda work: work 
-	"compute norm of a general matrix or vector"
+lansyWithnorm: norm uplo: uplo n: n a: a lda: lda work: work 	^self		xlansyWithnorm: (self cCharPointerOn: norm)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		work: work		length: 1		length: 1!
 
-	| cARGnorm cARGm cARGn cARGlda |
-	^
-	[cARGnorm := self cCharPointerOn: norm.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	self 
-		xlangeWithnorm: cARGnorm
-		m: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		work: work
-		length: 1] 
-			ensure: 
-				[self free: cARGnorm.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda]!
+lantrWithnorm: norm uplo: uplo diag: diag m: m n: n a: a lda: lda 	"compute norm of a triangular matrix"	| work |	work := self allocateElementArraySize: n.	^self 		lantrWithnorm: norm		uplo: uplo		diag: diag		m: m		n: n		a: a		lda: lda		work: work!
 
-lanheWithnorm: norm uplo: uplo n: n a: a lda: lda 
-	"compute norm of a hermitian matrix"
+lantrWithnorm: norm uplo: uplo diag: diag m: m n: n a: a lda: lda work: work 	^self		xlantrWithnorm: (self cCharPointerOn: norm)		uplo: (self cCharPointerOn: uplo)		diag: (self cCharPointerOn: diag)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		work: work		length: 1		length: 1		length: 1!
 
-	| work |
-	^
-	[work := self allocateElementArraySize: n.
-	self 
-		lanheWithnorm: norm
-		uplo: uplo
-		n: n
-		a: a
-		lda: lda
-		work: work] 
-			ensure: [self free: work]!
+larnvWithidist: idist iseed: iseed n: n x: x 	"fill x with random numbers"	^self		xlarnvWithidist: (self cIntegerPointerOn: idist)		iseed: iseed		n: (self cIntegerPointerOn: n)		x: x!
 
-lanheWithnorm: norm uplo: uplo n: n a: a lda: lda work: work 
-	| cARGnorm cARGuplo cARGn cARGlda |
-	^
-	[cARGnorm := self cCharPointerOn: norm.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	self 
-		xlanheWithnorm: cARGnorm
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		work: work
-		length: 1
-		length: 1] 
-			ensure: 
-				[self free: cARGnorm.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda]!
-
-lansyWithnorm: norm uplo: uplo n: n a: a lda: lda 
-	"compute norm of a symmetric matrix"
-
-	| work |
-	^
-	[work := self allocateElementArraySize: n.
-	self 
-		lansyWithnorm: norm
-		uplo: uplo
-		n: n
-		a: a
-		lda: lda
-		work: work] 
-			ensure: [self free: work]!
-
-lansyWithnorm: norm uplo: uplo n: n a: a lda: lda work: work 
-	| cARGnorm cARGuplo cARGn cARGlda |
-	^
-	[cARGnorm := self cCharPointerOn: norm.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	self 
-		xlansyWithnorm: cARGnorm
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		work: work
-		length: 1
-		length: 1] 
-			ensure: 
-				[self free: cARGnorm.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda]!
-
-lantrWithnorm: norm uplo: uplo diag: diag m: m n: n a: a lda: lda 
-	"compute norm of a triangular matrix"
-
-	| work |
-	^
-	[work := self allocateElementArraySize: n.
-	self 
-		lantrWithnorm: norm
-		uplo: uplo
-		diag: diag
-		m: m
-		n: n
-		a: a
-		lda: lda
-		work: work] 
-			ensure: [self free: work]!
-
-lantrWithnorm: norm uplo: uplo diag: diag m: m n: n a: a lda: lda work: work 
-	| cARGnorm cARGuplo cARGdiag cARGm cARGn cARGlda |
-	^
-	[cARGnorm := self cCharPointerOn: norm.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGdiag := self cCharPointerOn: diag.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	self 
-		xlantrWithnorm: cARGnorm
-		uplo: cARGuplo
-		diag: cARGdiag
-		m: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		work: work
-		length: 1
-		length: 1
-		length: 1] 
-			ensure: 
-				[self free: cARGnorm.
-				self free: cARGuplo.
-				self free: cARGdiag.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda]!
-
-larnvWithidist: idist iseed: iseed n: n x: x 
-	"fill x with random numbers"
-
-	| cARGidist cARGn |
-	^
-	[cARGidist := self cIntegerPointerOn: idist.
-	cARGn := self cIntegerPointerOn: n.
-	self 
-		xlarnvWithidist: cARGidist
-		iseed: iseed
-		n: cARGn
-		x: x] 
-			ensure: 
-				[self free: cARGidist.
-				self free: cARGn]!
-
-lasetWithuplo: uplo m: m n: n alpha: alpha beta: beta a: a lda: lda 
-	"set alpha off diagonal, beta on diagonal"
-
-	| cARGuplo cARGm cARGn cARGlda cARGalpha cARGbeta |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGalpha := self cElementPointerOn: alpha.
-	cARGbeta := self cElementPointerOn: beta.
-	cARGuplo := self cCharPointerOn: uplo.
-	self 
-		xlasetWithuplo: cARGuplo
-		m: cARGm
-		n: cARGn
-		alpha: cARGalpha
-		beta: cARGbeta
-		a: a
-		lda: cARGlda
-		length: 1] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGalpha.
-				self free: cARGbeta.
-				self free: cARGuplo]!
+lasetWithuplo: uplo m: m n: n alpha: alpha beta: beta a: a lda: lda 	"set alpha off diagonal, beta on diagonal"	^self		xlasetWithuplo: (self cCharPointerOn: uplo)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		alpha: (self cElementPointerOn: alpha)		beta: (self cElementPointerOn: beta)		a: a		lda: (self cIntegerPointerOn: lda)		length: 1!
 
 lower	^$L!
 
@@ -4148,210 +866,19 @@ noSingularVector	^$N!
 
 notTransposed	^$N!
 
-orghrWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau 
-	"generate orthonormal matrix
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+orghrWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau 	"generate orthonormal matrix	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		orghrWithn: n		ilo: ilo		ihi: ihi		a: a		lda: lda		tau: tau		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := (ihi getHandle signedLongAt: 1) - (ilo getHandle signedLongAt: 1) max: 1].	work := self allocateElementArraySize: lwork.	^self 		orghrWithn: n		ilo: ilo		ihi: ihi		a: a		lda: lda		tau: tau		work: work		lwork: lwork!
 
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		orghrWithn: n
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := (ihi sdwordAtOffset: 0) - (ilo sdwordAtOffset: 0) max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		orghrWithn: n
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
+orghrWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau work: work lwork: lwork 	"build orthonormal matrix	ilo and ihi must be allocated outside"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xorghrWithn: (self cIntegerPointerOn: n)		ilo: ilo		ihi: ihi		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-orghrWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau work: work lwork: lwork 
-	"build orthonormal matrix
-	ilo and ihi must be allocated outside"
+orglqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xorglqWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		k: (self cIntegerPointerOn: k)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xorghrWithn: cARGn
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+orgqlWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xorgqlWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		k: (self cIntegerPointerOn: k)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-orglqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 
-	| cARGm cARGn cARGk cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGk := self cIntegerPointerOn: k.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xorglqWithm: cARGm
-		n: cARGn
-		k: cARGk
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGk.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+orgqrWithm: m n: n k: k a: a lda: lda tau: tau 	"generate orthonormal matrix	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		orgqrWithm: m		n: n		k: k		a: a		lda: lda		tau: tau		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := n max: 1].	work := self allocateElementArraySize: lwork.	^self 		orgqrWithm: m		n: n		k: k		a: a		lda: lda		tau: tau		work: work		lwork: lwork!
 
-orgqlWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 
-	| cARGm cARGn cARGk cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGk := self cIntegerPointerOn: k.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xorgqlWithm: cARGm
-		n: cARGn
-		k: cARGk
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGk.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+orgqrWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 	"build orthonormal matrix"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xorgqrWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		k: (self cIntegerPointerOn: k)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-orgqrWithm: m n: n k: k a: a lda: lda tau: tau 
-	"generate orthonormal matrix
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
-
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		orgqrWithm: m
-		n: n
-		k: k
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := n max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		orgqrWithm: m
-		n: n
-		k: k
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
-
-orgqrWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 
-	"build orthonormal matrix"
-
-	| cARGm cARGn cARGk cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGk := self cIntegerPointerOn: k.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xorgqrWithm: cARGm
-		n: cARGn
-		k: cARGk
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGk.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-orgrqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 
-	| cARGm cARGn cARGk cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGk := self cIntegerPointerOn: k.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xorgrqWithm: cARGm
-		n: cARGn
-		k: cARGk
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGk.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+orgrqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xorgrqWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		k: (self cIntegerPointerOn: k)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
 retrieveLengthQueryAnswerFrom: workPointer 
 	"After a length query (setting LWORK=-1 as LAPACK 3.0 argument),
@@ -4455,1372 +982,85 @@ slamch: cmach length: lcmach
 someSingularVector
 	^$S!
 
-syconWithuplo: uplo n: n a: a lda: lda ipiv: ipiv anorm: anorm rcond: rcond work: work 
-	| cARGuplo cARGn cARGlda cARGanorm cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGanorm := self cRealPointerOn: anorm.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsyconWithuplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		anorm: cARGanorm
-		rcond: rcond
-		work: work
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGanorm.
-				self free: cARGinfo]!
+syconWithuplo: uplo n: n a: a lda: lda ipiv: ipiv anorm: anorm rcond: rcond work: work 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsyconWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		anorm: (self cRealPointerOn: anorm)		rcond: rcond		work: work		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-syconWithuplo: uplo n: n a: a lda: lda ipiv: ipiv anorm: anorm rcond: rcond work: work iwork: iwork 
-	| cARGuplo cARGn cARGlda cARGanorm cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGanorm := self cElementPointerOn: anorm.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsyconWithuplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		anorm: cARGanorm
-		rcond: rcond
-		work: work
-		iwork: iwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGanorm.
-				self free: cARGinfo]!
+syconWithuplo: uplo n: n a: a lda: lda ipiv: ipiv anorm: anorm rcond: rcond work: work iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsyconWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		anorm: (self cElementPointerOn: anorm)		rcond: rcond		work: work		iwork: iwork		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-syevdWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w 
-	"eigenvalue/vector decomposition (for real symmetric matrices)
-	use divide and conquer algorithm
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+syevdWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w 	"eigenvalue/vector decomposition (for real symmetric matrices)	use divide and conquer algorithm	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work iwork lwork liwork |	work := self allocateElementArraySize: 1.	iwork := self allocateIntegerArraySize: 1.	(self 		syevdWithjobz: jobz		uplo: uplo		n: n		a: a		lda: lda		w: w		work: work		lwork: -1		iwork: iwork		liwork: -1) = 0 		ifTrue: 			[lwork := self retrieveLengthQueryAnswerFrom: work.			liwork := iwork getHandle signedLongAt: 1]		ifFalse: 			[lwork := 1 max: (jobz = self doComputeVector 								ifTrue: [2 * n * n + (6 * n) + 1]								ifFalse: [2 * n + 1]).			liwork := 1 max: (jobz = self doComputeVector ifTrue: [5 * n + 3] ifFalse: [1])].	work := self allocateElementArraySize: lwork.	iwork := self allocateIntegerArraySize: liwork.	^self 		syevdWithjobz: jobz		uplo: uplo		n: n		a: a		lda: lda		w: w		work: work		lwork: lwork		iwork: iwork		liwork: liwork!
 
-	| work iwork lwork liwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	iwork := self allocateIntegerArraySize: 1.
-	(self 
-		syevdWithjobz: jobz
-		uplo: uplo
-		n: n
-		a: a
-		lda: lda
-		w: w
-		work: work
-		lwork: -1
-		iwork: iwork
-		liwork: -1) = 0 
-		ifTrue: 
-			[lwork := self retrieveLengthQueryAnswerFrom: work.
-			liwork := iwork sdwordAtOffset: 0]
-		ifFalse: 
-			[lwork := 1 max: (jobz = self doComputeVector 
-								ifTrue: [2 * n * n + (6 * n) + 1]
-								ifFalse: [2 * n + 1]).
-			liwork := 1 max: (jobz = self doComputeVector ifTrue: [5 * n + 3] ifFalse: [1])].
-	self free: work.
-	self free: iwork.
-	work := self allocateElementArraySize: lwork.
-	iwork := self allocateIntegerArraySize: liwork.
-	self 
-		syevdWithjobz: jobz
-		uplo: uplo
-		n: n
-		a: a
-		lda: lda
-		w: w
-		work: work
-		lwork: lwork
-		iwork: iwork
-		liwork: liwork] 
-			ensure: 
-				[self free: work.
-				self free: iwork]!
+syevdWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w work: work lwork: lwork iwork: iwork liwork: liwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsyevdWithjobz: (self cCharPointerOn: jobz)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		w: w		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		liwork: (self cIntegerPointerOn: liwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-syevdWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w work: work lwork: lwork iwork: iwork liwork: liwork 
-	| cARGjobz cARGuplo cARGn cARGlda cARGlwork cARGliwork cARGinfo |
-	^
-	[cARGjobz := self cCharPointerOn: jobz.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGliwork := self cIntegerPointerOn: liwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsyevdWithjobz: cARGjobz
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		w: w
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		liwork: cARGliwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobz.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGliwork.
-				self free: cARGinfo]!
+syevrWithjobz: jobz range: range uplo: uplo n: n a: a lda: lda vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz isuppz: isuppz work: work lwork: lwork iwork: iwork liwork: liwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsyevrWithjobz: (self cCharPointerOn: jobz)		range: (self cCharPointerOn: range)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		vl: (self cElementPointerOn: vl)		vu: (self cElementPointerOn: vu)		il: (self cIntegerPointerOn: il)		iu: (self cIntegerPointerOn: iu)		abstol: (self cElementPointerOn: abstol)		m: m		w: w		z: z		ldz: (self cIntegerPointerOn: ldz)		isuppz: isuppz		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		liwork: (self cIntegerPointerOn: liwork)		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-syevrWithjobz: jobz range: range uplo: uplo n: n a: a lda: lda vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz isuppz: isuppz work: work lwork: lwork iwork: iwork liwork: liwork 
-	| cARGjobz cARGrange cARGuplo cARGn cARGlda cARGvl cARGvu cARGil cARGiu cARGabstol cARGldz cARGlwork cARGliwork cARGinfo |
-	^
-	[cARGjobz := self cCharPointerOn: jobz.
-	cARGrange := self cCharPointerOn: range.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGvl := self cElementPointerOn: vl.
-	cARGvu := self cElementPointerOn: vu.
-	cARGil := self cIntegerPointerOn: il.
-	cARGiu := self cIntegerPointerOn: iu.
-	cARGabstol := self cElementPointerOn: abstol.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGliwork := self cIntegerPointerOn: liwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsyevrWithjobz: cARGjobz
-		range: cARGrange
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		vl: cARGvl
-		vu: cARGvu
-		il: cARGil
-		iu: cARGiu
-		abstol: cARGabstol
-		m: m
-		w: w
-		z: z
-		ldz: cARGldz
-		isuppz: isuppz
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		liwork: cARGliwork
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobz.
-				self free: cARGrange.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGvl.
-				self free: cARGvu.
-				self free: cARGil.
-				self free: cARGiu.
-				self free: cARGabstol.
-				self free: cARGldz.
-				self free: cARGlwork.
-				self free: cARGliwork.
-				self free: cARGinfo]!
+syevWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w 	"eigenvalue/vector decomposition (for real symmetric matrices)	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		syevWithjobz: jobz		uplo: uplo		n: n		a: a		lda: lda		w: w		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := 3 * n - 1 max: 1].	work := self allocateElementArraySize: lwork.	^self 		syevWithjobz: jobz		uplo: uplo		n: n		a: a		lda: lda		w: w		work: work		lwork: lwork!
 
-syevWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w 
-	"eigenvalue/vector decomposition (for real symmetric matrices)
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+syevWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w work: work lwork: lwork 	"eigenvalue/vector decomposition (for real symmetric matrices)"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsyevWithjobz: (self cCharPointerOn: jobz)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		w: w		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		syevWithjobz: jobz
-		uplo: uplo
-		n: n
-		a: a
-		lda: lda
-		w: w
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := 3 * n - 1 max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		syevWithjobz: jobz
-		uplo: uplo
-		n: n
-		a: a
-		lda: lda
-		w: w
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
+syevxWithjobz: jobz range: range uplo: uplo n: n a: a lda: lda vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz work: work lwork: lwork iwork: iwork ifail: ifail 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsyevxWithjobz: (self cCharPointerOn: jobz)		range: (self cCharPointerOn: range)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		vl: (self cElementPointerOn: vl)		vu: (self cElementPointerOn: vu)		il: (self cIntegerPointerOn: il)		iu: (self cIntegerPointerOn: iu)		abstol: (self cElementPointerOn: abstol)		m: m		w: w		z: z		ldz: (self cIntegerPointerOn: ldz)		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		ifail: ifail		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-syevWithjobz: jobz uplo: uplo n: n a: a lda: lda w: w work: work lwork: lwork 
-	"eigenvalue/vector decomposition (for real symmetric matrices)"
+sygvdWithitype: itype jobz: jobz uplo: uplo n: n a: a lda: lda b: b ldb: ldb w: w work: work lwork: lwork iwork: iwork liwork: liwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsygvdWithitype: (self cIntegerPointerOn: itype)		jobz: (self cCharPointerOn: jobz)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		w: w		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		liwork: (self cIntegerPointerOn: liwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGjobz cARGuplo cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGjobz := self cCharPointerOn: jobz.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsyevWithjobz: cARGjobz
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		w: w
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobz.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+sygvWithitype: itype jobz: jobz uplo: uplo n: n a: a lda: lda b: b ldb: ldb w: w work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsygvWithitype: (self cIntegerPointerOn: itype)		jobz: (self cCharPointerOn: jobz)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		w: w		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-syevxWithjobz: jobz range: range uplo: uplo n: n a: a lda: lda vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz work: work lwork: lwork iwork: iwork ifail: ifail 
-	| cARGjobz cARGrange cARGuplo cARGn cARGlda cARGvl cARGvu cARGil cARGiu cARGabstol cARGldz cARGlwork cARGinfo |
-	^
-	[cARGjobz := self cCharPointerOn: jobz.
-	cARGrange := self cCharPointerOn: range.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGvl := self cElementPointerOn: vl.
-	cARGvu := self cElementPointerOn: vu.
-	cARGil := self cIntegerPointerOn: il.
-	cARGiu := self cIntegerPointerOn: iu.
-	cARGabstol := self cElementPointerOn: abstol.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsyevxWithjobz: cARGjobz
-		range: cARGrange
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		vl: cARGvl
-		vu: cARGvu
-		il: cARGil
-		iu: cARGiu
-		abstol: cARGabstol
-		m: m
-		w: w
-		z: z
-		ldz: cARGldz
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		ifail: ifail
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjobz.
-				self free: cARGrange.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGvl.
-				self free: cARGvu.
-				self free: cARGil.
-				self free: cARGiu.
-				self free: cARGabstol.
-				self free: cARGldz.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+sygvxWithitype: itype jobz: jobz range: range uplo: uplo n: n a: a lda: lda b: b ldb: ldb vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz work: work lwork: lwork iwork: iwork ifail: ifail 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsygvxWithitype: (self cIntegerPointerOn: itype)		jobz: (self cCharPointerOn: jobz)		range: (self cCharPointerOn: range)		uplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		vl: (self cElementPointerOn: vl)		vu: (self cElementPointerOn: vu)		il: (self cIntegerPointerOn: il)		iu: (self cIntegerPointerOn: iu)		abstol: (self cElementPointerOn: abstol)		m: m		w: w		z: z		ldz: (self cIntegerPointerOn: ldz)		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		ifail: ifail		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-sygvdWithitype: itype jobz: jobz uplo: uplo n: n a: a lda: lda b: b ldb: ldb w: w work: work lwork: lwork iwork: iwork liwork: liwork 
-	| cARGitype cARGjobz cARGuplo cARGn cARGlda cARGldb cARGlwork cARGliwork cARGinfo |
-	^
-	[cARGitype := self cIntegerPointerOn: itype.
-	cARGjobz := self cCharPointerOn: jobz.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGliwork := self cIntegerPointerOn: liwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsygvdWithitype: cARGitype
-		jobz: cARGjobz
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		w: w
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		liwork: cARGliwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGitype.
-				self free: cARGjobz.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGliwork.
-				self free: cARGinfo]!
+sysvWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsysvWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		b: b		ldb: (self cIntegerPointerOn: ldb)		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-sygvWithitype: itype jobz: jobz uplo: uplo n: n a: a lda: lda b: b ldb: ldb w: w work: work lwork: lwork 
-	| cARGitype cARGjobz cARGuplo cARGn cARGlda cARGldb cARGlwork cARGinfo |
-	^
-	[cARGitype := self cIntegerPointerOn: itype.
-	cARGjobz := self cCharPointerOn: jobz.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsygvWithitype: cARGitype
-		jobz: cARGjobz
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		w: w
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGitype.
-				self free: cARGjobz.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+sytrfWithuplo: uplo n: n a: a lda: lda ipiv: ipiv 	"P*L*U decomposition of a syrmitian matrix	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		sytrfWithuplo: uplo		n: n		a: a		lda: lda		ipiv: ipiv		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := n * n].	work := self allocateElementArraySize: lwork.	^self 		sytrfWithuplo: uplo		n: n		a: a		lda: lda		ipiv: ipiv		work: work		lwork: lwork!
 
-sygvxWithitype: itype jobz: jobz range: range uplo: uplo n: n a: a lda: lda b: b ldb: ldb vl: vl vu: vu il: il iu: iu abstol: abstol m: m w: w z: z ldz: ldz work: work lwork: lwork iwork: iwork ifail: ifail 
-	| cARGitype cARGjobz cARGrange cARGuplo cARGn cARGlda cARGldb cARGvl cARGvu cARGil cARGiu cARGabstol cARGldz cARGlwork cARGinfo |
-	^
-	[cARGitype := self cIntegerPointerOn: itype.
-	cARGjobz := self cCharPointerOn: jobz.
-	cARGrange := self cCharPointerOn: range.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGvl := self cElementPointerOn: vl.
-	cARGvu := self cElementPointerOn: vu.
-	cARGil := self cIntegerPointerOn: il.
-	cARGiu := self cIntegerPointerOn: iu.
-	cARGabstol := self cElementPointerOn: abstol.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsygvxWithitype: cARGitype
-		jobz: cARGjobz
-		range: cARGrange
-		uplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		vl: cARGvl
-		vu: cARGvu
-		il: cARGil
-		iu: cARGiu
-		abstol: cARGabstol
-		m: m
-		w: w
-		z: z
-		ldz: cARGldz
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		ifail: ifail
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGitype.
-				self free: cARGjobz.
-				self free: cARGrange.
-				self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGvl.
-				self free: cARGvu.
-				self free: cARGil.
-				self free: cARGiu.
-				self free: cARGabstol.
-				self free: cARGldz.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+sytrfWithuplo: uplo n: n a: a lda: lda ipiv: ipiv work: work lwork: lwork 	"P*L*U decomposition of a symmetric matrix	return 0 if OK"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsytrfWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-sysvWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb work: work lwork: lwork 
-	| cARGuplo cARGn cARGnrhs cARGlda cARGldb cARGlwork cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsysvWithuplo: cARGuplo
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		b: b
-		ldb: cARGldb
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+sytriWithuplo: uplo n: n a: a lda: lda ipiv: ipiv 	"inverse of a symmetric matrix"	| work |	work := self allocateElementArraySize: n.	^self 		sytriWithuplo: uplo		n: n		a: a		lda: lda		ipiv: ipiv		work: work!
 
-sytrfWithuplo: uplo n: n a: a lda: lda ipiv: ipiv 
-	"P*L*U decomposition of a syrmitian matrix
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+sytriWithuplo: uplo n: n a: a lda: lda ipiv: ipiv work: work 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsytriWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		work: work		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		sytrfWithuplo: uplo
-		n: n
-		a: a
-		lda: lda
-		ipiv: ipiv
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := n * n].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		sytrfWithuplo: uplo
-		n: n
-		a: a
-		lda: lda
-		ipiv: ipiv
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
+sytrsWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xsytrsWithuplo: (self cCharPointerOn: uplo)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		ipiv: ipiv		b: b		ldb: (self cIntegerPointerOn: ldb)		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-sytrfWithuplo: uplo n: n a: a lda: lda ipiv: ipiv work: work lwork: lwork 
-	"P*L*U decomposition of a symmetric matrix
-	return 0 if OK"
+tgexcWithwantq: wantq wantz: wantz n: n a: a lda: lda b: b ldb: ldb q: q ldq: ldq z: z ldz: ldz ifst: ifst ilst: ilst 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtgexcWithwantq: (self cLogicalPointerOn: wantq)		wantz: (self cLogicalPointerOn: wantz)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		q: q		ldq: (self cIntegerPointerOn: ldq)		z: z		ldz: (self cIntegerPointerOn: ldz)		ifst: ifst		ilst: ilst		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGuplo cARGn cARGlda cARGinfo cARGlwork |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsytrfWithuplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+tgexcWithwantq: wantq wantz: wantz n: n a: a lda: lda b: b ldb: ldb q: q ldq: ldq z: z ldz: ldz ifst: ifst ilst: ilst work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtgexcWithwantq: (self cLogicalPointerOn: wantq)		wantz: (self cLogicalPointerOn: wantz)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		q: q		ldq: (self cIntegerPointerOn: ldq)		z: z		ldz: (self cIntegerPointerOn: ldz)		ifst: ifst		ilst: ilst		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-sytriWithuplo: uplo n: n a: a lda: lda ipiv: ipiv 
-	"inverse of a symmetric matrix"
+tgsenWithijob: ijob wantq: wantq wantz: wantz select: select n: n a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta q: q ldq: ldq z: z ldz: ldz m: m dif: dif work: work lwork: lwork iwork: iwork liwork: liwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtgsenWithijob: (self cIntegerPointerOn: ijob)		wantq: (self cLogicalPointerOn: wantq)		wantz: (self cLogicalPointerOn: wantz)		select: select		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		alpha: alpha		beta: beta		q: q		ldq: (self cIntegerPointerOn: ldq)		z: z		ldz: (self cIntegerPointerOn: ldz)		m: m		dif: dif		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		liwork: (self cIntegerPointerOn: liwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work |
-	^
-	[work := self allocateElementArraySize: n.
-	self 
-		sytriWithuplo: uplo
-		n: n
-		a: a
-		lda: lda
-		ipiv: ipiv
-		work: work] 
-			ensure: [self free: work]!
+tgsenWithijob: ijob wantq: wantq wantz: wantz select: select n: n a: a lda: lda b: b ldb: ldb alphar: alphar alphai: alphai beta: beta q: q ldq: ldq z: z ldz: ldz m: m dif: dif work: work lwork: lwork iwork: iwork liwork: liwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtgsenWithijob: (self cIntegerPointerOn: ijob)		wantq: (self cLogicalPointerOn: wantq)		wantz: (self cLogicalPointerOn: wantz)		select: select		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		alphar: alphar		alphai: alphai		beta: beta		q: q		ldq: (self cIntegerPointerOn: ldq)		z: z		ldz: (self cIntegerPointerOn: ldz)		m: m		dif: dif		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		liwork: (self cIntegerPointerOn: liwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-sytriWithuplo: uplo n: n a: a lda: lda ipiv: ipiv work: work 
-	| cARGuplo cARGn cARGlda cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsytriWithuplo: cARGuplo
-		n: cARGn
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		work: work
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGinfo]!
-
-sytrsWithuplo: uplo n: n nrhs: nrhs a: a lda: lda ipiv: ipiv b: b ldb: ldb 
-	| cARGuplo cARGn cARGnrhs cARGlda cARGldb cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xsytrsWithuplo: cARGuplo
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		ipiv: ipiv
-		b: b
-		ldb: cARGldb
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0 ] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGinfo]!
-
-tgexcWithwantq: wantq wantz: wantz n: n a: a lda: lda b: b ldb: ldb q: q ldq: ldq z: z ldz: ldz ifst: ifst ilst: ilst 
-	| cARGwantq cARGwantz cARGn cARGlda cARGldb cARGldq cARGldz cARGinfo |
-	^
-	[cARGwantq := self cLogicalPointerOn: wantq.
-	cARGwantz := self cLogicalPointerOn: wantz.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtgexcWithwantq: cARGwantq
-		wantz: cARGwantz
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		q: q
-		ldq: cARGldq
-		z: z
-		ldz: cARGldz
-		ifst: ifst
-		ilst: ilst
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGwantq.
-				self free: cARGwantz.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldq.
-				self free: cARGldz.
-				self free: cARGinfo]!
-
-tgexcWithwantq: wantq wantz: wantz n: n a: a lda: lda b: b ldb: ldb q: q ldq: ldq z: z ldz: ldz ifst: ifst ilst: ilst work: work lwork: lwork 
-	| cARGwantq cARGwantz cARGn cARGlda cARGldb cARGldq cARGldz cARGlwork cARGinfo |
-	^
-	[cARGwantq := self cLogicalPointerOn: wantq.
-	cARGwantz := self cLogicalPointerOn: wantz.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtgexcWithwantq: cARGwantq
-		wantz: cARGwantz
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		q: q
-		ldq: cARGldq
-		z: z
-		ldz: cARGldz
-		ifst: ifst
-		ilst: ilst
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGwantq.
-				self free: cARGwantz.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldq.
-				self free: cARGldz.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-tgsenWithijob: ijob wantq: wantq wantz: wantz select: select n: n a: a lda: lda b: b ldb: ldb alpha: alpha beta: beta q: q ldq: ldq z: z ldz: ldz m: m dif: dif work: work lwork: lwork iwork: iwork liwork: liwork 
-	| cARGijob cARGwantq cARGwantz cARGn cARGlda cARGldb cARGldq cARGldz cARGlwork cARGliwork cARGinfo |
-	^
-	[cARGijob := self cIntegerPointerOn: ijob.
-	cARGwantq := self cLogicalPointerOn: wantq.
-	cARGwantz := self cLogicalPointerOn: wantz.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGliwork := self cIntegerPointerOn: liwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtgsenWithijob: cARGijob
-		wantq: cARGwantq
-		wantz: cARGwantz
-		select: select
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		alpha: alpha
-		beta: beta
-		q: q
-		ldq: cARGldq
-		z: z
-		ldz: cARGldz
-		m: m
-		dif: dif
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		liwork: cARGliwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGijob.
-				self free: cARGwantq.
-				self free: cARGwantz.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldq.
-				self free: cARGldz.
-				self free: cARGlwork.
-				self free: cARGliwork.
-				self free: cARGinfo]!
-
-tgsenWithijob: ijob wantq: wantq wantz: wantz select: select n: n a: a lda: lda b: b ldb: ldb alphar: alphar alphai: alphai beta: beta q: q ldq: ldq z: z ldz: ldz m: m dif: dif work: work lwork: lwork iwork: iwork liwork: liwork 
-	| cARGijob cARGwantq cARGwantz cARGn cARGlda cARGldb cARGldq cARGldz cARGlwork cARGliwork cARGinfo |
-	^
-	[cARGijob := self cIntegerPointerOn: ijob.
-	cARGwantq := self cLogicalPointerOn: wantq.
-	cARGwantz := self cLogicalPointerOn: wantz.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGldz := self cIntegerPointerOn: ldz.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGliwork := self cIntegerPointerOn: liwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtgsenWithijob: cARGijob
-		wantq: cARGwantq
-		wantz: cARGwantz
-		select: select
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		alphar: alphar
-		alphai: alphai
-		beta: beta
-		q: q
-		ldq: cARGldq
-		z: z
-		ldz: cARGldz
-		m: m
-		dif: dif
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		liwork: cARGliwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGijob.
-				self free: cARGwantq.
-				self free: cARGwantz.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldq.
-				self free: cARGldz.
-				self free: cARGlwork.
-				self free: cARGliwork.
-				self free: cARGinfo]!
-
-tgsylWithtrans: trans ijob: ijob m: m n: n a: a lda: lda b: b ldb: ldb c: c ldc: ldc d: d ldd: ldd e: e lde: lde f: f ldf: ldf dif: dif scale: scale work: work lwork: lwork iwork: iwork 
-	| cARGtrans cARGijob cARGm cARGn cARGlda cARGldb cARGldc cARGldd cARGlde cARGldf cARGlwork cARGinfo |
-	^
-	[cARGtrans := self cCharPointerOn: trans.
-	cARGijob := self cIntegerPointerOn: ijob.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldc := self cIntegerPointerOn: ldc.
-	cARGldd := self cIntegerPointerOn: ldd.
-	cARGlde := self cIntegerPointerOn: lde.
-	cARGldf := self cIntegerPointerOn: ldf.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtgsylWithtrans: cARGtrans
-		ijob: cARGijob
-		m: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		c: c
-		ldc: cARGldc
-		d: d
-		ldd: cARGldd
-		e: e
-		lde: cARGlde
-		f: f
-		ldf: cARGldf
-		dif: dif
-		scale: scale
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGtrans.
-				self free: cARGijob.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldc.
-				self free: cARGldd.
-				self free: cARGlde.
-				self free: cARGldf.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+tgsylWithtrans: trans ijob: ijob m: m n: n a: a lda: lda b: b ldb: ldb c: c ldc: ldc d: d ldd: ldd e: e lde: lde f: f ldf: ldf dif: dif scale: scale work: work lwork: lwork iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtgsylWithtrans: (self cCharPointerOn: trans)		ijob: (self cIntegerPointerOn: ijob)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		c: c		ldc: (self cIntegerPointerOn: ldc)		d: d		ldd: (self cIntegerPointerOn: ldd)		e: e		lde: (self cIntegerPointerOn: lde)		f: f		ldf: (self cIntegerPointerOn: ldf)		dif: dif		scale: scale		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
 transposeConjugated	^$C!
 
 transposed	^$T!
 
-trconWithnorm: norm uplo: uplo diag: diag n: n a: a lda: lda rcond: rcond work: work iwork: iwork 
-	| cARGnorm cARGuplo cARGdiag cARGn cARGlda cARGinfo |
-	^
-	[cARGnorm := self cCharPointerOn: norm.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGdiag := self cCharPointerOn: diag.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtrconWithnorm: cARGnorm
-		uplo: cARGuplo
-		diag: cARGdiag
-		n: cARGn
-		a: a
-		lda: cARGlda
-		rcond: rcond
-		work: work
-		iwork: iwork
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGnorm.
-				self free: cARGuplo.
-				self free: cARGdiag.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGinfo]!
+trconWithnorm: norm uplo: uplo diag: diag n: n a: a lda: lda rcond: rcond work: work iwork: iwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtrconWithnorm: (self cCharPointerOn: norm)		uplo: (self cCharPointerOn: uplo)		diag: (self cCharPointerOn: diag)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		rcond: rcond		work: work		iwork: iwork		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-trconWithnorm: norm uplo: uplo diag: diag n: n a: a lda: lda rcond: rcond work: work rwork: rwork 
-	| cARGnorm cARGuplo cARGdiag cARGn cARGlda cARGinfo |
-	^
-	[cARGnorm := self cCharPointerOn: norm.
-	cARGuplo := self cCharPointerOn: uplo.
-	cARGdiag := self cCharPointerOn: diag.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtrconWithnorm: cARGnorm
-		uplo: cARGuplo
-		diag: cARGdiag
-		n: cARGn
-		a: a
-		lda: cARGlda
-		rcond: rcond
-		work: work
-		rwork: rwork
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGnorm.
-				self free: cARGuplo.
-				self free: cARGdiag.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGinfo]!
+trconWithnorm: norm uplo: uplo diag: diag n: n a: a lda: lda rcond: rcond work: work rwork: rwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtrconWithnorm: (self cCharPointerOn: norm)		uplo: (self cCharPointerOn: uplo)		diag: (self cCharPointerOn: diag)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		rcond: rcond		work: work		rwork: rwork		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-trexcWithcompq: compq n: n t: t ldt: ldt q: q ldq: ldq ifst: ifst ilst: ilst 
-	| cARGcompq cARGn cARGldt cARGldq cARGifst cARGilst cARGinfo |
-	^
-	[cARGcompq := self cCharPointerOn: compq.
-	cARGn := self cIntegerPointerOn: n.
-	cARGldt := self cIntegerPointerOn: ldt.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGifst := self cIntegerPointerOn: ifst.
-	cARGilst := self cIntegerPointerOn: ilst.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtrexcWithcompq: cARGcompq
-		n: cARGn
-		t: t
-		ldt: cARGldt
-		q: q
-		ldq: cARGldq
-		ifst: cARGifst
-		ilst: cARGilst
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGcompq.
-				self free: cARGn.
-				self free: cARGldt.
-				self free: cARGldq.
-				self free: cARGifst.
-				self free: cARGilst.
-				self free: cARGinfo]!
+trexcWithcompq: compq n: n t: t ldt: ldt q: q ldq: ldq ifst: ifst ilst: ilst 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtrexcWithcompq: (self cCharPointerOn: compq)		n: (self cIntegerPointerOn: n)		t: t		ldt: (self cIntegerPointerOn: ldt)		q: q		ldq: (self cIntegerPointerOn: ldq)		ifst: (self cIntegerPointerOn: ifst)		ilst: (self cIntegerPointerOn: ilst)		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-trexcWithcompq: compq n: n t: t ldt: ldt q: q ldq: ldq ifst: ifst ilst: ilst work: work 
-	| cARGcompq cARGn cARGldt cARGldq cARGinfo |
-	^
-	[cARGcompq := self cCharPointerOn: compq.
-	cARGn := self cIntegerPointerOn: n.
-	cARGldt := self cIntegerPointerOn: ldt.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtrexcWithcompq: cARGcompq
-		n: cARGn
-		t: t
-		ldt: cARGldt
-		q: q
-		ldq: cARGldq
-		ifst: ifst
-		ilst: ilst
-		work: work
-		info: cARGinfo
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGcompq.
-				self free: cARGn.
-				self free: cARGldt.
-				self free: cARGldq.
-				self free: cARGinfo]!
+trexcWithcompq: compq n: n t: t ldt: ldt q: q ldq: ldq ifst: ifst ilst: ilst work: work 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtrexcWithcompq: (self cCharPointerOn: compq)		n: (self cIntegerPointerOn: n)		t: t		ldt: (self cIntegerPointerOn: ldt)		q: q		ldq: (self cIntegerPointerOn: ldq)		ifst: ifst		ilst: ilst		work: work		info: cARGinfo		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-trsenWithjob: job compq: compq select: select n: n t: t ldt: ldt q: q ldq: ldq w: w m: m s: s sep: sep work: work lwork: lwork 
-	| cARGjob cARGcompq cARGn cARGldt cARGldq cARGlwork cARGinfo |
-	^
-	[cARGjob := self cCharPointerOn: job.
-	cARGcompq := self cCharPointerOn: compq.
-	cARGn := self cIntegerPointerOn: n.
-	cARGldt := self cIntegerPointerOn: ldt.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtrsenWithjob: cARGjob
-		compq: cARGcompq
-		select: select
-		n: cARGn
-		t: t
-		ldt: cARGldt
-		q: q
-		ldq: cARGldq
-		w: w
-		m: m
-		s: s
-		sep: sep
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjob.
-				self free: cARGcompq.
-				self free: cARGn.
-				self free: cARGldt.
-				self free: cARGldq.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+trsenWithjob: job compq: compq select: select n: n t: t ldt: ldt q: q ldq: ldq w: w m: m s: s sep: sep work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtrsenWithjob: (self cCharPointerOn: job)		compq: (self cCharPointerOn: compq)		select: select		n: (self cIntegerPointerOn: n)		t: t		ldt: (self cIntegerPointerOn: ldt)		q: q		ldq: (self cIntegerPointerOn: ldq)		w: w		m: m		s: s		sep: sep		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-trsenWithjob: job compq: compq select: select n: n t: t ldt: ldt q: q ldq: ldq wr: wr wi: wi m: m s: s sep: sep work: work lwork: lwork iwork: iwork liwork: liwork 
-	| cARGjob cARGcompq cARGn cARGldt cARGldq cARGlwork cARGliwork cARGinfo |
-	^
-	[cARGjob := self cCharPointerOn: job.
-	cARGcompq := self cCharPointerOn: compq.
-	cARGn := self cIntegerPointerOn: n.
-	cARGldt := self cIntegerPointerOn: ldt.
-	cARGldq := self cIntegerPointerOn: ldq.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGliwork := self cIntegerPointerOn: liwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtrsenWithjob: cARGjob
-		compq: cARGcompq
-		select: select
-		n: cARGn
-		t: t
-		ldt: cARGldt
-		q: q
-		ldq: cARGldq
-		wr: wr
-		wi: wi
-		m: m
-		s: s
-		sep: sep
-		work: work
-		lwork: cARGlwork
-		iwork: iwork
-		liwork: cARGliwork
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGjob.
-				self free: cARGcompq.
-				self free: cARGn.
-				self free: cARGldt.
-				self free: cARGldq.
-				self free: cARGlwork.
-				self free: cARGliwork.
-				self free: cARGinfo]!
+trsenWithjob: job compq: compq select: select n: n t: t ldt: ldt q: q ldq: ldq wr: wr wi: wi m: m s: s sep: sep work: work lwork: lwork iwork: iwork liwork: liwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtrsenWithjob: (self cCharPointerOn: job)		compq: (self cCharPointerOn: compq)		select: select		n: (self cIntegerPointerOn: n)		t: t		ldt: (self cIntegerPointerOn: ldt)		q: q		ldq: (self cIntegerPointerOn: ldq)		wr: wr		wi: wi		m: m		s: s		sep: sep		work: work		lwork: (self cIntegerPointerOn: lwork)		iwork: iwork		liwork: (self cIntegerPointerOn: liwork)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-trsylWithtrana: trana tranb: tranb isgn: isgn m: m n: n a: a lda: lda b: b ldb: ldb c: c ldc: ldc scale: scale 
-	| cARGtrana cARGtranb cARGisgn cARGm cARGn cARGlda cARGldb cARGldc cARGinfo |
-	^
-	[cARGtrana := self cCharPointerOn: trana.
-	cARGtranb := self cCharPointerOn: tranb.
-	cARGisgn := self cIntegerPointerOn: isgn.
-	cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGldc := self cIntegerPointerOn: ldc.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtrsylWithtrana: cARGtrana
-		tranb: cARGtranb
-		isgn: cARGisgn
-		m: cARGm
-		n: cARGn
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		c: c
-		ldc: cARGldc
-		scale: scale
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGtrana.
-				self free: cARGtranb.
-				self free: cARGisgn.
-				self free: cARGm.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGldc.
-				self free: cARGinfo]!
+trsylWithtrana: trana tranb: tranb isgn: isgn m: m n: n a: a lda: lda b: b ldb: ldb c: c ldc: ldc scale: scale 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtrsylWithtrana: (self cCharPointerOn: trana)		tranb: (self cCharPointerOn: tranb)		isgn: (self cIntegerPointerOn: isgn)		m: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		c: c		ldc: (self cIntegerPointerOn: ldc)		scale: scale		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-trtriWithuplo: uplo diag: diag n: n a: a lda: lda 
-	| cARGuplo cARGdiag cARGn cARGlda cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGdiag := self cCharPointerOn: diag.
-	cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtrtriWithuplo: cARGuplo
-		diag: cARGdiag
-		n: cARGn
-		a: a
-		lda: cARGlda
-		info: cARGinfo
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGdiag.
-				self free: cARGn.
-				self free: cARGlda.
-				self free: cARGinfo]!
+trtriWithuplo: uplo diag: diag n: n a: a lda: lda 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtrtriWithuplo: (self cCharPointerOn: uplo)		diag: (self cCharPointerOn: diag)		n: (self cIntegerPointerOn: n)		a: a		lda: (self cIntegerPointerOn: lda)		info: cARGinfo		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-trtrsWithuplo: uplo trans: trans diag: diag n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb 
-	"Solve a triangular system of equations A*x=B in x"
+trtrsWithuplo: uplo trans: trans diag: diag n: n nrhs: nrhs a: a lda: lda b: b ldb: ldb 	"Solve a triangular system of equations A*x=B in x"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xtrtrsWithuplo: (self cCharPointerOn: uplo)		trans: (self cCharPointerOn: trans)		diag: (self cCharPointerOn: diag)		n: (self cIntegerPointerOn: n)		nrhs: (self cIntegerPointerOn: nrhs)		a: a		lda: (self cIntegerPointerOn: lda)		b: b		ldb: (self cIntegerPointerOn: ldb)		info: cARGinfo		length: 1		length: 1		length: 1.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGuplo cARGtrans cARGdiag cARGn cARGnrhs cARGlda cARGldb cARGinfo |
-	^
-	[cARGuplo := self cCharPointerOn: uplo.
-	cARGtrans := self cCharPointerOn: trans.
-	cARGdiag := self cCharPointerOn: diag.
-	cARGn := self cIntegerPointerOn: n.
-	cARGnrhs := self cIntegerPointerOn: nrhs.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGldb := self cIntegerPointerOn: ldb.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xtrtrsWithuplo: cARGuplo
-		trans: cARGtrans
-		diag: cARGdiag
-		n: cARGn
-		nrhs: cARGnrhs
-		a: a
-		lda: cARGlda
-		b: b
-		ldb: cARGldb
-		info: cARGinfo
-		length: 1
-		length: 1
-		length: 1.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGuplo.
-				self free: cARGtrans.
-				self free: cARGdiag.
-				self free: cARGn.
-				self free: cARGnrhs.
-				self free: cARGlda.
-				self free: cARGldb.
-				self free: cARGinfo]!
+unghrWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau 	"generate orthonormal matrix	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		unghrWithn: n		ilo: ilo		ihi: ihi		a: a		lda: lda		tau: tau		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := (ihi getHandle signedLongAt: 1) - (ilo getHandle signedLongAt: 1) max: 1].	work := self allocateElementArraySize: lwork.	^self 		unghrWithn: n		ilo: ilo		ihi: ihi		a: a		lda: lda		tau: tau		work: work		lwork: lwork!
 
-unghrWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau 
-	"generate orthonormal matrix
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
+unghrWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau work: work lwork: lwork 	"build orthonormal matrix	ilo and ihi must be allocated outside"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xunghrWithn: (self cIntegerPointerOn: n)		ilo: ilo		ihi: ihi		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		unghrWithn: n
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := (ihi sdwordAtOffset: 0) - (ilo sdwordAtOffset: 0) max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		unghrWithn: n
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
+unglqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xunglqWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		k: (self cIntegerPointerOn: k)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-unghrWithn: n ilo: ilo ihi: ihi a: a lda: lda tau: tau work: work lwork: lwork 
-	"build orthonormal matrix
-	ilo and ihi must be allocated outside"
+ungqlWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xungqlWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		k: (self cIntegerPointerOn: k)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-	| cARGn cARGlda cARGlwork cARGinfo |
-	^
-	[cARGn := self cIntegerPointerOn: n.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xunghrWithn: cARGn
-		ilo: ilo
-		ihi: ihi
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGn.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+ungqrWithm: m n: n k: k a: a lda: lda tau: tau 	"generate orthonormal matrix	use LAPACK 3.0 feature to get optimized lwork	return 0 if OK"	| work lwork |	work := self allocateElementArraySize: 1.	(self 		ungqrWithm: m		n: n		k: k		a: a		lda: lda		tau: tau		work: work		lwork: -1) = 0 		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]		ifFalse: [lwork := n max: 1].	work := self allocateElementArraySize: lwork.	^self 		ungqrWithm: m		n: n		k: k		a: a		lda: lda		tau: tau		work: work		lwork: lwork!
 
-unglqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 
-	| cARGm cARGn cARGk cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGk := self cIntegerPointerOn: k.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xunglqWithm: cARGm
-		n: cARGn
-		k: cARGk
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGk.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+ungqrWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 	"build orthonormal matrix"	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xungqrWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		k: (self cIntegerPointerOn: k)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
-ungqlWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 
-	| cARGm cARGn cARGk cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGk := self cIntegerPointerOn: k.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xungqlWithm: cARGm
-		n: cARGn
-		k: cARGk
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGk.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-ungqrWithm: m n: n k: k a: a lda: lda tau: tau 
-	"generate orthonormal matrix
-	use LAPACK 3.0 feature to get optimized lwork
-	return 0 if OK"
-
-	| work lwork |
-	^
-	[work := self allocateElementArraySize: 1.
-	(self 
-		ungqrWithm: m
-		n: n
-		k: k
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: -1) = 0 
-		ifTrue: [lwork := self retrieveLengthQueryAnswerFrom: work]
-		ifFalse: [lwork := n max: 1].
-	self free: work.
-	work := self allocateElementArraySize: lwork.
-	self 
-		ungqrWithm: m
-		n: n
-		k: k
-		a: a
-		lda: lda
-		tau: tau
-		work: work
-		lwork: lwork] 
-			ensure: [self free: work]!
-
-ungqrWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 
-	"build orthonormal matrix"
-
-	| cARGm cARGn cARGk cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGk := self cIntegerPointerOn: k.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xungqrWithm: cARGm
-		n: cARGn
-		k: cARGk
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGk.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
-
-ungrqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 
-	| cARGm cARGn cARGk cARGlda cARGlwork cARGinfo |
-	^
-	[cARGm := self cIntegerPointerOn: m.
-	cARGn := self cIntegerPointerOn: n.
-	cARGk := self cIntegerPointerOn: k.
-	cARGlda := self cIntegerPointerOn: lda.
-	cARGlwork := self cIntegerPointerOn: lwork.
-	cARGinfo := self cIntegerPointerOn: 0.
-	self 
-		xungrqWithm: cARGm
-		n: cARGn
-		k: cARGk
-		a: a
-		lda: cARGlda
-		tau: tau
-		work: work
-		lwork: cARGlwork
-		info: cARGinfo.
-	cARGinfo sdwordAtOffset: 0] 
-			ensure: 
-				[self free: cARGm.
-				self free: cARGn.
-				self free: cARGk.
-				self free: cARGlda.
-				self free: cARGlwork.
-				self free: cARGinfo]!
+ungrqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork 	| cARGinfo |	cARGinfo := self cIntegerPointerOn: 0.	self		xungrqWithm: (self cIntegerPointerOn: m)		n: (self cIntegerPointerOn: n)		k: (self cIntegerPointerOn: k)		a: a		lda: (self cIntegerPointerOn: lda)		tau: tau		work: work		lwork: (self cIntegerPointerOn: lwork)		info: cARGinfo.	^cARGinfo getHandle signedLongAt: 1!
 
 uniform01	"used by random number generator"	^1!
 
@@ -6777,6 +2017,10 @@ trmvWithuplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx le
 	"x=op(a)*x op=yourself, transpose, transposeConjugated"
 
 	<cdecl: void 'ctrmv_'  char * char * char * SDWORD * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * SDWORD * SDWORD SDWORD SDWORD >
+	^self invalidCall!
+
+trsmWithside: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb length: lside length: luplo length: ltrans length: ldiag 
+	<cdecl: void 'ctrsm_'  char * char * char * char * SDWORD * SDWORD * "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * SDWORD * SDWORD SDWORD SDWORD SDWORD >
 	^self invalidCall! !
 !BlasCLibrary categoriesFor: #asumWithn:x:incx:!public! !
 !BlasCLibrary categoriesFor: #axpyWithn:alpha:x:incx:y:incy:!public! !
@@ -6801,6 +2045,7 @@ trmvWithuplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx le
 !BlasCLibrary categoriesFor: #tpmvWithuplo:trans:diag:n:ap:x:incx:length:length:length:!public! !
 !BlasCLibrary categoriesFor: #trmmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
 !BlasCLibrary categoriesFor: #trmvWithuplo:trans:diag:n:a:lda:x:incx:length:length:length:!public! !
+!BlasCLibrary categoriesFor: #trsmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
 
 BlasDLibrary guid: (GUID fromString: '{98A31CA8-9A20-4B7A-B28C-E0799F10D0A8}')!
 BlasDLibrary comment: ''!
@@ -7001,6 +2246,10 @@ trmvWithuplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx le
 	"x=op(a)*x op=yourself, transpose, transposeConjugated"
 
 	<cdecl: void 'dtrmv_'  char * char * char * SDWORD * double * SDWORD * double * SDWORD * SDWORD SDWORD SDWORD >
+	^self invalidCall!
+
+trsmWithside: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb length: lside length: luplo length: ltrans length: ldiag 
+	<cdecl: void 'dtrsm_' char * char * char * char * SDWORD * SDWORD * double * double * SDWORD * double * SDWORD * SDWORD SDWORD SDWORD SDWORD >
 	^self invalidCall! !
 !BlasDLibrary categoriesFor: #asumWithn:x:incx:!public! !
 !BlasDLibrary categoriesFor: #axpyWithn:alpha:x:incx:y:incy:!public! !
@@ -7032,6 +2281,7 @@ trmvWithuplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx le
 !BlasDLibrary categoriesFor: #tpmvWithuplo:trans:diag:n:ap:x:incx:length:length:length:!public! !
 !BlasDLibrary categoriesFor: #trmmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
 !BlasDLibrary categoriesFor: #trmvWithuplo:trans:diag:n:a:lda:x:incx:length:length:length:!public! !
+!BlasDLibrary categoriesFor: #trsmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
 
 BlasSLibrary guid: (GUID fromString: '{2DBB5FEC-1AAD-42BF-82D5-0E010C71D445}')!
 BlasSLibrary comment: ''!
@@ -7215,6 +2465,10 @@ trmvWithuplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx le
 	"x=op(a)*x op=yourself, transpose, transposeConjugated"
 
 	<cdecl: void 'strmv_'  char * char * char * SDWORD * float * SDWORD * float * SDWORD * SDWORD SDWORD SDWORD >
+	^self invalidCall!
+
+trsmWithside: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb length: lside length: luplo length: ltrans length: ldiag 
+	<cdecl: void 'strsm_'  char * char * char * char * SDWORD * SDWORD * float * float * SDWORD * float * SDWORD * SDWORD SDWORD SDWORD SDWORD >
 	^self invalidCall! !
 !BlasSLibrary categoriesFor: #asumWithn:x:incx:!public! !
 !BlasSLibrary categoriesFor: #axpyWithn:alpha:x:incx:y:incy:!public! !
@@ -7246,6 +2500,7 @@ trmvWithuplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx le
 !BlasSLibrary categoriesFor: #tpmvWithuplo:trans:diag:n:ap:x:incx:length:length:length:!public! !
 !BlasSLibrary categoriesFor: #trmmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
 !BlasSLibrary categoriesFor: #trmvWithuplo:trans:diag:n:a:lda:x:incx:length:length:length:!public! !
+!BlasSLibrary categoriesFor: #trsmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
 
 BlasZLibrary guid: (GUID fromString: '{5E4F44EB-3712-4263-8A54-4B010B2F4925}')!
 BlasZLibrary comment: ''!
@@ -7370,6 +2625,10 @@ trmvWithuplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx le
 	"x=op(a)*x op=yourself, transpose, transposeConjugated"
 
 	<cdecl: void 'ztrmv_'  char * char * char * SDWORD * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * SDWORD * SDWORD SDWORD SDWORD >
+	^self invalidCall!
+
+trsmWithside: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb length: lside length: luplo length: ltrans length: ldiag 
+	<cdecl: void 'ztrsm_'  char * char * char * char * SDWORD * SDWORD * "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * SDWORD * SDWORD SDWORD SDWORD SDWORD >
 	^self invalidCall! !
 !BlasZLibrary categoriesFor: #asumWithn:x:incx:!public! !
 !BlasZLibrary categoriesFor: #axpyWithn:alpha:x:incx:y:incy:!public! !
@@ -7394,6 +2653,7 @@ trmvWithuplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx le
 !BlasZLibrary categoriesFor: #tpmvWithuplo:trans:diag:n:ap:x:incx:length:length:length:!public! !
 !BlasZLibrary categoriesFor: #trmmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
 !BlasZLibrary categoriesFor: #trmvWithuplo:trans:diag:n:a:lda:x:incx:length:length:length:!public! !
+!BlasZLibrary categoriesFor: #trsmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
 
 LapackCLibrary guid: (GUID fromString: '{70E0D32E-9B4F-4BC0-93CE-CA5616F198CB}')!
 LapackCLibrary comment: ''!
