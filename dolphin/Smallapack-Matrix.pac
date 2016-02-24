@@ -766,8 +766,8 @@ fill: n elementsWithStride: incy withSelfPlusScalar: alpha timesVector: aMatrix 
 		do: 
 			[:i | 
 			self at: (i - 1) * incy + sy
-				put: (aMatrix at: (i - 1) * incx + sx) 
-						+ (alpha * (self at: (i - 1) * incy + sy))]!
+				put: (self at: (i - 1) * incy + sy) 
+						+ (alpha * (aMatrix at: (i - 1) * incx + sx))]!
 
 fill: m elementsWithStride: incy withSelfScaledBy: beta plusScalar: alpha timesMatrix: a transposed: trans timesVector: x length: n stride: incx 
 	"BLAS primitve xGEMV - naive implementation"
