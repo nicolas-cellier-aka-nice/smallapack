@@ -703,23 +703,7 @@ cumulativeSum: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue:
 
 diagonal	"Answer a Column Matrix with elements extracted from my diagonal.	This is not compatible with Matlab function diag.	Matlab code would be:		^self isVector			ifTrue: [self clas diagonal: self]			ifFalse: [self diagonalAt: 0]"	^self diagonalAt: 0!
 
-diagonalAt: index 
-	"Answer a Column Matrix with elements extracted from :
-	- my diagonal if index is 0
-	- super diagonal (upper right) number index if index > 0
-	- sub diagonal (lower left) number index negated if index < 0
-	This is not compatible with Matlab function diag"
-
-	| diag |
-	diag := self class nrow: (self diagonalSizeAt: index).
-	index >= 0 
-		ifTrue: 
-			[1 to: diag size
-				do: [:i | diag at: i put: (self rowAt: i columnAt: i + index)]]
-		ifFalse: 
-			[1 to: diag size
-				do: [:i | diag at: i put: (self rowAt: i - index columnAt: i)]].
-	^diag!
+diagonalAt: index 	"Answer a Column Matrix with elements extracted from :	- my diagonal if index is 0	- super diagonal (upper right) number index if index > 0	- sub diagonal (lower left) number index negated if index < 0	This is not compatible with Matlab function diag"	| diag |	index >= 0 		ifTrue: 			[diag := self class nrow: (self diagonalSizeAt: index).			1 to: diag size				do: [:i | diag at: i put: (self rowAt: i columnAt: i + index)]]		ifFalse: 			[diag := self class nrow: (self diagonalSizeAt: index).			1 to: diag size				do: [:i | diag at: i put: (self rowAt: i - index columnAt: i)]].	^diag!
 
 diagonalSizeAt: index 	"answer the size of a diagonal"	^index >= 0 		ifTrue: [nrow min: ncol - index]		ifFalse: [nrow + index min: ncol]!
 
@@ -1054,7 +1038,7 @@ productFromMatrix: aMatrix 	"Algorithm ^(aMatrix productMatrixWithMatrix: self)
 
 productMatrixAtRightWithMatrix: aMatrix 	"Answer the matrix product		aMatrix * self	This can be optimized in special cases of hermitian or triangular Matrix	and should be overloaded in these subclasses"	^aMatrix productMatrixWithMatrix: self!
 
-productMatrixTransposeWithColumnVector: aVector 	"Matrix transpose * vector	naive algorithm"	| result |	result := self class allocateNrow: nrow ncol: 1.	1 to: nrow		do: 			[:ir | 			result at: ir				put: ((1 to: ncol) 						sumOf: [:jc | (self rowAt: jc columnAt: ir) * (aVector at: jc)])].	^result!
+productMatrixTransposeWithColumnVector: aVector 	"Matrix transpose * vector	naive algorithm"	| result |	result := self class allocateNrow: ncol ncol: 1.	1 to: ncol		do: 			[:jc | 			result at: jc				put: ((1 to: nrow) 						sumOf: [:ir | (self rowAt: ir columnAt: jc) * (aVector at: ir)])].	^result!
 
 productMatrixWithColumnVector: aVector 	"Matrix * vector	naive algorithm"	| result |	result := self class allocateNrow: nrow ncol: 1.	1 to: nrow		do: 			[:ir | 			result at: ir				put: ((1 to: ncol) 						sumOf: [:jc | (self rowAt: ir columnAt: jc) * (aVector at: jc)])].	^result!
 
@@ -1083,6 +1067,8 @@ productOf: aBlock
 	"Evaluate the product of all elements"
 	| product |
 	self isEmpty ifTrue: [^1].	product := aBlock value: (self at: 1).	2 to: self size		do: [:i | product := product * (aBlock value: (self at: i))].	^product!
+
+productOf: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: 1.			1 to: nrow				do: 					[:ir | 					res at: ir						put: ((1 to: ncol) 								product: [:jc | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: 1 ncol: ncol.			1 to: ncol				do: 					[:jc | 					res at: jc						put: ((1 to: nrow) 								product: [:ir | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
 
 productRowVectorWithColumnVector: aVector 	"Answer the result of operation (a dot product)		leftVector transpose * aVector	where		leftVector transpose = self"	| res |	res := self class allocateNrow: 1 ncol: 1.	res at: 1		put: ((1 to: self size) sumOf: [:i | (self at: i) * (aVector at: i)]).	^res!
 
@@ -1261,13 +1247,15 @@ sumFromMatrix: aMatrix 	| res |	(nrow = aMatrix nrow and: [ncol = aMatrix ncol
 
 sumOf: aBlock 	| sum |	self isEmpty ifTrue: [^0].	sum := aBlock value: (self at: 1).	2 to: self size do: [:i | sum := sum + (aBlock value: (self at: i))].	^sum!
 
+sumOf: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: 1.			1 to: nrow				do: 					[:ir | 					res at: ir						put: ((1 to: ncol) 								sum: [:jc | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: 1 ncol: ncol.			1 to: ncol				do: 					[:jc | 					res at: jc						put: ((1 to: nrow) 								sum: [:ir | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
+
 swap: r1 at: c1 with: r2 at: c2 	"Squeak compatible protocol"	^self swapRowAt: r1 columnAt: c1 withRowAt: r2 columnAt: c2!
 
 swapColumn: c1 withColumn: c2	"Squeak compatible - avoid direct access to array because subclasses might implement other behaviour	NAIVE implementation"	1 to: nrow do: [:row |		self swapRowAt: row columnAt: c1 withRowAt: row columnAt: c2]!
 
 swapRow: r1 withRow: r2	"Squeak compatible - avoid direct access to array because subclasses might implement other behaviour	NAIVE implementation"	1 to: ncol do: [:col |		self swapRowAt: r1 columnAt: col withRowAt: r2 columnAt: col]!
 
-swapRowAt: r1 columnAt: c1 withRowAt: r2 columnAt: c2 	"Swap two elements.	Avoid direct access to array because subclasses might implement other behaviour"	| tmp |	tmp := self at: r1 at: c1.	self 		at: r1		at: c1		put: (self at: r2 at: c2).	self 		at: r1		at: c1		put: tmp!
+swapRowAt: r1 columnAt: c1 withRowAt: r2 columnAt: c2 	"Swap two elements.	Avoid direct access to array because subclasses might implement other behaviour"	| tmp |	tmp := self at: r1 at: c1.	self 		at: r1		at: c1		put: (self at: r2 at: c2).	self 		at: r2		at: c2		put: tmp!
 
 transpose	"synonym"	^self transposed!
 
@@ -1509,6 +1497,7 @@ zero	^self class nrow: nrow ncol: ncol! !
 !AbstractMatrix categoriesFor: #productMatrixWithColumnVector:!arithmetic-internal!public! !
 !AbstractMatrix categoriesFor: #productMatrixWithMatrix:!arithmetic-internal!public! !
 !AbstractMatrix categoriesFor: #productOf:!enumerating!public! !
+!AbstractMatrix categoriesFor: #productOf:dimension:!public! !
 !AbstractMatrix categoriesFor: #productRowVectorWithColumnVector:!arithmetic-internal!public! !
 !AbstractMatrix categoriesFor: #productRowVectorWithMatrix:!arithmetic-internal!public! !
 !AbstractMatrix categoriesFor: #realPart!arithmetic-complex!public! !
@@ -1553,6 +1542,7 @@ zero	^self class nrow: nrow ncol: ncol! !
 !AbstractMatrix categoriesFor: #sumFromLapackMatrix:!arithmetic-internal!public! !
 !AbstractMatrix categoriesFor: #sumFromMatrix:!arithmetic-internal!public! !
 !AbstractMatrix categoriesFor: #sumOf:!enumerating!public! !
+!AbstractMatrix categoriesFor: #sumOf:dimension:!public! !
 !AbstractMatrix categoriesFor: #swap:at:with:at:!accessing-elements!public! !
 !AbstractMatrix categoriesFor: #swapColumn:withColumn:!accessing-submatrix!public! !
 !AbstractMatrix categoriesFor: #swapRow:withRow:!accessing-submatrix!public! !
@@ -1931,9 +1921,9 @@ conjugated
 copy	"Implementation notes: this code should be more efficient than doing the super postCopy (array := array copy)	postCopy must be overloaded to just create the array"	^super copy 		copy: self arraySize		elementsFrom: self		sourceIncrement: 1		destIncrement: 1!
 
 copy: n elementsFrom: aLapackMatrix sourceOffset: offx sourceIncrement: incx destOffset: offy destIncrement: incy 
-	(offx >= 0 and: [n + offx <= aLapackMatrix size]) 
+	(offx >= 0 and: [n - 1 * incx abs + offx < aLapackMatrix size]) 
 		ifFalse: [^self error: 'matrix access out of bounds'].
-	(offy >= 0 and: [n + offy <= self size]) 
+	(offy >= 0 and: [n - 1 * incy abs + offy < self size]) 
 		ifFalse: [^self error: 'matrix access out of bounds'].
 	
 	[self blasInterface 
