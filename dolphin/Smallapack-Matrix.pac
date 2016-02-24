@@ -619,7 +619,7 @@ atInteger: rowIndex andInteger: columnIndex put: aNumber	"Access the underlying
 
 atInteger: anInteger put: aNumber	"Access the underlying array"	^self at: anInteger put: aNumber!
 
-atIntervalFrom: interStart to: interStop by: interStep 	"Extract a copy of a subinterval of self"	| sz result |	sz := (interStop - interStart) / interStep + 1 max: 0.	result := nrow = 1 				ifTrue: [self class ncol: sz]				ifFalse: [ncol = 1 ifTrue: [self class nrow: sz] ifFalse: [Array new: sz]].	1 to: sz		do: [:i | result at: i put: (self at: interStart + ((i - 1) * interStep))].	^result!
+atIntervalFrom: interStart to: interStop by: interStep 	"Extract a copy of a subinterval of self"	| sz result |	sz := (interStop - interStart) // interStep + 1 max: 0.	result := nrow = 1 				ifTrue: [self class ncol: sz]				ifFalse: [ncol = 1 ifTrue: [self class nrow: sz] ifFalse: [Array new: sz]].	1 to: sz		do: [:i | result at: i put: (self at: interStart + ((i - 1) * interStep))].	^result!
 
 atPoint: aPoint 	"some implementations use Points to access 2D tables"	^self rowAt: aPoint x columnAt: aPoint y!
 
@@ -1796,7 +1796,7 @@ at: anInteger put: aNumber handle: exceptionBlock 	"This method does handle err
 
 atAllPut: aNumber 	self setOffDiagonal: aNumber diagonal: aNumber!
 
-atIntervalFrom: interStart to: interStop by: interStep 	"fast method : bounds checking must be done externally"	| sz |	sz := (interStop - interStart) / interStep + 1.	^(nrow = 1 		ifTrue: [self class allocateNrow: 1 ncol: sz]		ifFalse: [self class allocateNrow: sz ncol: 1]) 			copy: sz			elementsFrom: (self withArrayOffsetBy: interStart - 1)			sourceIncrement: interStep			destIncrement: 1!
+atIntervalFrom: interStart to: interStop by: interStep 	"fast method : bounds checking must be done externally"	| sz |	sz := (interStop - interStart) // interStep + 1.	^(nrow = 1 		ifTrue: [self class allocateNrow: 1 ncol: sz]		ifFalse: [self class allocateNrow: sz ncol: 1]) 			copy: sz			elementsFrom: (self withArrayOffsetBy: interStart - 1)			sourceIncrement: interStep			destIncrement: 1!
 
 blasInterface	^self class blasInterface!
 
@@ -2664,8 +2664,6 @@ libraryError	^libraryErrorCollection!
 
 nrow: nr ncol: nc withAll: aNumber 	"Create a matrix filled with aNumber"	^(self allocateNrow: nr ncol: nc) atAllPut: aNumber!
 
-obsolete	super obsolete.	self unregisterFlags!
-
 onStartup
 	"reset the ExternalLibrary nterfaces on image startup"
 
@@ -2715,6 +2713,10 @@ triangularMatrix	^self 		findClassWithFlags: ((self flags maskClear: PropertyM
 uninitialize
 	SessionManager current removeEventsTriggeredFor: self!
 
+uninitializeBeforeRemove
+	"Note: this cannot be uninitialize, because we want it to be performed by each removed subclass"
+	self unregisterFlags.	^super uninitializeBeforeRemove.!
+
 unpackedMatrix	"This must be overloaded where it make sense"	^self!
 
 unregisterFlags	"remove reference to a self before being unloaded"	FlagsToClassDictionary removeKey: self flags ifAbsent: []! !
@@ -2754,7 +2756,6 @@ unregisterFlags	"remove reference to a self before being unloaded"	FlagsToCla
 !LapackMatrix class categoriesFor: #lapackInterface!public! !
 !LapackMatrix class categoriesFor: #libraryError!public! !
 !LapackMatrix class categoriesFor: #nrow:ncol:withAll:!public! !
-!LapackMatrix class categoriesFor: #obsolete!public! !
 !LapackMatrix class categoriesFor: #onStartup!public! !
 !LapackMatrix class categoriesFor: #packedMatrix!public! !
 !LapackMatrix class categoriesFor: #preSnapshot!public! !
@@ -2774,6 +2775,7 @@ unregisterFlags	"remove reference to a self before being unloaded"	FlagsToCla
 !LapackMatrix class categoriesFor: #storeInstancesInSmalltalkSpace!public! !
 !LapackMatrix class categoriesFor: #triangularMatrix!public! !
 !LapackMatrix class categoriesFor: #uninitialize!public! !
+!LapackMatrix class categoriesFor: #uninitializeBeforeRemove!public! !
 !LapackMatrix class categoriesFor: #unpackedMatrix!public! !
 !LapackMatrix class categoriesFor: #unregisterFlags!public! !
 
