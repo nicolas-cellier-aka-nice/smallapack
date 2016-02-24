@@ -228,9 +228,30 @@ copy: m rowsStartingAt: i and: n columnsStartingAt: j from: a 	"Equivalent Matl
 
 count: aBlock 	"Count the number of elements that satisfy a condition.	anElement is satisfying a condition means	(aBlock value: anElement) = true."	| count |	count := 0.	1 to: self size		do: [:i | (aBlock value: (self at: i)) ifTrue: [count := count + 1]].	^count!
 
-cumulativeProduct: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: nrow				do: 					[:i | 					res rowAt: i						putSequence: ((1 to: ncol) 								cumulativeProduct: [:j | aBlock value: (self rowAt: i columnAt: j)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: ncol				do: 					[:i | 					res columnAt: i						putSequence: ((1 to: nrow) 								cumulativeProduct: [:j | aBlock value: (self rowAt: j columnAt: i)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
+cumulativeProduct: aBlock dimension: aDimension 
+	| res |
+	aDimension = 2 
+		ifTrue: 
+			[res := self class allocateNrow: nrow ncol: ncol.
+			1 to: nrow
+				do: 
+					[:i | 
+					res rowAt: i
+						putSequence: ((1 to: ncol) cumulativeProductOf: [:j | aBlock value: (self rowAt: i columnAt: j)])].
+			^res].
+	aDimension = 1 
+		ifTrue: 
+			[res := self class allocateNrow: nrow ncol: ncol.
+			1 to: ncol
+				do: 
+					[:i | 
+					res columnAt: i
+						putSequence: ((1 to: nrow) cumulativeProductOf: [:j | aBlock value: (self rowAt: j columnAt: i)])].
+			^res].
+	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.
+	^nil!
 
-cumulativeSum: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: nrow				do: 					[:i | 					res rowAt: i						putSequence: ((1 to: ncol) 								cumulativeSum: [:j | aBlock value: (self rowAt: i columnAt: j)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: ncol				do: 					[:i | 					res columnAt: i						putSequence: ((1 to: nrow) 								cumulativeSum: [:j | aBlock value: (self rowAt: j columnAt: i)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
+cumulativeSum: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: nrow				do: 					[:i | 					res rowAt: i						putSequence: ((1 to: ncol) 								cumulativeSumOf: [:j | aBlock value: (self rowAt: i columnAt: j)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: ncol				do: 					[:i | 					res columnAt: i						putSequence: ((1 to: nrow) 								cumulativeSumOf: [:j | aBlock value: (self rowAt: j columnAt: i)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
 
 diagonal	"Answer a Column Matrix with elements extracted from my diagonal.	This is not compatible with Matlab function diag.	Matlab code would be:		^self isVector			ifTrue: [self clas diagonal: self]			ifFalse: [self diagonalAt: 0]"	^self diagonalAt: 0!
 
@@ -544,7 +565,7 @@ product	| prod |	self isEmpty ifTrue: [^1].	prod := self at: 1.	2 to: self s
 
 product: aBlock 
 	"backward compatibility - synonym of productOf:"
-	| product |	#deprecated.
+	#deprecated.
 	^self productOf: aBlock!
 
 product: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: 1.			1 to: nrow				do: 					[:ir | 					res at: ir						put: ((1 to: ncol) 								product: [:jc | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: 1 ncol: ncol.			1 to: ncol				do: 					[:jc | 					res at: jc						put: ((1 to: nrow) 								product: [:ir | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
@@ -605,7 +626,7 @@ productRowVectorWithColumnVector: aVector 	"Answer the result of operation (a d
 
 productRowVectorWithMatrix: aMatrix 	"Vector * Matrix	naive algorithm"	| result |	result := self class allocateNrow: 1 ncol: aMatrix ncol.	1 to: aMatrix ncol		do: 			[:jc | 			result at: jc				put: ((1 to: aMatrix nrow) 						sumOf: [:ir | (self at: ir) * (aMatrix rowAt: ir columnAt: jc)])].	^result!
 
-realPart	^self collect: [:e | e real]!
+realPart	^self collect: [:e | e realPart]!
 
 replicate: newDimensions
 	^self class shape: newDimensions do: [:nr :nc | self replicateNrow: nr timesNcol: nc]!
@@ -656,7 +677,7 @@ scale: n elementsBy: alpha increment: incx
 			self at: (i - 1) * incx + sx
 				put: (self at: (i - 1) * incx + sx) * alpha]!
 
-scaledByComplex: aComplex 	"Answer a copy of self scaled."	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex real].	^self collect: [:each | each * aComplex]!
+scaledByComplex: aComplex 	"Answer a copy of self scaled."	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex realPart].	^self collect: [:each | each * aComplex]!
 
 scaledByNumber: aNumber 	"Answer a copy of self scaled."	^self collect: [:each | each * aNumber]!
 

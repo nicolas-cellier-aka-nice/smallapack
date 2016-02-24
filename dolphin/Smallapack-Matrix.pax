@@ -165,7 +165,7 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: '..\..\Burning River\Complex\Complex';
+	add: '..\..\..\Contributions\Burning River\Complex\Complex';
 	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	add: 'Smallapack-Algorithm';
 	add: 'Smallapack-External';

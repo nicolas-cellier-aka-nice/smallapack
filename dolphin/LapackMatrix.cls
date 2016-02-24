@@ -679,7 +679,7 @@ rightDivideWithLapackMatrix: aLapackMatrix
 						rhsMatrix: self asGeneralMatrix transposed.
 			solver solution transposed]!
 
-scaledByComplex: aComplex 	"Answer a copy of self scaled.	aComplex and self should agree on precision before sending this message."	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex real].	^self asComplexMatrix copy inPlaceScaledByComplex: aComplex!
+scaledByComplex: aComplex 	"Answer a copy of self scaled.	aComplex and self should agree on precision before sending this message."	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex realPart].	^self asComplexMatrix copy inPlaceScaledByComplex: aComplex!
 
 scaledByNumber: aNumber 	"Answer a copy of self scaled.	aNumber and self should agree on precision before sending this message."	^self copy inPlaceScaledByNumber: aNumber!
 
@@ -870,8 +870,6 @@ arrayInterface	^ArrayInterfaces at: self sdczIndex!
 
 blasInterface	^BlasInterfaces at: self sdczIndex!
 
-cAccessError	^cAccessError!
-
 cArrayClass	"answer the array suitable for storing data in C space	can eventually be optimized in subclasses"	^CArrayClasses at: self sdczIndex!
 
 columnMatrix	^self generalMatrix!
@@ -975,8 +973,6 @@ isUnpackedMatrix	^(flags bitAnd: StorageMask) ~= PackedStorageMask!
 
 lapackInterface	^LapackInterfaces at: self sdczIndex!
 
-libraryError	^libraryErrorCollection!
-
 nrow: nr ncol: nc withAll: aNumber 	"Create a matrix filled with aNumber"	^(self allocateNrow: nr ncol: nc) atAllPut: aNumber!
 
 onStartup
@@ -1017,8 +1013,6 @@ sdczIndex	"Answer an index used for indirection according to precision and comp
 
 singlePrecisionMatrix	^self findClassWithFlags: (self flags maskClear: PrecisionMask)!
 
-smalltalkAccessError	^smalltalkAccessError!
-
 smalltalkArrayClass	"answer the array suitable for storing data in Smalltalk space"	^SmalltalkArrayClasses at: self sdczIndex!
 
 storeInstancesInSmalltalkSpace	self allInstancesDo: [:e | e storeInSmalltalkSpace]!
@@ -1038,7 +1032,6 @@ unregisterFlags	"remove reference to a self before being unloaded"	FlagsToCla
 !LapackMatrix class categoriesFor: #allocateNrow:ncol:!public! !
 !LapackMatrix class categoriesFor: #arrayInterface!public! !
 !LapackMatrix class categoriesFor: #blasInterface!public! !
-!LapackMatrix class categoriesFor: #cAccessError!public! !
 !LapackMatrix class categoriesFor: #cArrayClass!public! !
 !LapackMatrix class categoriesFor: #columnMatrix!public! !
 !LapackMatrix class categoriesFor: #complexMatrix!public! !
@@ -1069,7 +1062,6 @@ unregisterFlags	"remove reference to a self before being unloaded"	FlagsToCla
 !LapackMatrix class categoriesFor: #isTriangularMatrix!public! !
 !LapackMatrix class categoriesFor: #isUnpackedMatrix!public! !
 !LapackMatrix class categoriesFor: #lapackInterface!public! !
-!LapackMatrix class categoriesFor: #libraryError!public! !
 !LapackMatrix class categoriesFor: #nrow:ncol:withAll:!public! !
 !LapackMatrix class categoriesFor: #onStartup!public! !
 !LapackMatrix class categoriesFor: #packedMatrix!public! !
@@ -1085,7 +1077,6 @@ unregisterFlags	"remove reference to a self before being unloaded"	FlagsToCla
 !LapackMatrix class categoriesFor: #rowMatrix!public! !
 !LapackMatrix class categoriesFor: #sdczIndex!public! !
 !LapackMatrix class categoriesFor: #singlePrecisionMatrix!public! !
-!LapackMatrix class categoriesFor: #smalltalkAccessError!public! !
 !LapackMatrix class categoriesFor: #smalltalkArrayClass!public! !
 !LapackMatrix class categoriesFor: #storeInstancesInSmalltalkSpace!public! !
 !LapackMatrix class categoriesFor: #triangularMatrix!public! !

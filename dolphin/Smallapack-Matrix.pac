@@ -165,7 +165,7 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: '..\..\Burning River\Complex\Complex';
+	add: '..\..\..\Contributions\Burning River\Complex\Complex';
 	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	add: 'Smallapack-Algorithm';
 	add: 'Smallapack-External';
@@ -697,9 +697,30 @@ copy: m rowsStartingAt: i and: n columnsStartingAt: j from: a 	"Equivalent Matl
 
 count: aBlock 	"Count the number of elements that satisfy a condition.	anElement is satisfying a condition means	(aBlock value: anElement) = true."	| count |	count := 0.	1 to: self size		do: [:i | (aBlock value: (self at: i)) ifTrue: [count := count + 1]].	^count!
 
-cumulativeProduct: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: nrow				do: 					[:i | 					res rowAt: i						putSequence: ((1 to: ncol) 								cumulativeProduct: [:j | aBlock value: (self rowAt: i columnAt: j)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: ncol				do: 					[:i | 					res columnAt: i						putSequence: ((1 to: nrow) 								cumulativeProduct: [:j | aBlock value: (self rowAt: j columnAt: i)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
+cumulativeProduct: aBlock dimension: aDimension 
+	| res |
+	aDimension = 2 
+		ifTrue: 
+			[res := self class allocateNrow: nrow ncol: ncol.
+			1 to: nrow
+				do: 
+					[:i | 
+					res rowAt: i
+						putSequence: ((1 to: ncol) cumulativeProductOf: [:j | aBlock value: (self rowAt: i columnAt: j)])].
+			^res].
+	aDimension = 1 
+		ifTrue: 
+			[res := self class allocateNrow: nrow ncol: ncol.
+			1 to: ncol
+				do: 
+					[:i | 
+					res columnAt: i
+						putSequence: ((1 to: nrow) cumulativeProductOf: [:j | aBlock value: (self rowAt: j columnAt: i)])].
+			^res].
+	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.
+	^nil!
 
-cumulativeSum: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: nrow				do: 					[:i | 					res rowAt: i						putSequence: ((1 to: ncol) 								cumulativeSum: [:j | aBlock value: (self rowAt: i columnAt: j)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: ncol				do: 					[:i | 					res columnAt: i						putSequence: ((1 to: nrow) 								cumulativeSum: [:j | aBlock value: (self rowAt: j columnAt: i)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
+cumulativeSum: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: nrow				do: 					[:i | 					res rowAt: i						putSequence: ((1 to: ncol) 								cumulativeSumOf: [:j | aBlock value: (self rowAt: i columnAt: j)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: nrow ncol: ncol.			1 to: ncol				do: 					[:i | 					res columnAt: i						putSequence: ((1 to: nrow) 								cumulativeSumOf: [:j | aBlock value: (self rowAt: j columnAt: i)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
 
 diagonal	"Answer a Column Matrix with elements extracted from my diagonal.	This is not compatible with Matlab function diag.	Matlab code would be:		^self isVector			ifTrue: [self clas diagonal: self]			ifFalse: [self diagonalAt: 0]"	^self diagonalAt: 0!
 
@@ -1013,7 +1034,7 @@ product	| prod |	self isEmpty ifTrue: [^1].	prod := self at: 1.	2 to: self s
 
 product: aBlock 
 	"backward compatibility - synonym of productOf:"
-	| product |	#deprecated.
+	#deprecated.
 	^self productOf: aBlock!
 
 product: aBlock dimension: aDimension 	| res |	aDimension = 2 		ifTrue: 			[res := self class allocateNrow: nrow ncol: 1.			1 to: nrow				do: 					[:ir | 					res at: ir						put: ((1 to: ncol) 								product: [:jc | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	aDimension = 1 		ifTrue: 			[res := self class allocateNrow: 1 ncol: ncol.			1 to: ncol				do: 					[:jc | 					res at: jc						put: ((1 to: nrow) 								product: [:ir | aBlock value: (self rowAt: ir columnAt: jc)])].			^res].	self error: 'UNKNOWN DIMENSION : should be 1 or 2'.	^nil!
@@ -1074,7 +1095,7 @@ productRowVectorWithColumnVector: aVector 	"Answer the result of operation (a d
 
 productRowVectorWithMatrix: aMatrix 	"Vector * Matrix	naive algorithm"	| result |	result := self class allocateNrow: 1 ncol: aMatrix ncol.	1 to: aMatrix ncol		do: 			[:jc | 			result at: jc				put: ((1 to: aMatrix nrow) 						sumOf: [:ir | (self at: ir) * (aMatrix rowAt: ir columnAt: jc)])].	^result!
 
-realPart	^self collect: [:e | e real]!
+realPart	^self collect: [:e | e realPart]!
 
 replicate: newDimensions
 	^self class shape: newDimensions do: [:nr :nc | self replicateNrow: nr timesNcol: nc]!
@@ -1125,7 +1146,7 @@ scale: n elementsBy: alpha increment: incx
 			self at: (i - 1) * incx + sx
 				put: (self at: (i - 1) * incx + sx) * alpha]!
 
-scaledByComplex: aComplex 	"Answer a copy of self scaled."	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex real].	^self collect: [:each | each * aComplex]!
+scaledByComplex: aComplex 	"Answer a copy of self scaled."	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex realPart].	^self collect: [:each | each * aComplex]!
 
 scaledByNumber: aNumber 	"Answer a copy of self scaled."	^self collect: [:each | each * aNumber]!
 
@@ -2354,7 +2375,7 @@ rightDivideWithLapackMatrix: aLapackMatrix
 						rhsMatrix: self asGeneralMatrix transposed.
 			solver solution transposed]!
 
-scaledByComplex: aComplex 	"Answer a copy of self scaled.	aComplex and self should agree on precision before sending this message."	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex real].	^self asComplexMatrix copy inPlaceScaledByComplex: aComplex!
+scaledByComplex: aComplex 	"Answer a copy of self scaled.	aComplex and self should agree on precision before sending this message."	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex realPart].	^self asComplexMatrix copy inPlaceScaledByComplex: aComplex!
 
 scaledByNumber: aNumber 	"Answer a copy of self scaled.	aNumber and self should agree on precision before sending this message."	^self copy inPlaceScaledByNumber: aNumber!
 
@@ -2545,8 +2566,6 @@ arrayInterface	^ArrayInterfaces at: self sdczIndex!
 
 blasInterface	^BlasInterfaces at: self sdczIndex!
 
-cAccessError	^cAccessError!
-
 cArrayClass	"answer the array suitable for storing data in C space	can eventually be optimized in subclasses"	^CArrayClasses at: self sdczIndex!
 
 columnMatrix	^self generalMatrix!
@@ -2650,8 +2669,6 @@ isUnpackedMatrix	^(flags bitAnd: StorageMask) ~= PackedStorageMask!
 
 lapackInterface	^LapackInterfaces at: self sdczIndex!
 
-libraryError	^libraryErrorCollection!
-
 nrow: nr ncol: nc withAll: aNumber 	"Create a matrix filled with aNumber"	^(self allocateNrow: nr ncol: nc) atAllPut: aNumber!
 
 onStartup
@@ -2692,8 +2709,6 @@ sdczIndex	"Answer an index used for indirection according to precision and comp
 
 singlePrecisionMatrix	^self findClassWithFlags: (self flags maskClear: PrecisionMask)!
 
-smalltalkAccessError	^smalltalkAccessError!
-
 smalltalkArrayClass	"answer the array suitable for storing data in Smalltalk space"	^SmalltalkArrayClasses at: self sdczIndex!
 
 storeInstancesInSmalltalkSpace	self allInstancesDo: [:e | e storeInSmalltalkSpace]!
@@ -2713,7 +2728,6 @@ unregisterFlags	"remove reference to a self before being unloaded"	FlagsToCla
 !LapackMatrix class categoriesFor: #allocateNrow:ncol:!public! !
 !LapackMatrix class categoriesFor: #arrayInterface!public! !
 !LapackMatrix class categoriesFor: #blasInterface!public! !
-!LapackMatrix class categoriesFor: #cAccessError!public! !
 !LapackMatrix class categoriesFor: #cArrayClass!public! !
 !LapackMatrix class categoriesFor: #columnMatrix!public! !
 !LapackMatrix class categoriesFor: #complexMatrix!public! !
@@ -2744,7 +2758,6 @@ unregisterFlags	"remove reference to a self before being unloaded"	FlagsToCla
 !LapackMatrix class categoriesFor: #isTriangularMatrix!public! !
 !LapackMatrix class categoriesFor: #isUnpackedMatrix!public! !
 !LapackMatrix class categoriesFor: #lapackInterface!public! !
-!LapackMatrix class categoriesFor: #libraryError!public! !
 !LapackMatrix class categoriesFor: #nrow:ncol:withAll:!public! !
 !LapackMatrix class categoriesFor: #onStartup!public! !
 !LapackMatrix class categoriesFor: #packedMatrix!public! !
@@ -2760,7 +2773,6 @@ unregisterFlags	"remove reference to a self before being unloaded"	FlagsToCla
 !LapackMatrix class categoriesFor: #rowMatrix!public! !
 !LapackMatrix class categoriesFor: #sdczIndex!public! !
 !LapackMatrix class categoriesFor: #singlePrecisionMatrix!public! !
-!LapackMatrix class categoriesFor: #smalltalkAccessError!public! !
 !LapackMatrix class categoriesFor: #smalltalkArrayClass!public! !
 !LapackMatrix class categoriesFor: #storeInstancesInSmalltalkSpace!public! !
 !LapackMatrix class categoriesFor: #triangularMatrix!public! !
@@ -3488,7 +3500,7 @@ scale: n elementsBy: alpha increment: incx
 		ifTrue: 
 			[self blasInterface 
 				realScalWithN: n
-				alpha: comp real
+				alpha: comp realPart
 				X: self asParameter
 				incX: incx]
 		ifFalse: 
@@ -3600,7 +3612,7 @@ scale: n elementsBy: alpha increment: incx
 		ifTrue: 
 			[self blasInterface 
 				realScalWithN: n
-				alpha: comp real
+				alpha: comp realPart
 				X: self asParameter
 				incX: incx]
 		ifFalse: 
@@ -4079,7 +4091,7 @@ productMatrixWithMatrix: aLapackMatrix
 
 reciprocal	^[self pluDecomposition inverse] on: Error		do: [:exc | exc return: super reciprocal]!
 
-scaledByComplex: aComplex 	"a Hermitian Matrix when scaled by complex number is no more hermitian... It is general"	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex real].	^self asGeneralMatrix scaledByComplex: aComplex!
+scaledByComplex: aComplex 	"a Hermitian Matrix when scaled by complex number is no more hermitian... It is general"	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex realPart].	^self asGeneralMatrix scaledByComplex: aComplex!
 
 setArray: anArray nrow: nr ncol: nc 	self beBothUpperLower.	super 		setArray: anArray		nrow: nr		ncol: nc!
 
