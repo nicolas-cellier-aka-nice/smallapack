@@ -16,10 +16,10 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: '..\..\Documents and Settings\cellier\Mes documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	add: 'Smallapack-Algorithm';
 	add: 'Smallapack-Matrix';
-	add: '..\..\Documents and Settings\cellier\Mes documents\Dolphin Smalltalk X6\Camp Smalltalk\SUnit\SUnit';
+	add: '..\..\..\Core\Contributions\Camp Smalltalk\SUnit\SUnit';
 	yourself).
 
 package!
@@ -175,6 +175,8 @@ testEigenValues
 	self assert: ((LapackDGEMatrix diagonal: eva eigenValues asSortedCollection ) - d) absMax < 1.0d-12.
 	self assert: (a * eva rightEigenVectors - ( eva rightEigenVectors * (LapackDGEMatrix diagonal: eva eigenValues) ) ) absMax < 1.0d-12.!
 
+testEquality	self deny: zeros43 = ones34.	self deny: ones34 = seq34.	self assert: ones34 - ones34 = zeros43 transpose.!
+
 testHessenberg
 	| m hess |
 	m := LapackDGEMatrix rows: #(#(3 2 4) #(2 -5 -1) #(1 -2 2)).
@@ -286,40 +288,7 @@ testMatrixOperation
 	self should: [ ((c rowAt: 2) at: 2) = 14].
 	self should: [ ((c rowAt: 2) at: 3) = 4].!
 
-testMatrixProduct
-	| dic matrixClasses |
-	dic := Dictionary new.
-	dic at: 33 put: #(#(3 2 4) #(2 -5 -1) #(1 -2 2)).
-	dic at: 31 put: #(#(-7) #(11) #(19)).
-	dic at: 13 put: #(#(2 -5 8)).
-	dic at: 34 put: #(#(1 3 -2 4) #(-5 1 -5 -1) #(-1 2 4 2)).
-	matrixClasses := Array with: LapackDGEMatrix with: LapackSGEMatrix.
-	matrixClasses do: 
-			[:mclass1 | 
-			dic keysDo: 
-					[:k1 | 
-					| m1 m1t |
-					m1 := mclass1 rows: (dic at: k1).
-					m1t := m1 lowerTriangle: 0.
-					matrixClasses do: 
-							[:mclass2 | 
-							dic keysDo: 
-									[:k2 | 
-									| m2 m2t |
-									m2 := mclass2 rows: (dic at: k2).
-									m2t := m2 lowerTriangle: 0.
-									k1 \\ 10 = (k2 // 10) 
-										ifTrue: 
-											[(Array with: m1 with: m1t) do: 
-													[:mm1 | 
-													(Array with: m2 with: m2t) do: 
-															[:mm2 | 
-															| m1m2 |
-															m1m2 := mm1 * mm2.
-															self assert: m1m2 nrow = m1 nrow.
-															self assert: m1m2 ncol = m2 ncol.
-															self assert: (m1m2 transposed - (mm2 transposed * mm1 transposed)) absMax < 1.0d-15]]]
-										ifFalse: [self should: [m1t * m2] raise: TestResult error]]]]]!
+testMatrixProduct	| dic matrixClasses |	dic := Dictionary new.	dic at: 33 put: #(#(3 2 4) #(2 -5 -1) #(1 -2 2)).	dic at: 31 put: #(#(-7) #(11) #(19)).	dic at: 13 put: #(#(2 -5 8)).	dic at: 34 put: #(#(1 3 -2 4) #(-5 1 -5 -1) #(-1 2 4 2)).	self should: [ones34 * seq34] raise: Error.	matrixClasses := Array with: LapackDGEMatrix with: LapackSGEMatrix.	matrixClasses do: 			[:mclass1 | 			dic keysDo: 					[:k1 | 					| m1 m1t |					m1 := mclass1 rows: (dic at: k1).					m1t := m1 lowerTriangle: 0.					matrixClasses do: 							[:mclass2 | 							dic keysDo: 									[:k2 | 									| m2 m2t |									m2 := mclass2 rows: (dic at: k2).									m2t := m2 lowerTriangle: 0.									k1 \\ 10 = (k2 // 10) 										ifTrue: 											[(Array with: m1 with: m1t) do: 													[:mm1 | 													(Array with: m2 with: m2t) do: 															[:mm2 | 															| m1m2 |															m1m2 := mm1 * mm2.															self assert: m1m2 nrow = m1 nrow.															self assert: m1m2 ncol = m2 ncol.															self assert: (m1m2 transposed - (mm2 transposed * mm1 transposed)) absMax < 1.0d-15]]]										ifFalse: [self should: [m1t * m2] raise: TestResult error]]]]]!
 
 testMatrixReplicate
 	| m1 o34 m23 m1012 m1012b |
@@ -445,48 +414,29 @@ testSingularValues
 	sigma setDiagonal: svd s.
 	self assert: (svd u * sigma * svd vt - a) absMax < 1.0d-12.!
 
-testSmallLowerTriangle
-	"Unlike #upperTriangle: , #smallLowerTriangle: can be of smaller size than receiver"
-	
-	(LapackGeneralMatrix allSubclasses copyWith: AbstractMatrix) do: [:matrixClass |
-		| m33 m36 m63 |
-		m33 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33)).
-		m36 := matrixClass rows: #(#(11 12 13 14 15 16) #(21 22 23 24 25 26) #(31 32 33 34 35 36)).
-		m63 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63)).
-	
-		self assert: (m33 smallLowerTriangle: -1) = (matrixClass rows: #(#(21 0) #(31 32 ))).
-		self assert: (m33 smallLowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33))).
-		self assert: (m33 smallLowerTriangle: 1) = (matrixClass rows: #(#(11 12 0) #(21 22 23) #(31 32 33))).
-		self assert: (m33 smallLowerTriangle: 2) = m33.
-	
-		self assert: (m36 smallLowerTriangle: -1) = (matrixClass rows: #(#(21 0) #(31 32))).
-		self assert: (m36 smallLowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33))).
-		self assert: (m36 smallLowerTriangle: 1) = (matrixClass rows: #(#(11 12 0 0) #(21 22 23 0) #(31 32 33 34))).
-		self assert: (m36 smallLowerTriangle: 5) = m36.
-	
-		self assert: (m63 smallLowerTriangle: 2) = m63.
-		self assert: (m63 smallLowerTriangle: 1) = (matrixClass rows: #(#(11 12 0) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63))).
-		self assert: (m63 smallLowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63))).
-		self assert: (m63 smallLowerTriangle: -1) = (matrixClass rows: #(#(21 0 0) #(31 32 0) #(41 42 43) #(51 52 53) #(61 62 63))).
-		self assert: (m63 smallLowerTriangle: -2) = (matrixClass rows: #(#(31 0 0) #(41 42 0) #(51 52 53) #(61 62 63))).
-		self assert: (m63 smallLowerTriangle: -3) = (matrixClass rows: #(#(41 0 0) #(51 52 0) #(61 62 63))).
-		self assert: (m63 smallLowerTriangle: -4) = (matrixClass rows: #(#(51 0) #(61 62)))]!
+testSmallLowerTriangle	"Unlike #upperTriangle: , #smallLowerTriangle: can be of smaller size than receiver"		self deny: (seq34 lowerTriangle: 0) isTriangular.	self assert: (seq34 smallLowerTriangle: 0) isTriangular.	(LapackGeneralMatrix allSubclasses copyWith: AbstractMatrix) do: [:matrixClass |		| m33 m36 m63 |		m33 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33)).		m36 := matrixClass rows: #(#(11 12 13 14 15 16) #(21 22 23 24 25 26) #(31 32 33 34 35 36)).		m63 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63)).			self assert: (m33 smallLowerTriangle: -1) = (matrixClass rows: #(#(21 0) #(31 32 ))).		self assert: (m33 smallLowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33))).		self assert: (m33 smallLowerTriangle: 1) = (matrixClass rows: #(#(11 12 0) #(21 22 23) #(31 32 33))).		self assert: (m33 smallLowerTriangle: 2) = m33.			self assert: (m36 smallLowerTriangle: -1) = (matrixClass rows: #(#(21 0) #(31 32))).		self assert: (m36 smallLowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33))).		self assert: (m36 smallLowerTriangle: 1) = (matrixClass rows: #(#(11 12 0 0) #(21 22 23 0) #(31 32 33 34))).		self assert: (m36 smallLowerTriangle: 5) = m36.			self assert: (m63 smallLowerTriangle: 2) = m63.		self assert: (m63 smallLowerTriangle: 1) = (matrixClass rows: #(#(11 12 0) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63))).		self assert: (m63 smallLowerTriangle: 0) = (matrixClass rows: #(#(11 0 0) #(21 22 0) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63))).		self assert: (m63 smallLowerTriangle: -1) = (matrixClass rows: #(#(21 0 0) #(31 32 0) #(41 42 43) #(51 52 53) #(61 62 63))).		self assert: (m63 smallLowerTriangle: -2) = (matrixClass rows: #(#(31 0 0) #(41 42 0) #(51 52 53) #(61 62 63))).		self assert: (m63 smallLowerTriangle: -3) = (matrixClass rows: #(#(41 0 0) #(51 52 0) #(61 62 63))).		self assert: (m63 smallLowerTriangle: -4) = (matrixClass rows: #(#(51 0) #(61 62)))]!
 
 testSmallPackAccessing
 	"Borrowed to Smallpack"
 
-	| seqRows seqCols |
+	| seqRows seqCols i3b zeros43b ones34b |
 	self assert: ones34 size = 12.
-	self assert: ((i3 at: 4)	= 0 and: [(i3 at: 5)	= 1]).
-	i3 at: 6 put: 7.
-	self assert: (i3 atRow:3  column: 2) = 7.
-	i3 atRow: 3 column: 2 put: 0.
-	self assert: (i3 at: 6) = 0.
+	self assert: ((i3 at: 4) = 0 and: [(i3 at: 5)	= 1]).
+	
+	i3b := i3 copy.
+	i3b at: 6 put: 7.
+	self assert: (i3b atRow:3  column: 2) = 7.
+	i3b atRow: 3 column: 2 put: 0.
+	self assert: (i3b at: 6) = 0.
+	
 	self assert: ((seq34 atColumn: 2) isSameSequenceAs: 4 asLapackMatrix, 5, 6).
 	self assert: ((seq34 atRow: 3) isSameSequenceAs: 3 asLapackMatrix, 6, 9, 12).
-	zeros43 atRow:3  putSequence: vec3.
-	zeros43 atColumn: 2 putSequence: (1 asLapackMatrix, 2, 3, 4).
-	self assert: (zeros43 asColumnMatrix isSameSequenceAs: 0 asLapackMatrix, 0, 1, 0, 1, 2, 3, 4, 0, 0, 3, 0).
+	
+	zeros43b := zeros43 copy.
+	zeros43b atRow:3  putSequence: vec3.
+	zeros43b atColumn: 2 putSequence: (1 asLapackMatrix, 2, 3, 4).
+	self assert: (zeros43b asColumnMatrix isSameSequenceAs: 0 asLapackMatrix, 0, 1, 0, 1, 2, 3, 4, 0, 0, 3, 0).
+	
 	self assert: (zeros43 nrow = 4 and: [ zeros43 ncol = 3]).
 	seqRows := seq34 rows.
 	self assert: ((seqRows isKindOf: Array) and: [ seqRows size = 3]).
@@ -495,11 +445,15 @@ testSmallPackAccessing
 	self assert: ((seqCols isKindOf: Array) and: [ seqCols size = 4]).
 	self assert: (((seqCols at: 3) isKindOf: LapackMatrix) and: [ (seqCols at: 3) isSameSequenceAs: 7 asLapackMatrix, 8, 9]).
 	self assert: (i3  diagonal isSameSequenceAs: 1 asLapackMatrix, 1, 1).
-	i3 setDiagonal: vec3.
-	self assert: (i3 diagonal isSameSequenceAs: 1 asLapackMatrix, 2, 3).
-	ones34 atRow: 1 putAll: 0.
-	ones34 atColumn: 2 putAll: 2.
-	self assert: (ones34 isSameSequenceAs: 0 asLapackMatrix, 1, 1, 2, 2, 2, 0, 1, 1, 0, 1, 1).!
+
+	i3b := i3 copy.
+	i3b setDiagonal: vec3.
+	self assert: (i3b diagonal isSameSequenceAs: 1 asLapackMatrix, 2, 3).
+	
+	ones34b := ones34 copy.
+	ones34b atRow: 1 putAll: 0.
+	ones34b atColumn: 2 putAll: 2.
+	self assert: (ones34b isSameSequenceAs: 0 asLapackMatrix, 1, 1, 2, 2, 2, 0, 1, 1, 0, 1, 1).!
 
 testSmallPackArithmetic
 	"Borrowed to Smallpack"
@@ -603,30 +557,9 @@ testSmallPackAugmenting
 	self assert: ((i3 ,, zeros43) hasShape: 7 by: 3).
 	self assert: ((((vec03 ,, vec03) ,, vec03) ,, vec03) = zeros43).!
 
-testSmallUpperTriangle
-	"Unlike #upperTriangle: , #smallUpperTriangle: can be of smaller size than receiver"
-	
-	(LapackGeneralMatrix allSubclasses copyWith: AbstractMatrix) do: [:matrixClass |
-		| m33 m36 m63 |
-		m33 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33)).
-		m36 := matrixClass rows: #(#(11 12 13 14 15 16) #(21 22 23 24 25 26) #(31 32 33 34 35 36)).
-		m63 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63)).
-	
-		self assert: (m33 smallUpperTriangle: -2) = m33.
-		self assert: (m33 smallUpperTriangle: -1) = (matrixClass rows: #(#(11 12 13 ) #(21 22 23 ) #(0 32 33 ))).
-		self assert: (m33 smallUpperTriangle: 0) = (matrixClass rows: #(#(11 12 13) #(0 22 23) #(0 0 33))).
-		self assert: (m33 smallUpperTriangle: 1) = (matrixClass rows: #(#(12 13) #(0 23))).
-	
-		self assert: (m36 smallUpperTriangle: -2) = m36.
-		self assert: (m36 smallUpperTriangle: -1) = (matrixClass rows: #(#(11 12 13 14 15 16 ) #(21 22 23 24 25 26 ) #(0 32 33 34 35 36 ))).
-		self assert: (m36 smallUpperTriangle: 0) = (matrixClass rows: #(#(11 12 13 14 15 16 ) #(0 22 23 24 25 26 ) #(0 0 33 34 35 36 ))).
-		self assert: (m36 smallUpperTriangle: 1) = (matrixClass rows: #(#(12 13 14 15 16 ) #(0 23 24 25 26 ) #(0 0 34 35 36 ))).
-		self assert: (m36 smallUpperTriangle: 4) = (matrixClass rows: #(#(15 16 ) #(0 26 ))).
-	
-		self assert: (m63 smallUpperTriangle: -5) = m63.
-		self assert: (m63 smallUpperTriangle: -1) = (matrixClass rows: #(#(11 12 13 ) #(21 22 23 ) #(0 32 33 ) #(0 0 43 ))).
-		self assert: (m63 smallUpperTriangle: 0) = (matrixClass rows: #(#(11 12 13) #(0 22 23) #(0 0 33))).
-		self assert: (m63 smallUpperTriangle: 1) = (matrixClass rows: #(#(12 13) #(0 23)))]!
+testSmallUpperTriangle	"Unlike #upperTriangle: , #smallUpperTriangle: can be of smaller size than receiver"		self deny: (seq34 upperTriangle: 1) isTriangular.	self assert: (seq34 smallUpperTriangle: 1) isTriangular.	(LapackGeneralMatrix allSubclasses copyWith: AbstractMatrix) do: [:matrixClass |		| m33 m36 m63 |		m33 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33)).		m36 := matrixClass rows: #(#(11 12 13 14 15 16) #(21 22 23 24 25 26) #(31 32 33 34 35 36)).		m63 := matrixClass rows: #(#(11 12 13) #(21 22 23) #(31 32 33) #(41 42 43) #(51 52 53) #(61 62 63)).			self assert: (m33 smallUpperTriangle: -2) = m33.		self assert: (m33 smallUpperTriangle: -1) = (matrixClass rows: #(#(11 12 13 ) #(21 22 23 ) #(0 32 33 ))).		self assert: (m33 smallUpperTriangle: 0) = (matrixClass rows: #(#(11 12 13) #(0 22 23) #(0 0 33))).		self assert: (m33 smallUpperTriangle: 1) = (matrixClass rows: #(#(12 13) #(0 23))).			self assert: (m36 smallUpperTriangle: -2) = m36.		self assert: (m36 smallUpperTriangle: -1) = (matrixClass rows: #(#(11 12 13 14 15 16 ) #(21 22 23 24 25 26 ) #(0 32 33 34 35 36 ))).		self assert: (m36 smallUpperTriangle: 0) = (matrixClass rows: #(#(11 12 13 14 15 16 ) #(0 22 23 24 25 26 ) #(0 0 33 34 35 36 ))).		self assert: (m36 smallUpperTriangle: 1) = (matrixClass rows: #(#(12 13 14 15 16 ) #(0 23 24 25 26 ) #(0 0 34 35 36 ))).		self assert: (m36 smallUpperTriangle: 4) = (matrixClass rows: #(#(15 16 ) #(0 26 ))).			self assert: (m63 smallUpperTriangle: -5) = m63.		self assert: (m63 smallUpperTriangle: -1) = (matrixClass rows: #(#(11 12 13 ) #(21 22 23 ) #(0 32 33 ) #(0 0 43 ))).		self assert: (m63 smallUpperTriangle: 0) = (matrixClass rows: #(#(11 12 13) #(0 22 23) #(0 0 33))).		self assert: (m63 smallUpperTriangle: 1) = (matrixClass rows: #(#(12 13) #(0 23)))]!
+
+testSqueakAccessProtocol	| invalidMarker modified |	invalidMarker := Object new.	self assert: (seq34 at: 1 at: 1) = 1.	self assert: (seq34 at: 3 at: 4) = 12.	self assert: (seq34 at: 3 at: 4 ifInvalid: [invalidMarker]) = 12.	self assert: (seq34 at: 4 at: 3 ifInvalid: [invalidMarker]) = invalidMarker.	self assert: (seq34 at: 1 at: 5 ifInvalid: [invalidMarker]) = invalidMarker.	modified := seq34 copy.	self assert: (modified at: 3 at: 4 incrementBy: 2) = 14.	self assert: (modified at: 3 at: 4) = 14.	self assert: (modified at: 3 at: 4 put: 13) = 13.	self assert: (modified at: 3 at: 4) = 13.	modified := seq34 copy.	modified swap: 1 at: 2 with: 3 at: 4.	self assert: (modified at: 1 at: 2) = (seq34 at: 3 at: 4).	self assert: (modified at: 3 at: 4) = (seq34 at: 1 at: 2).	modified := seq34 copy.	modified swapRow: 1 withRow: 2.	self assert: (modified rowAt: 1) = (seq34 rowAt: 2).	self assert: (modified rowAt: 2) = (seq34 rowAt: 1).	modified := seq34 copy.	modified swapColumn: 3 withColumn: 2.	self assert: (modified columnAt: 3) = (seq34 columnAt: 2).	self assert: (modified columnAt: 2) = (seq34 columnAt: 3).!
 
 testSum
 	| aSmallapackArray aMatrix bMatrix md ms mdmd mdms msmd msms |
@@ -730,6 +663,7 @@ testUpperTriangle
 !TestLapackMatrix categoriesFor: #testCreation!public! !
 !TestLapackMatrix categoriesFor: #testDeterminant!public! !
 !TestLapackMatrix categoriesFor: #testEigenValues!public! !
+!TestLapackMatrix categoriesFor: #testEquality!public! !
 !TestLapackMatrix categoriesFor: #testHessenberg!public! !
 !TestLapackMatrix categoriesFor: #testLeastSquareWithEqualityConstraints!public!running! !
 !TestLapackMatrix categoriesFor: #testLowerTriangle!public!running! !
@@ -747,6 +681,7 @@ testUpperTriangle
 !TestLapackMatrix categoriesFor: #testSmallPackArithmetic!public! !
 !TestLapackMatrix categoriesFor: #testSmallPackAugmenting!public! !
 !TestLapackMatrix categoriesFor: #testSmallUpperTriangle!public!running! !
+!TestLapackMatrix categoriesFor: #testSqueakAccessProtocol!public! !
 !TestLapackMatrix categoriesFor: #testSum!public! !
 !TestLapackMatrix categoriesFor: #testTransposed!public!running! !
 !TestLapackMatrix categoriesFor: #testUpperTriangle!public!running! !
