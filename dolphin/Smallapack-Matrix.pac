@@ -165,8 +165,8 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: '..\Dolphin Smalltalk 5.1\Burning River\Complex\Complex';
-	add: '..\..\Documents and Settings\cellier\Mes documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\Burning River\Complex\Complex';
+	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	add: 'Smallapack-Algorithm';
 	add: 'Smallapack-External';
 	yourself).
@@ -681,7 +681,17 @@ conjugated	^self collect: [:e | e conjugated]!
 
 copy: n elementsFrom: aMatrix sourceIncrement: incx destIncrement: incy 	"BLAS primitve xCOPY - naive implementation"	^self 		copy: n		elementsFrom: aMatrix		sourceOffset: 0		sourceIncrement: incx		destOffset: 0		destIncrement: incy!
 
-copy: n elementsFrom: aMatrix sourceOffset: offx sourceIncrement: incx destOffset: offy destIncrement: incy 	"BLAS primitve xCOPY - naive implementation"	1 to: n		do: 			[:i | 			self at: (i - 1) * incy + offy + 1				put: (aMatrix at: (i - 1) * incx + offx + 1)]!
+copy: n elementsFrom: aMatrix sourceOffset: offx sourceIncrement: incx destOffset: offy destIncrement: incy 
+	"BLAS primitve xCOPY - naive implementation"
+
+	| sx sy |
+	sx := incx positive ifTrue: [offx + 1] ifFalse: [(1 - n) * incx + offx + 1].
+	sy := incy positive ifTrue: [offy + 1] ifFalse: [(1 - n) * incy + offy + 1].
+	0 to: n - 1
+		do: 
+			[:i | 
+			self at: i * incy + sy
+				put: (aMatrix at: i * incx + sx)]!
 
 copy: m rowsStartingAt: i and: n columnsStartingAt: j from: a 	"Equivalent Matlab code:		self( i:i+m-1 , j:j+n-1 ) = a(1:m , 1:n)	subclass would use auxiliary lapack routine"	1 to: n		do: 			[:jc | 			1 to: m				do: 					[:ir | 					self at: (j + jc - 2) * nrow + i + ir - 1						put: (a at: (jc - 1) * a nrow + ir)]]!
 
@@ -733,7 +743,16 @@ dimensions	^Array with: nrow with: ncol!
 
 do: aBlock 	"Evaluate aBlock with each of the receiver's elements as the argument."	1 to: self size do: [:i | aBlock value: (self at: i)]!
 
-dotProduct: n elementsIncrement: incx with: aMatrix increment: incy 	"BLAS primitve xDOT - naive implementation"	^(1 to: n) sumOf: 			[:i | 			(self at: (i - 1) * incx + 1) 				* (aMatrix at: (i - 1) * incy + 1)]!
+dotProduct: n elementsIncrement: incx with: aMatrix increment: incy 
+	"BLAS primitve xDOT - naive implementation"
+
+	| sx sy |
+	sx := incx positive ifTrue: [1] ifFalse: [(1 - n) * incx + 1].
+	sy := incy positive ifTrue: [ 1] ifFalse: [(1 - n) * incy +1].
+	^(1 to: n) sum: 
+			[:i | 
+			(self at: (i - 1) * incx + sx) 
+				* (aMatrix at: (i - 1) * incy + sy)]!
 
 elementwisePowerFromNumber: aNumber 	| res |	res := self class allocateNrow: nrow ncol: ncol.	1 to: ncol		do: 			[:jc | 			1 to: nrow				do: 					[:ir | 					res 						rowAt: ir						columnAt: jc						put: aNumber ** (res rowAt: ir columnAt: jc)]].	^res!
 
@@ -753,13 +772,107 @@ elementwiseQuotientWithMatrix: aMatrix 	| res |	(aMatrix nrow = nrow and: [aMa
 
 elementwiseQuotientWithNumber: aNumber 	| res |	res := self class allocateNrow: nrow ncol: ncol.	1 to: ncol		do: 			[:jc | 			1 to: nrow				do: 					[:ir | 					res 						rowAt: ir						columnAt: jc						put: (res rowAt: ir columnAt: jc) / aNumber]].	^res!
 
-fill: n elementsWithStride: incy withSelfPlusScalar: alpha timesVector: aMatrix stride: incx 	"BLAS primitve xAXPY - naive implementation"	1 to: n		do: 			[:i | 			self at: (i - 1) * incx + 1				put: (self at: (i - 1) * incx + 1) * alpha 						+ (aMatrix at: (i - 1) * incy + 1)]!
+fill: n elementsWithStride: incy withSelfPlusScalar: alpha timesVector: aMatrix stride: incx 
+	"BLAS primitve xAXPY - naive implementation"
 
-fill: m elementsWithStride: incy withSelfScaledBy: beta plusScalar: alpha timesMatrix: a transposed: trans timesVector: x length: n stride: incx 	"BLAS primitve xGEMV - naive implementation"	trans 		ifTrue: 			[1 to: m				do: 					[:i | 					self at: (i - 1) * incy + 1						put: alpha * ((1 to: n) 										sumOf: [:j | (a rowAt: j columnAt: i) * (x at: (j - 1) * incx + 1)]) 								+ (beta * (self at: (i - 1) * incy + 1))]]		ifFalse: 			[1 to: m				do: 					[:i | 					self at: (i - 1) * incy + 1						put: alpha * ((1 to: n) 										sumOf: [:j | (a rowAt: i columnAt: j) * (x at: (j - 1) * incx + 1)]) 								+ (beta * (self at: (i - 1) * incy + 1))]]!
+	| sx sy |
+	sx := incx positive ifTrue: [1] ifFalse: [(1 - n) * incx + 1].
+	sy := incy positive ifTrue: [1] ifFalse: [(1 - n) * incy + 1].
+	1 to: n
+		do: 
+			[:i | 
+			self at: (i - 1) * incy + sy
+				put: (aMatrix at: (i - 1) * incx + sx) 
+						+ (alpha * (self at: (i - 1) * incy + sy))]!
 
-fillM: m byN: n withScalar: alpha timesColumnVector: x stride: incx timesRowVector: y stride: incy 	"Blas library xGERx 	fill mxn elements of self from following m-length x and a n-length y vector product		alpha*x*transpose(y)"	1 to: n		do: 			[:j | 			1 to: m				do: 					[:i | 					self 						rowAt: i						columnAt: j						put: alpha * (x at: (i - 1) * incx + 1) 								* (y at: (j - 1) * incy + 1)]]!
+fill: m elementsWithStride: incy withSelfScaledBy: beta plusScalar: alpha timesMatrix: a transposed: trans timesVector: x length: n stride: incx 
+	"BLAS primitve xGEMV - naive implementation"
 
-fillM: m byN: n withSelfScaledBy: beta plusScalar: alpha timesLeftMatrix: a transposed: transa timesRightMatrix: b transposed: transb length: k 	"BLAS primitve xGEMM - naive implementation"	transa 		ifTrue: 			[transb 				ifTrue: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sumOf: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: j columnAt: kk)]) 												+ (beta * (self rowAt: i columnAt: j))]]]				ifFalse: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sumOf: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: kk columnAt: j)]) 												+ (beta * (self rowAt: i columnAt: j))]]]]		ifFalse: 			[transb 				ifTrue: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sumOf: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: j columnAt: kk)]) 												+ (beta * (self rowAt: i columnAt: j))]]]				ifFalse: 					[1 to: n						do: 							[:j | 							1 to: m								do: 									[:i | 									self 										rowAt: i										columnAt: j										put: alpha * ((1 to: k) 														sumOf: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: kk columnAt: j)]) 												+ (beta * (self rowAt: i columnAt: j))]]]]!
+	| sx sy |
+	sx := incx positive ifTrue: [1] ifFalse: [(1 - n) * incx + 1].
+	sy := incy positive ifTrue: [1] ifFalse: [(1 - m) * incy + 1].
+	trans 
+		ifTrue: 
+			[1 to: m
+				do: 
+					[:i | 
+					self at: (i - 1) * incy + sy
+						put: alpha * ((1 to: n) 
+										sum: [:j | (a rowAt: j columnAt: i) * (x at: (j - 1) * incx + sx)]) 
+								+ (beta * (self at: (i - 1) * incy + sy))]]
+		ifFalse: 
+			[1 to: m
+				do: 
+					[:i | 
+					self at: (i - 1) * incy + sy
+						put: alpha * ((1 to: n) 
+										sum: [:j | (a rowAt: i columnAt: j) * (x at: (j - 1) * incx + sx)]) 
+								+ (beta * (self at: (i - 1) * incy + sy))]]!
+
+fillM: m byN: n withScalar: alpha timesColumnVector: x stride: incx timesRowVector: y stride: incy 
+	"Blas library xGERx 
+	fill mxn elements of self from following m-length x and a n-length y vector product
+		alpha*x*transpose(y)"
+
+	| sx sy |
+	sx := incx positive ifTrue: [1] ifFalse: [(1 - m) * incx + 1].
+	sy := incy positive ifTrue: [1] ifFalse: [(1 - n) * incy + 1].
+	1 to: n
+		do: 
+			[:j | 
+			1 to: m
+				do: 
+					[:i | 
+					self 
+						rowAt: i
+						columnAt: j
+						put: alpha * (x at: (i - 1) * incx + sx) 
+								* (y at: (j - 1) * incy + sy)]]!
+
+fillM: m byN: n withSelfScaledBy: beta plusScalar: alpha timesLeftMatrix: a transposed: transa timesRightMatrix: b transposed: transb length: k 
+	"BLAS primitve xGEMM - naive implementation"
+
+	transa 
+		ifTrue: 
+			[transb 
+				ifTrue: 
+					[1 to: n do: [:j | 
+						1 to: m do: [:i | 
+							self 
+								rowAt: i
+								columnAt: j
+								put: alpha * ((1 to: k) 
+												sum: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: j columnAt: kk)]) 
+										+ (beta * (self rowAt: i columnAt: j))]]]
+				ifFalse: 
+					[1 to: n do: [:j | 
+						1 to: m do: [:i | 
+							self 
+								rowAt: i
+								columnAt: j
+								put: alpha * ((1 to: k) 
+												sum: [:kk | (a rowAt: kk columnAt: i) * (b rowAt: kk columnAt: j)]) 
+										+ (beta * (self rowAt: i columnAt: j))]]]]
+		ifFalse: 
+			[transb 
+				ifTrue: 
+					[1 to: n do: [:j | 
+						1 to: m do: [:i | 
+							self 
+								rowAt: i
+								columnAt: j
+								put: alpha * ((1 to: k) 
+												sum: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: j columnAt: kk)]) 
+										+ (beta * (self rowAt: i columnAt: j))]]]
+				ifFalse: 
+					[1 to: n do: [:j | 
+						1 to: m do: [:i | 
+							self 
+								rowAt: i
+								columnAt: j
+								put: alpha * ((1 to: k) 
+												sum: [:kk | (a rowAt: i columnAt: kk) * (b rowAt: kk columnAt: j)]) 
+										+ (beta * (self rowAt: i columnAt: j))]]]]!
 
 findMax	"answer the index of the max of all elements  "	| max index |	self isEmpty ifTrue: [^0].	index := 1.	max := self at: 1.	2 to: self size		do: 			[:i | 			| tmp |			(tmp := self at: i) > max 				ifTrue: 					[max := tmp.					index := i]].	^index!
 
@@ -1015,7 +1128,16 @@ rows: anArrayOfRows 	1 to: anArrayOfRows size		do: [:rowIndex | self rowAt: ro
 
 rowsDo: aBlock 	"evaluate aBlock with each row"	1 to: nrow do: [:i | aBlock value: (self rowAt: i)]!
 
-scale: n elementsBy: alpha increment: incx 	"BLAS primitve xSCAL - naive implementation"	1 to: n		do: 			[:i | 			self at: (i - 1) * incx + 1				put: (self at: (i - 1) * incx + 1) * alpha]!
+scale: n elementsBy: alpha increment: incx 
+	"BLAS primitve xSCAL - naive implementation"
+
+	| sx |
+	sx := incx positive ifTrue: [1] ifFalse: [(1 - n) * incx + 1].
+	1 to: n
+		do: 
+			[:i | 
+			self at: (i - 1) * incx + sx
+				put: (self at: (i - 1) * incx + sx) * alpha]!
 
 scaledByComplex: aComplex 	"Answer a copy of self scaled."	aComplex imaginaryPart isZero ifTrue: [^self scaledByNumber: aComplex real].	^self collect: [:each | each * aComplex]!
 

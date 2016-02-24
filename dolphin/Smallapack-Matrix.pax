@@ -1,7 +1,95 @@
 | package |
 package := Package name: 'Smallapack-Matrix'.
 package paxVersion: 1;
-	basicComment: ''.
+	basicComment: 'Smallapack-Matrix hold classes for doing linear algebra
+
+Note1: we define several synonyms for compatibility with various matrix packages.
+
+Note2: matrices hold an underlying uni-dimensional array inst var, ordered column-wise FORTRAN oblige.
+
+Here is a small uncomplete overview of Matrix protocol:
+
+Different classes of Matrix:
+	There is an abstract class which can hold any kind of element (AbstractMatrix).
+	AbstractMatrix does implement limited protocol (no inversion, eigen values etc...).
+	Other classes are for storing floating point single/double precision real/complex matrices.
+	Class naming is based on LAPACK library naming.
+	1 letter tell contents (S=single real, D=double real, C=single complex, Z=double complex)
+	2 letters tell matrix property (GE=general, TR=triangular, SY=symmetric, HE=hermitian ...)
+	Thus LapackDGEMatrix is a general matrix holding double precision real numbers.
+
+Creating a matrix:
+	LapackDGEMatrix rows: 3 columns: 4.
+	LapackDGEMatrix rows: 3 columns: 4 element: 1.
+	LapackDGEMatrix rows: 3 columns: 4 tabulate: [:i :j | 10*i+j].
+	LapackDGEMatrix rows: 2 columns: 3 contents: (1 to: 6).
+	LapackDGEMatrix nrow; 3 ncol: 4.
+	LapackDGEMatrix nrow; 3 ncol: 4 withAll: 2.
+	LapackDGEMatrix nrow 3  ncol: 4 tabulate: [:i :j | 10*i+j].
+	LapackDGEMatrix fromSequence: (1 to: 6) nrow: 2 ncol: 3.
+	LapackDGEMatrix shape: 3.
+	LapackDGEMatrix shape: 3@4.
+	LapackDGEMatrix shape: #(3 4).
+	LapackDGEMatrix ones: 3@4.
+	LapackDGEMatrix zeros: 3@4.
+	LapackDGEMatrix eye: 3.
+	LapackDGEMAtrix row: #( 1 2 3 ).
+	LapackDGEMAtrix rows: #( #(1 2 3) #(4 5 6) ).
+	LapackDGEMAtrix column: #( 1 2 3 ).
+	LapackDGEMAtrix columns: #( #(1 2 3) #(4 5 6) ).
+
+Accessing an element:
+	(aMatrix at: i at: j).
+	(aMatrix atRow: i column: j).
+	(aMatrix rowAt: i columnAt: j).
+
+Accessing dimensions:
+	(aMatrix numberOfRows). "or #nrow or #nRows or #rowCount"
+	(aMatrix numberOfColumns). "or #ncol or #nCols or #columnCount"
+	(aMatrix shape). "or #dimensions"
+
+Accessing like a 1D-sequenceable collection: NOTE always columnwise, FORTRAN oblige
+	(aMatrix at: i).
+	(aMatrix at: i put: j).
+	(aMatrix size).
+
+Accessing a sub-matrix
+	(aMatrix atRow: 1).
+	(aMatrix rowAt: 1).
+	(aMatrix atColumn: 3).
+	(aMatrix columnAt: 2).
+	(LapackDGEMatrix ones: 4) diagonalAt: 0.
+	(LapackDGEMatrix ones: 4) diagonalAt: 1.
+	(LapackDGEMatrix ones: 4) diagonalAt: -1.
+	(LapackDGEMatrix ones: 4) upperTriangle: 0.
+	(LapackDGEMatrix ones: 4) upperTriangle: 1.
+	(LapackDGEMatrix ones: 4) upperTriangle: -1.
+
+Enumerating
+	do: select: reject: collect: anySatisfy: allSatisfy: sumOf: maxOf: minOf: count:
+
+Matrix enumerating
+	aMatrix rowsDo: [:arow | Transcript cr; show: arow printString].
+	aMatrix columnsDo: [:arow | Transcript cr; show: arow printString].
+
+Concatenating rows and columns:
+	(LapackDGEMatrix ones: 4) , (LapackDGEMatrix column: #(1 2 3 4)).
+	(LapackDGEMatrix ones: 4) ,, (LapackDGEMatrix row: #(1 2 3 4)).
+
+Doing operations with matrices:
+	aMatrix abs.
+	aMatrix negated
+	aMatrix transpose transposed transposeConjugate transposedConjugated.
+	aMatrix + bMatrix.
+	aMatrix - bMatrix.
+	aMatrix * bMatrix.
+	aMatrix + 1.
+	aMatrix * 2.
+
+Some algorithms:
+	aMatrix reciprocal.
+	x := a solve: b. "solve a*x=b"
+	aMatrix eigenValues.'.
 
 
 package classNames
@@ -77,8 +165,8 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
-	add: '..\Dolphin Smalltalk 5.1\Burning River\Complex\Complex';
-	add: '..\..\WINDOWS\Profiles\nicolas\Mes Documents\Dolphin Smalltalk X6\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\Burning River\Complex\Complex';
+	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	add: 'Smallapack-Algorithm';
 	add: 'Smallapack-External';
 	yourself).
