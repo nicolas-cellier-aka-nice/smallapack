@@ -118,7 +118,7 @@ package classNames
 	add: #LapackZGEMatrix;
 	add: #LapackZHEMatrix;
 	add: #LapackZTRMatrix;
-	add: #Settings;
+	add: #SmallapackSettings;
 	yourself.
 
 package methodNames
@@ -182,7 +182,7 @@ Object subclass: #AbstractMatrix
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
-Object subclass: #Settings
+Object subclass: #SmallapackSettings
 	instanceVariableNames: ''
 	classVariableNames: 'Registry'
 	poolDictionaries: ''

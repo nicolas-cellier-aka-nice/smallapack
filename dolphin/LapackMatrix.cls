@@ -630,7 +630,25 @@ productFromInteger: anInteger 	^anInteger asFloat coercing: self		do: [:num :m
 
 productFromLapackMatrix: aLapackMatrix 	"Answer the result of matrix product		aLapackMatrix * self	Implementation Notes: 	1) Do not coerce the properties (Hermitian, Triangular, ...)	   because LAPACK/BLAS functions will handle heterogeneous case.	   (as Matrix*Vector for example)	2) Dimension testing is done here only.	   Won't be done in lower #product* methods"	aLapackMatrix ncol = nrow 		ifFalse: [^self error: 'matrix dimensions are not compatible'].	^self coercingButPropertyFromLapackMatrix: aLapackMatrix		do: [:a :b | a productWithLapackMatrix: b]!
 
-productRowVectorWithColumnVector: aLapackMatrix 	"Implementation notes:	We must not use DOT in complex case because BLAS return a complex by value,	and VW Smalltalk does not seem to handle the case correctly (at least with g77)"	| res |	res := self class nrow: 1 ncol: 1.	(self isComplexMatrix not or: [Settings useAtlasCBlas]) 		ifTrue: 			["Case when we can use DOT"			| dotProduct |			dotProduct := self 						dotProduct: self size						elementsIncrement: 1						with: aLapackMatrix						increment: 1.			res at: 1 put: dotProduct]		ifFalse: 			["Fall back to matrix*vector product"			self productMatrixWithColumnVector: aLapackMatrix].	^res!
+productRowVectorWithColumnVector: aLapackMatrix 
+	"Implementation notes:	We must not use DOT in complex case because BLAS return a complex by value,	and VW Smalltalk does not seem to handle the case correctly (at least with g77)"
+
+	| res |
+	res := self class nrow: 1 ncol: 1.
+	(self isComplexMatrix not or: [SmallapackSettings useAtlasCBlas]) 
+		ifTrue: 
+			["Case when we can use DOT"
+			| dotProduct |
+			dotProduct := self 
+						dotProduct: self size
+						elementsIncrement: 1
+						with: aLapackMatrix
+						increment: 1.
+			res at: 1 put: dotProduct]
+		ifFalse: 
+			["Fall back to matrix*vector product"
+			self productMatrixWithColumnVector: aLapackMatrix].
+	^res!
 
 productRowVectorWithMatrix: aMatrix 	"Vector * Matrix	naive algorithm"	^aMatrix productMatrixTransposeWithColumnVector: self asColumnMatrix!
 
@@ -1003,7 +1021,7 @@ resetArrayInterfaces
 	ArrayInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: ArrayCLibrary default.
 	ArrayInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: ArrayZLibrary default!
 
-resetBlasInterfaces	BlasInterfaces := Array new: 4.	"Settings useAtlasCBlas 		ifTrue: 			[BlasInterfaces at: 1 + SinglePrecisionMask + RealMask put: CBlasSLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + RealMask put: CBlasDLibrary default.			BlasInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: CBlasCLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: CBlasZLibrary default]		ifFalse: 			["BlasInterfaces at: 1 + SinglePrecisionMask + RealMask put: BlasSLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + RealMask put: BlasDLibrary default.			BlasInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: BlasCLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: BlasZLibrary default"]"!
+resetBlasInterfaces	BlasInterfaces := Array new: 4.	SmallapackSettings useAtlasCBlas 		ifTrue: 			["BlasInterfaces at: 1 + SinglePrecisionMask + RealMask put: CBlasSLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + RealMask put: CBlasDLibrary default.			BlasInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: CBlasCLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: CBlasZLibrary default"]		ifFalse: 			[BlasInterfaces at: 1 + SinglePrecisionMask + RealMask put: BlasSLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + RealMask put: BlasDLibrary default.			BlasInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: BlasCLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: BlasZLibrary default]!
 
 resetLapackInterfaces	LapackInterfaces := Array new: 4.	LapackInterfaces at: 1 + SinglePrecisionMask + RealMask put: LapackSLibrary default.	LapackInterfaces at: 1 + DoublePrecisionMask + RealMask put: LapackDLibrary default.	LapackInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: LapackCLibrary default.	LapackInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: LapackZLibrary default!
 

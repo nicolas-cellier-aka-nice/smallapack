@@ -1,14 +1,14 @@
 "Filed out from Dolphin Smalltalk 7"!
 
-Object subclass: #Settings
+Object subclass: #SmallapackSettings
 	instanceVariableNames: ''
 	classVariableNames: 'Registry'
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
-Settings guid: (GUID fromString: '{F2C649C5-1104-4A6D-935A-5FD8E9E8891F}')!
-Settings comment: ''!
-!Settings categoriesForClass!Smallapack-Matrix! !
-!Settings class methodsFor!
+SmallapackSettings guid: (GUID fromString: '{F2C649C5-1104-4A6D-935A-5FD8E9E8891F}')!
+SmallapackSettings comment: ''!
+!SmallapackSettings categoriesForClass!Smallapack-Matrix! !
+!SmallapackSettings class methodsFor!
 
 blasLibraryEnabled	^self registry at: #blasLibraryEnabled ifAbsent: [true]!
 
@@ -21,7 +21,7 @@ icon
 		fromFile: 'Lapack.ICO'
 		usingLocator: (PackageRelativeFileLocator package: self owningPackage)!
 
-initialize	"Settings initialize"	self initializeRegistry.
+initialize	"SmallapackSettings initialize"	self initializeRegistry.
 	(Smalltalk developmentSystem)
 		registerTool: self!
 
@@ -48,15 +48,15 @@ uninitialize
 useAtlasCBlas	^self registry at: #useAtlasCBlas ifAbsent: [true]!
 
 useAtlasCBlas: aBoolean 	self registry at: #useAtlasCBlas put: aBoolean.	LapackMatrix		resetBlasInterfaces;		resetLapackInterfaces! !
-!Settings class categoriesFor: #blasLibraryEnabled!public! !
-!Settings class categoriesFor: #blasLibraryEnabled:!public! !
-!Settings class categoriesFor: #icon!constants!public! !
-!Settings class categoriesFor: #initialize!class initialization!public! !
-!Settings class categoriesFor: #initializeRegistry!private! !
-!Settings class categoriesFor: #publishedAspects!accessing!public! !
-!Settings class categoriesFor: #registry!private! !
-!Settings class categoriesFor: #resetRegistry!private! !
-!Settings class categoriesFor: #uninitialize!class initialization!public! !
-!Settings class categoriesFor: #useAtlasCBlas!public! !
-!Settings class categoriesFor: #useAtlasCBlas:!public! !
+!SmallapackSettings class categoriesFor: #blasLibraryEnabled!public! !
+!SmallapackSettings class categoriesFor: #blasLibraryEnabled:!public! !
+!SmallapackSettings class categoriesFor: #icon!constants!public! !
+!SmallapackSettings class categoriesFor: #initialize!class initialization!public! !
+!SmallapackSettings class categoriesFor: #initializeRegistry!private! !
+!SmallapackSettings class categoriesFor: #publishedAspects!accessing!public! !
+!SmallapackSettings class categoriesFor: #registry!private! !
+!SmallapackSettings class categoriesFor: #resetRegistry!private! !
+!SmallapackSettings class categoriesFor: #uninitialize!class initialization!public! !
+!SmallapackSettings class categoriesFor: #useAtlasCBlas!public! !
+!SmallapackSettings class categoriesFor: #useAtlasCBlas:!public! !
 
