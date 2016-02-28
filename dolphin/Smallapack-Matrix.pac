@@ -118,7 +118,6 @@ package classNames
 	add: #LapackZGEMatrix;
 	add: #LapackZHEMatrix;
 	add: #LapackZTRMatrix;
-	add: #SmallapackSettings;
 	yourself.
 
 package methodNames
@@ -166,11 +165,10 @@ package globalAliases: (Set new
 
 package setPrerequisites: (IdentitySet new
 	add: '..\..\..\Contributions\Burning River\Complex\Complex';
-	add: '..\..\..\Core\Object Arts\Dolphin\IDE\Base\Development System';
 	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
-	add: '..\..\..\Core\Object Arts\Dolphin\MVP\Base\Dolphin MVP Base';
 	add: 'Smallapack-Algorithm';
 	add: 'Smallapack-External';
+	add: 'Smallapack-Settings';
 	yourself).
 
 package!
@@ -180,11 +178,6 @@ package!
 Object subclass: #AbstractMatrix
 	instanceVariableNames: 'array nrow ncol'
 	classVariableNames: ''
-	poolDictionaries: ''
-	classInstanceVariableNames: ''!
-Object subclass: #SmallapackSettings
-	instanceVariableNames: ''
-	classVariableNames: 'Registry'
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
 AbstractMatrix subclass: #LapackMatrix
@@ -1674,61 +1667,6 @@ zeros: anIntegerOrPointOrArrayOfInteger 	"Form a Matrix filled with 0 of dimens
 !AbstractMatrix class categoriesFor: #shape:do:!public! !
 !AbstractMatrix class categoriesFor: #zeros:!public! !
 
-SmallapackSettings guid: (GUID fromString: '{F2C649C5-1104-4A6D-935A-5FD8E9E8891F}')!
-SmallapackSettings comment: ''!
-!SmallapackSettings categoriesForClass!Smallapack-Matrix! !
-!SmallapackSettings class methodsFor!
-
-blasLibraryEnabled	^self registry at: #blasLibraryEnabled ifAbsent: [true]!
-
-blasLibraryEnabled: aBoolean 	^self registry at: #blasLibraryEnabled put: aBoolean!
-
-icon
-	"Answers an Icon that can be used to represent this class"
-
-	^Icon
-		fromFile: 'Lapack.ICO'
-		usingLocator: (PackageRelativeFileLocator package: self owningPackage)!
-
-initialize	"SmallapackSettings initialize"	self initializeRegistry.
-	(Smalltalk developmentSystem)
-		registerTool: self!
-
-initializeRegistry	Registry isNil ifTrue: [ self resetRegistry ].!
-
-publishedAspects
-	"Answer a <LookupTable> of the <Aspect>s published by instances of the receiver."
-
-	| aspects |
-	aspects := super publishedAspects.
-	aspects
-		add: (Aspect boolean: #useAtlasCBlas);
-		add: (Aspect boolean: #blasLibraryEnabled).
-	^aspects!
-
-registry	^Registry!
-
-resetRegistry	" self resetRegistry "		Registry := Dictionary new.!
-
-uninitialize
-	(Smalltalk developmentSystem)
-		unregisterTool: self!
-
-useAtlasCBlas	^self registry at: #useAtlasCBlas ifAbsent: [true]!
-
-useAtlasCBlas: aBoolean 	self registry at: #useAtlasCBlas put: aBoolean.	LapackMatrix		resetBlasInterfaces;		resetLapackInterfaces! !
-!SmallapackSettings class categoriesFor: #blasLibraryEnabled!public! !
-!SmallapackSettings class categoriesFor: #blasLibraryEnabled:!public! !
-!SmallapackSettings class categoriesFor: #icon!constants!public! !
-!SmallapackSettings class categoriesFor: #initialize!class initialization!public! !
-!SmallapackSettings class categoriesFor: #initializeRegistry!private! !
-!SmallapackSettings class categoriesFor: #publishedAspects!accessing!public! !
-!SmallapackSettings class categoriesFor: #registry!private! !
-!SmallapackSettings class categoriesFor: #resetRegistry!private! !
-!SmallapackSettings class categoriesFor: #uninitialize!class initialization!public! !
-!SmallapackSettings class categoriesFor: #useAtlasCBlas!public! !
-!SmallapackSettings class categoriesFor: #useAtlasCBlas:!public! !
-
 LapackMatrix guid: (GUID fromString: '{D905FA3C-CE43-451B-ADC0-5771DDFB0B7E}')!
 LapackMatrix comment: 'LapackMatrix can use special CArrayAccessor operating on an underlying CPointer in place of regular array.
 This is in order to access fast external libraries (BLAS LAPACK)
@@ -2643,9 +2581,11 @@ initialize
 	self initializeMasks.
 	self initializeSeed.
 	self initializeArrayClasses.
-	[self resetBlasInterfaces] on: Win32Error do: [:exc |exc return: nil].
-	[self resetLapackInterfaces] on: Win32Error do: [:exc |exc return: nil].
-	[self resetArrayInterfaces] on: Win32Error do: [:exc |exc return: nil].
+	SmallapackSettings
+		when: #librariesChanged
+		send: #resetInterfaces
+		to: self.
+	self resetInterfaces.
 	SessionManager current 
 		when: #sessionStarted
 		send: #onStartup
@@ -2718,11 +2658,9 @@ lapackInterface	^LapackInterfaces at: self sdczIndex!
 nrow: nr ncol: nc withAll: aNumber 	"Create a matrix filled with aNumber"	^(self allocateNrow: nr ncol: nc) atAllPut: aNumber!
 
 onStartup
-	"reset the ExternalLibrary nterfaces on image startup"
+	"reset the ExternalLibrary interfaces on image startup"
 
-	[self resetBlasInterfaces] on: Win32Error do: [:exc | exc return: nil].
-	[self resetLapackInterfaces] on: Win32Error do: [:exc | exc return: nil].
-	[self resetArrayInterfaces] on: Win32Error do: [:exc | exc return: nil].!
+	self resetInterfaces!
 
 packedMatrix	"This must be overloaded where it make sense"	^self!
 
@@ -2747,6 +2685,11 @@ resetArrayInterfaces
 
 resetBlasInterfaces	BlasInterfaces := Array new: 4.	SmallapackSettings useAtlasCBlas 		ifTrue: 			["BlasInterfaces at: 1 + SinglePrecisionMask + RealMask put: CBlasSLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + RealMask put: CBlasDLibrary default.			BlasInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: CBlasCLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: CBlasZLibrary default"]		ifFalse: 			[BlasInterfaces at: 1 + SinglePrecisionMask + RealMask put: BlasSLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + RealMask put: BlasDLibrary default.			BlasInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: BlasCLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: BlasZLibrary default]!
 
+resetInterfaces
+	[self resetBlasInterfaces] on: Win32Error do: [:exc |exc return: nil].
+	[self resetLapackInterfaces] on: Win32Error do: [:exc |exc return: nil].
+	[self resetArrayInterfaces] on: Win32Error do: [:exc |exc return: nil].!
+
 resetLapackInterfaces	LapackInterfaces := Array new: 4.	LapackInterfaces at: 1 + SinglePrecisionMask + RealMask put: LapackSLibrary default.	LapackInterfaces at: 1 + DoublePrecisionMask + RealMask put: LapackDLibrary default.	LapackInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: LapackCLibrary default.	LapackInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: LapackZLibrary default!
 
 rowMatrix	^self generalMatrix!
@@ -2762,6 +2705,7 @@ storeInstancesInSmalltalkSpace	self allInstancesDo: [:e | e storeInSmalltalkSpa
 triangularMatrix	^self 		findClassWithFlags: ((self flags maskClear: PropertyMask) bitOr: TriangularMask)!
 
 uninitialize
+	SmallapackSettings removeEventsTriggeredFor: self.
 	SessionManager current removeEventsTriggeredFor: self!
 
 uninitializeBeforeRemove
@@ -2771,61 +2715,62 @@ uninitializeBeforeRemove
 unpackedMatrix	"This must be overloaded where it make sense"	^self!
 
 unregisterFlags	"remove reference to a self before being unloaded"	FlagsToClassDictionary removeKey: self flags ifAbsent: []! !
-!LapackMatrix class categoriesFor: #allocateNrow:ncol:!public! !
-!LapackMatrix class categoriesFor: #arrayInterface!public! !
-!LapackMatrix class categoriesFor: #blasInterface!public! !
-!LapackMatrix class categoriesFor: #cArrayClass!public! !
-!LapackMatrix class categoriesFor: #columnMatrix!public! !
-!LapackMatrix class categoriesFor: #complexMatrix!public! !
-!LapackMatrix class categoriesFor: #diagonalMatrix!public! !
-!LapackMatrix class categoriesFor: #doublePrecisionMatrix!public! !
-!LapackMatrix class categoriesFor: #eye:!public! !
-!LapackMatrix class categoriesFor: #findClassWithFlags:!public! !
-!LapackMatrix class categoriesFor: #flags!public! !
-!LapackMatrix class categoriesFor: #generalMatrix!public! !
-!LapackMatrix class categoriesFor: #hermitianMatrix!public! !
-!LapackMatrix class categoriesFor: #initialize!public! !
-!LapackMatrix class categoriesFor: #initializeArrayClasses!public! !
-!LapackMatrix class categoriesFor: #initializeClassInstVars!public! !
-!LapackMatrix class categoriesFor: #initializeFlags!public! !
-!LapackMatrix class categoriesFor: #initializeMasks!public! !
-!LapackMatrix class categoriesFor: #initializeSeed!public! !
-!LapackMatrix class categoriesFor: #isBandMatrix!public! !
-!LapackMatrix class categoriesFor: #isComplexMatrix!public! !
-!LapackMatrix class categoriesFor: #isDiagonalMatrix!public! !
-!LapackMatrix class categoriesFor: #isDoublePrecisionMatrix!public! !
-!LapackMatrix class categoriesFor: #isFullMatrix!public! !
-!LapackMatrix class categoriesFor: #isGeneralMatrix!public! !
-!LapackMatrix class categoriesFor: #isHermitianMatrix!public! !
-!LapackMatrix class categoriesFor: #isPackedMatrix!public! !
-!LapackMatrix class categoriesFor: #isRealMatrix!public! !
-!LapackMatrix class categoriesFor: #isSinglePrecisionMatrix!public! !
-!LapackMatrix class categoriesFor: #isSymmetricMatrix!public! !
-!LapackMatrix class categoriesFor: #isTriangularMatrix!public! !
-!LapackMatrix class categoriesFor: #isUnpackedMatrix!public! !
-!LapackMatrix class categoriesFor: #lapackInterface!public! !
-!LapackMatrix class categoriesFor: #nrow:ncol:withAll:!public! !
-!LapackMatrix class categoriesFor: #onStartup!public! !
-!LapackMatrix class categoriesFor: #packedMatrix!public! !
+!LapackMatrix class categoriesFor: #allocateNrow:ncol:!instance creation!public! !
+!LapackMatrix class categoriesFor: #arrayInterface!accessing!public! !
+!LapackMatrix class categoriesFor: #blasInterface!accessing!public! !
+!LapackMatrix class categoriesFor: #cArrayClass!accessing!private! !
+!LapackMatrix class categoriesFor: #columnMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #complexMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #diagonalMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #doublePrecisionMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #eye:!instance creation!public! !
+!LapackMatrix class categoriesFor: #findClassWithFlags:!accessing!private! !
+!LapackMatrix class categoriesFor: #flags!accessing!public! !
+!LapackMatrix class categoriesFor: #generalMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #hermitianMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #initialize!class initialization!public! !
+!LapackMatrix class categoriesFor: #initializeArrayClasses!class initialization!public! !
+!LapackMatrix class categoriesFor: #initializeClassInstVars!class initialization!public! !
+!LapackMatrix class categoriesFor: #initializeFlags!class initialization!public! !
+!LapackMatrix class categoriesFor: #initializeMasks!class initialization!public! !
+!LapackMatrix class categoriesFor: #initializeSeed!class initialization!public! !
+!LapackMatrix class categoriesFor: #isBandMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isComplexMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isDiagonalMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isDoublePrecisionMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isFullMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isGeneralMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isHermitianMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isPackedMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isRealMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isSinglePrecisionMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isSymmetricMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isTriangularMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #isUnpackedMatrix!public!testing! !
+!LapackMatrix class categoriesFor: #lapackInterface!accessing!public! !
+!LapackMatrix class categoriesFor: #nrow:ncol:withAll:!instance creation!public! !
+!LapackMatrix class categoriesFor: #onStartup!class initialization!public! !
+!LapackMatrix class categoriesFor: #packedMatrix!accessing!public! !
 !LapackMatrix class categoriesFor: #preSnapshot!public! !
-!LapackMatrix class categoriesFor: #randNormal:!public! !
-!LapackMatrix class categoriesFor: #randNormal:withSeed:!public! !
-!LapackMatrix class categoriesFor: #randUniform:!public! !
-!LapackMatrix class categoriesFor: #randUniform:withSeed:!public! !
-!LapackMatrix class categoriesFor: #realMatrix!public! !
-!LapackMatrix class categoriesFor: #resetArrayInterfaces!public! !
-!LapackMatrix class categoriesFor: #resetBlasInterfaces!public! !
-!LapackMatrix class categoriesFor: #resetLapackInterfaces!public! !
-!LapackMatrix class categoriesFor: #rowMatrix!public! !
-!LapackMatrix class categoriesFor: #sdczIndex!public! !
-!LapackMatrix class categoriesFor: #singlePrecisionMatrix!public! !
-!LapackMatrix class categoriesFor: #smalltalkArrayClass!public! !
+!LapackMatrix class categoriesFor: #randNormal:!instance creation!public! !
+!LapackMatrix class categoriesFor: #randNormal:withSeed:!instance creation!public! !
+!LapackMatrix class categoriesFor: #randUniform:!instance creation!public! !
+!LapackMatrix class categoriesFor: #randUniform:withSeed:!instance creation!public! !
+!LapackMatrix class categoriesFor: #realMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #resetArrayInterfaces!class initialization!public! !
+!LapackMatrix class categoriesFor: #resetBlasInterfaces!class initialization!public! !
+!LapackMatrix class categoriesFor: #resetInterfaces!class initialization!public! !
+!LapackMatrix class categoriesFor: #resetLapackInterfaces!class initialization!public! !
+!LapackMatrix class categoriesFor: #rowMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #sdczIndex!accessing!private! !
+!LapackMatrix class categoriesFor: #singlePrecisionMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #smalltalkArrayClass!accessing!private! !
 !LapackMatrix class categoriesFor: #storeInstancesInSmalltalkSpace!public! !
-!LapackMatrix class categoriesFor: #triangularMatrix!public! !
-!LapackMatrix class categoriesFor: #uninitialize!public! !
-!LapackMatrix class categoriesFor: #uninitializeBeforeRemove!public! !
-!LapackMatrix class categoriesFor: #unpackedMatrix!public! !
-!LapackMatrix class categoriesFor: #unregisterFlags!public! !
+!LapackMatrix class categoriesFor: #triangularMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #uninitialize!class initialization!public! !
+!LapackMatrix class categoriesFor: #uninitializeBeforeRemove!class initialization!public! !
+!LapackMatrix class categoriesFor: #unpackedMatrix!accessing!public! !
+!LapackMatrix class categoriesFor: #unregisterFlags!class initialization!public! !
 
 LapackDiagonalMatrix guid: (GUID fromString: '{420E585E-75C6-4311-A97D-92E7046C5230}')!
 LapackDiagonalMatrix comment: 'LapackDiagonalMatrix is square and has zeroes off diagonal by definition.

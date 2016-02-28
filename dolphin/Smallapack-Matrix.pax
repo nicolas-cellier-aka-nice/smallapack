@@ -118,7 +118,6 @@ package classNames
 	add: #LapackZGEMatrix;
 	add: #LapackZHEMatrix;
 	add: #LapackZTRMatrix;
-	add: #SmallapackSettings;
 	yourself.
 
 package methodNames
@@ -166,11 +165,10 @@ package globalAliases: (Set new
 
 package setPrerequisites: (IdentitySet new
 	add: '..\..\..\Contributions\Burning River\Complex\Complex';
-	add: '..\..\..\Core\Object Arts\Dolphin\IDE\Base\Development System';
 	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
-	add: '..\..\..\Core\Object Arts\Dolphin\MVP\Base\Dolphin MVP Base';
 	add: 'Smallapack-Algorithm';
 	add: 'Smallapack-External';
+	add: 'Smallapack-Settings';
 	yourself).
 
 package!
@@ -180,11 +178,6 @@ package!
 Object subclass: #AbstractMatrix
 	instanceVariableNames: 'array nrow ncol'
 	classVariableNames: ''
-	poolDictionaries: ''
-	classInstanceVariableNames: ''!
-Object subclass: #SmallapackSettings
-	instanceVariableNames: ''
-	classVariableNames: 'Registry'
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
 AbstractMatrix subclass: #LapackMatrix

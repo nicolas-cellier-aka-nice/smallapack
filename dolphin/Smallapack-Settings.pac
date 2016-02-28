@@ -1,10 +1,46 @@
-"Filed out from Dolphin Smalltalk 7"!
+| package |
+package := Package name: 'Smallapack-Settings'.
+package paxVersion: 1;
+	basicComment: 'This class is used to handle the preferences and settings of Smallapack (like the name of DLL to be linked)'.
+
+
+package classNames
+	add: #SmallapackSettings;
+	yourself.
+
+package binaryGlobalNames: (Set new
+	yourself).
+
+package globalAliases: (Set new
+	yourself).
+
+package setPrerequisites: (IdentitySet new
+	add: '..\..\..\Core\Object Arts\Dolphin\IDE\Base\Development System';
+	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
+	add: '..\..\..\Core\Object Arts\Dolphin\MVP\Base\Dolphin MVP Base';
+	yourself).
+
+package!
+
+"Class Definitions"!
 
 Object subclass: #SmallapackSettings
 	instanceVariableNames: ''
 	classVariableNames: 'Registry'
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
+
+"Global Aliases"!
+
+
+"Loose Methods"!
+
+"End of package definition"!
+
+"Source Globals"!
+
+"Classes"!
+
 SmallapackSettings guid: (GUID fromString: '{F2C649C5-1104-4A6D-935A-5FD8E9E8891F}')!
 SmallapackSettings comment: ''!
 !SmallapackSettings categoriesForClass!Smallapack-Matrix! !
@@ -85,4 +121,6 @@ useAtlasCBlas: aBoolean 	self registry at: #useAtlasCBlas put: aBoolean.
 !SmallapackSettings class categoriesFor: #uninitialize!class initialization!public! !
 !SmallapackSettings class categoriesFor: #useAtlasCBlas!public! !
 !SmallapackSettings class categoriesFor: #useAtlasCBlas:!public! !
+
+"Binary Globals"!
 

@@ -171,6 +171,6 @@ upper	^$U! !
 fileName
 	"Answer the host system file name for the library"
 
-	^'BLAS'! !
+	^SmallapackSettings blasLibraryName! !
 !BlasLibrary class categoriesFor: #fileName!public! !
 

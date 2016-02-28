@@ -1398,6 +1398,6 @@ xungrqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork info: in
 fileName
 	"Answer the host system file name for the library"
 
-	^'LAPACK30'! !
+	^SmallapackSettings lapackLibraryName! !
 !LapackLibrary class categoriesFor: #fileName!public! !
 

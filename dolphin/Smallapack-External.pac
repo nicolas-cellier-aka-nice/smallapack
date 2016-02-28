@@ -44,6 +44,7 @@ package globalAliases: (Set new
 
 package setPrerequisites: (IdentitySet new
 	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
+	add: 'Smallapack-Settings';
 	yourself).
 
 package!
@@ -451,7 +452,7 @@ upper	^$U! !
 fileName
 	"Answer the host system file name for the library"
 
-	^'BLAS'! !
+	^SmallapackSettings blasLibraryName! !
 !BlasLibrary class categoriesFor: #fileName!public! !
 
 LapackLibrary guid: (GUID fromString: '{021ADB71-B752-493D-8724-4E576D275EBA}')!
@@ -1847,7 +1848,7 @@ xungrqWithm: m n: n k: k a: a lda: lda tau: tau work: work lwork: lwork info: in
 fileName
 	"Answer the host system file name for the library"
 
-	^'LAPACK30'! !
+	^SmallapackSettings lapackLibraryName! !
 !LapackLibrary class categoriesFor: #fileName!public! !
 
 ArrayCLibrary guid: (GUID fromString: '{6C2FEBF8-5C7C-4A85-9B75-9B969DCB8A9F}')!
