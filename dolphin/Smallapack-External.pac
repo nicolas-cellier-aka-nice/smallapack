@@ -19,6 +19,11 @@ package classNames
 	add: #BlasLibrary;
 	add: #BlasSLibrary;
 	add: #BlasZLibrary;
+	add: #CBlasCLibrary;
+	add: #CBlasDLibrary;
+	add: #CBlasLibrary;
+	add: #CBlasSLibrary;
+	add: #CBlasZLibrary;
 	add: #CMathLibrary;
 	add: #DOUBLECOMPLEX;
 	add: #DOUBLECOMPLEXArray;
@@ -43,6 +48,7 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
+	add: '..\..\..\Contributions\Burning River\Complex\Complex';
 	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	add: 'Smallapack-Settings';
 	yourself).
@@ -62,6 +68,11 @@ CMathLibrary subclass: #ArrayLibrary
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
 CMathLibrary subclass: #BlasLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CMathLibrary subclass: #CBlasLibrary
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -107,6 +118,26 @@ BlasLibrary subclass: #BlasSLibrary
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
 BlasLibrary subclass: #BlasZLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CBlasLibrary subclass: #CBlasCLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CBlasLibrary subclass: #CBlasDLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CBlasLibrary subclass: #CBlasSLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CBlasLibrary subclass: #CBlasZLibrary
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -454,6 +485,130 @@ fileName
 
 	^SmallapackSettings blasLibraryName! !
 !BlasLibrary class categoriesFor: #fileName!public! !
+
+CBlasLibrary guid: (GUID fromString: '{96613F99-4779-49A0-9458-9E82FF14EFB0}')!
+CBlasLibrary comment: ''!
+!CBlasLibrary categoriesForClass!Unclassified! !
+!CBlasLibrary methodsFor!
+
+asumWithN: N X: X incX: incX 	^self 		asumWithn: N		x: X		incx: incX!
+
+axpyWithN: N alpha: alpha X: X incX: incX Y: Y incY: incY 	| cARGalpha |	cARGalpha := self cElementArgumentOn: alpha.	^self 		axpyWithn: N		alpha: cARGalpha		x: X		incx: incX		y: Y		incy: incY!
+
+cComplexPointerOn: aComplex 	^self subclassResponsibility!
+
+cElementArgumentOn: aComplex 	^self subclassResponsibility!
+
+cElementPointerOn: aComplex 	^self subclassResponsibility!
+
+colMajor	^102!
+
+conjugated	^114!
+
+copyWithN: N X: X incX: incX Y: Y incY: incY 	^self 		copyWithn: N		x: X		incx: incX		y: Y		incy: incY!
+
+cRealPointerOn: aComplex 	^self subclassResponsibility!
+
+dotcWithN: N X: X incX: incX Y: Y incY: incY 	^self 		dotcWithn: N		x: X		incx: incX		y: Y		incy: incY!
+
+dotuWithN: N X: X incX: incX Y: Y incY: incY 	^self 		dotuWithn: N		x: X		incx: incX		y: Y		incy: incY!
+
+dotWithN: N X: X incX: incX Y: Y incY: incY 	^self 		dotuWithn: N		x: X		incx: incX		y: Y		incy: incY!
+
+gemmWithTransA: TransA TransB: TransB M: M N: N K: K alpha: alpha A: A lda: lda B: B ldb: ldb beta: beta C: C ldc: ldc 	| cARGalpha cARGbeta |	cARGalpha := self cElementArgumentOn: alpha.	cARGbeta := self cElementArgumentOn: beta.	^self 		gemmWithorder: self colMajor		transa: TransA		transb: TransB		m: M		n: N		k: K		alpha: cARGalpha		a: A		lda: lda		b: B		ldb: ldb		beta: cARGbeta		c: C		ldc: ldc!
+
+gemvWithTransA: TransA M: M N: N alpha: alpha A: A lda: lda X: X incX: incX beta: beta Y: Y incY: incY 	| cARGalpha cARGbeta |	cARGalpha := self cElementArgumentOn: alpha.	cARGbeta := self cElementArgumentOn: beta.	^self 		gemvWithorder: self colMajor		trans: TransA		m: M		n: N		alpha: cARGalpha		a: A		lda: lda		x: X		incx: incX		beta: cARGbeta		y: Y		incy: incY!
+
+gercWithM: M N: N alpha: alpha X: X incX: incX Y: Y incY: incY A: A lda: lda 	| cARGalpha |	cARGalpha := self cElementArgumentOn: alpha.	^self 		gercWithorder: self colMajor		m: M		n: N		alpha: cARGalpha		x: X		incx: incX		y: Y		incy: incY		a: A		lda: lda!
+
+geruWithM: M N: N alpha: alpha X: X incX: incX Y: Y incY: incY A: A lda: lda 	| cARGalpha |	cARGalpha := self cElementArgumentOn: alpha.	^self 		geruWithorder: self colMajor		m: M		n: N		alpha: cARGalpha		x: X		incx: incX		y: Y		incy: incY		a: A		lda: lda!
+
+gerWithM: M N: N alpha: alpha X: X incX: incX Y: Y incY: incY A: A lda: lda 	| cARGalpha |	cARGalpha := self cElementArgumentOn: alpha.	^self 		geruWithorder: self colMajor		m: M		n: N		alpha: cARGalpha		x: X		incx: incX		y: Y		incy: incY		a: A		lda: lda!
+
+hemmWithSide: Side Uplo: Uplo M: M N: N alpha: alpha A: A lda: lda B: B ldb: ldb beta: beta C: C ldc: ldc 	| cARGalpha cARGbeta |	cARGalpha := self cElementArgumentOn: alpha.	cARGbeta := self cElementArgumentOn: beta.	^self 		hemmWithorder: self colMajor		side: Side		uplo: Uplo		m: M		n: N		alpha: cARGalpha		a: A		lda: lda		b: B		ldb: ldb		beta: cARGbeta		c: C		ldc: ldc!
+
+hemvWithUplo: Uplo N: N alpha: alpha A: A lda: lda X: X incX: incX beta: beta Y: Y incY: incY 	| cARGalpha cARGbeta |	cARGalpha := self cElementArgumentOn: alpha.	cARGbeta := self cElementArgumentOn: beta.	self 		hemvWithorder: self colMajor		uplo: Uplo		n: N		alpha: cARGalpha		n: A		lda: lda		x: X		incx: incX		beta: cARGbeta		y: Y		incy: incY!
+
+hpmvWithUplo: Uplo N: N alpha: alpha Ap: Ap X: X incX: incX beta: beta Y: Y incY: incY 	| cARGalpha cARGbeta |	cARGalpha := self cElementArgumentOn: alpha.	cARGbeta := self cElementArgumentOn: beta.	^self 		hpmvWithorder: self colMajor		uplo: Uplo		n: N		alpha: cARGalpha		ap: Ap		x: X		incx: incX		beta: cARGbeta		y: Y		incy: incY!
+
+left	^141!
+
+lower	^122!
+
+nonUnit	^131!
+
+notTransposed	^111!
+
+realScalWithN: N alpha: alpha X: X incX: incX 	^self 		realScalWithn: N		alpha: alpha		x: X		incx: incX!
+
+right	^142!
+
+rowMajor	^101!
+
+scalWithN: N alpha: alpha X: X incX: incX 	| cARGalpha |	cARGalpha := self cElementArgumentOn: alpha.	^self 		scalWithn: N		alpha: cARGalpha		x: X		incx: incX!
+
+swapWithN: N X: X incX: incX Y: Y incY: incY 	^self 		swapWithn: N		x: X		incx: incX		y: Y		incy: incY!
+
+tpmvWithUplo: Uplo TransA: TransA Diag: Diag N: N Ap: A X: X incX: incX 	^self 		tpmvWithorder: self colMajor		uplo: Uplo		trans: TransA		diag: Diag		n: N		ap: A		x: X		incx: incX!
+
+transposeConjugated	^113!
+
+transposed	^112!
+
+trmmWithSide: Side Uplo: Uplo TransA: TransA Diag: Diag M: M N: N alpha: alpha A: A lda: lda B: B ldb: ldb 	| cARGalpha |	cARGalpha := self cElementArgumentOn: alpha.	^self 		trmmWithorder: self colMajor		side: Side		uplo: Uplo		trans: TransA		diag: Diag		m: M		n: N		alpha: cARGalpha		a: A		lda: lda		b: B		ldb: ldb!
+
+trmvWithUplo: Uplo TransA: TransA Diag: Diag N: N A: A lda: lda X: X incX: incX 	^self 		trmvWithorder: self colMajor		uplo: Uplo		trans: TransA		diag: Diag		n: N		a: A		lda: lda		x: X		incx: incX!
+
+trsmWithSide: Side Uplo: Uplo TransA: TransA Diag: Diag M: M N: N alpha: alpha A: A lda: lda B: B ldb: ldb 	| cARGalpha |	cARGalpha := self cElementArgumentOn: alpha.	^self 		trsmWithorder: self colMajor		side: Side		uplo: Uplo		trans: TransA		diag: Diag		m: M		n: N		alpha: cARGalpha		a: A		lda: lda		b: B		ldb: ldb!
+
+unit	^132!
+
+upper	^121! !
+!CBlasLibrary categoriesFor: #asumWithN:X:incX:!public! !
+!CBlasLibrary categoriesFor: #axpyWithN:alpha:X:incX:Y:incY:!public! !
+!CBlasLibrary categoriesFor: #cComplexPointerOn:!public! !
+!CBlasLibrary categoriesFor: #cElementArgumentOn:!public! !
+!CBlasLibrary categoriesFor: #cElementPointerOn:!public! !
+!CBlasLibrary categoriesFor: #colMajor!public! !
+!CBlasLibrary categoriesFor: #conjugated!public! !
+!CBlasLibrary categoriesFor: #copyWithN:X:incX:Y:incY:!public! !
+!CBlasLibrary categoriesFor: #cRealPointerOn:!public! !
+!CBlasLibrary categoriesFor: #dotcWithN:X:incX:Y:incY:!public! !
+!CBlasLibrary categoriesFor: #dotuWithN:X:incX:Y:incY:!public! !
+!CBlasLibrary categoriesFor: #dotWithN:X:incX:Y:incY:!public! !
+!CBlasLibrary categoriesFor: #gemmWithTransA:TransB:M:N:K:alpha:A:lda:B:ldb:beta:C:ldc:!public! !
+!CBlasLibrary categoriesFor: #gemvWithTransA:M:N:alpha:A:lda:X:incX:beta:Y:incY:!public! !
+!CBlasLibrary categoriesFor: #gercWithM:N:alpha:X:incX:Y:incY:A:lda:!public! !
+!CBlasLibrary categoriesFor: #geruWithM:N:alpha:X:incX:Y:incY:A:lda:!public! !
+!CBlasLibrary categoriesFor: #gerWithM:N:alpha:X:incX:Y:incY:A:lda:!public! !
+!CBlasLibrary categoriesFor: #hemmWithSide:Uplo:M:N:alpha:A:lda:B:ldb:beta:C:ldc:!public! !
+!CBlasLibrary categoriesFor: #hemvWithUplo:N:alpha:A:lda:X:incX:beta:Y:incY:!public! !
+!CBlasLibrary categoriesFor: #hpmvWithUplo:N:alpha:Ap:X:incX:beta:Y:incY:!public! !
+!CBlasLibrary categoriesFor: #left!public! !
+!CBlasLibrary categoriesFor: #lower!public! !
+!CBlasLibrary categoriesFor: #nonUnit!public! !
+!CBlasLibrary categoriesFor: #notTransposed!public! !
+!CBlasLibrary categoriesFor: #realScalWithN:alpha:X:incX:!public! !
+!CBlasLibrary categoriesFor: #right!public! !
+!CBlasLibrary categoriesFor: #rowMajor!public! !
+!CBlasLibrary categoriesFor: #scalWithN:alpha:X:incX:!public! !
+!CBlasLibrary categoriesFor: #swapWithN:X:incX:Y:incY:!public! !
+!CBlasLibrary categoriesFor: #tpmvWithUplo:TransA:Diag:N:Ap:X:incX:!public! !
+!CBlasLibrary categoriesFor: #transposeConjugated!public! !
+!CBlasLibrary categoriesFor: #transposed!public! !
+!CBlasLibrary categoriesFor: #trmmWithSide:Uplo:TransA:Diag:M:N:alpha:A:lda:B:ldb:!public! !
+!CBlasLibrary categoriesFor: #trmvWithUplo:TransA:Diag:N:A:lda:X:incX:!public! !
+!CBlasLibrary categoriesFor: #trsmWithSide:Uplo:TransA:Diag:M:N:alpha:A:lda:B:ldb:!public! !
+!CBlasLibrary categoriesFor: #unit!public! !
+!CBlasLibrary categoriesFor: #upper!public! !
+
+!CBlasLibrary class methodsFor!
+
+fileName
+	"Answer the host system file name for the library"
+
+	^SmallapackSettings cblasLibraryName! !
+!CBlasLibrary class categoriesFor: #fileName!public! !
 
 LapackLibrary guid: (GUID fromString: '{021ADB71-B752-493D-8724-4E576D275EBA}')!
 LapackLibrary comment: ''!
@@ -2655,6 +2810,378 @@ trsmWithside: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: 
 !BlasZLibrary categoriesFor: #trmmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
 !BlasZLibrary categoriesFor: #trmvWithuplo:trans:diag:n:a:lda:x:incx:length:length:length:!public! !
 !BlasZLibrary categoriesFor: #trsmWithside:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:length:length:length:length:!public! !
+
+CBlasCLibrary guid: (GUID fromString: '{9FFFC04D-3C54-489A-B786-45B5ECEFF0AE}')!
+CBlasCLibrary comment: ''!
+!CBlasCLibrary categoriesForClass!Unclassified! !
+!CBlasCLibrary methodsFor!
+
+asumWithn: n x: x incx: incx	"||real(x)||_1 + ||imag(x)||_1"	<cdecl: float 'cblas_scasum' SDWORD  "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+axpyWithn: n alpha: alpha x: x incx: incx y: y incy: incy	"y := alpha*x+y"	<cdecl: void 'cblas_caxpy' SDWORD  "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD  "ExternalFloatComplex"void * SDWORD  >	^self invalidCall!
+
+cComplexPointerOn: aComplex 	^self cFloatComplexPointerOn: aComplex!
+
+cElementArgumentOn: aComplex 	^self cComplexPointerOn: aComplex!
+
+cElementPointerOn: aComplex 	^self cComplexPointerOn: aComplex!
+
+copyWithn: n x: x incx: incx y: y incy: incy	"y := x"	<cdecl: void 'cblas_ccopy' SDWORD  "ExternalFloatComplex"void * SDWORD  "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+cRealPointerOn: aDouble 	^self cFloatPointerOn: aDouble!
+
+dotcWithn: n x: x incx: incx y: y incy: incy dotc: dotc	"dotc := transposeConjugate(x)*y"	<cdecl: void 'cblas_cdotc_sub' SDWORD  "ExternalFloatComplex"void * SDWORD  "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * >	^self invalidCall!
+
+dotuWithn: n x: x incx: incx y: y incy: incy dotu: dotu	"dotu := transpose(x)*y"	<cdecl: void 'cblas_cdotu_sub' SDWORD  "ExternalFloatComplex"void * SDWORD  "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * >	^self invalidCall!
+
+gemmWithorder: order transa: transa transb: transb m: m n: n k: k alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc	"C:=alpha*op(A)*op(B)+beta*C  , C has dimension (m,n)"	<cdecl: void 'cblas_cgemm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD * "ExternalFloatComplex"void * SDWORD  "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+gemvWithorder: order trans: trans m: m n: n alpha: alpha a: a lda: lda x: x incx: incx beta: beta y: y incy: incy	"y=alpha*op(X)+beta*y op=yourself, transpose, transposeConjugated"	<cdecl: void 'cblas_cgemv' SDWORD SDWORD SDWORD SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD  "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+gercWithorder: order m: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transposeConjugate(y)+A"	<cdecl: void 'cblas_cgerc' SDWORD SDWORD SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+geruWithorder: order m: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transpose(y)+A"	<cdecl: void 'cblas_cgeru' SDWORD SDWORD SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+hemmWithorder: order side: side uplo: uplo m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc	"C=alpha*A*B+beta*C"	<cdecl: void 'cblas_chemm' SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+hemvWithorder: order uplo: uplo n: n alpha: alpha n: a lda: lda x: x incx: incx beta: beta y: y incy: incy	"y=alpha*X+beta*y"	<cdecl: void 'cblas_chemv' SDWORD SDWORD SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+hpmvWithorder: order uplo: uplo n: n alpha: alpha ap: ap x: x incx: incx beta: beta y: y incy: incy	"y=alpha*X+beta*y"	<cdecl: void 'cblas_chpmv' SDWORD SDWORD SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+iamaxWithn: n x: x incx: incx	"index of max : max_i (abs(real(x_i))+abs(imag(x_i)))"	<cdecl: SDWORD 'cblas_icamax' SDWORD "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+nrm2Withn: n x: x incx: incx	"||x||_2"	<cdecl: float 'cblas_scnrm2' SDWORD "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+realScalWithn: n alpha: alpha x: x incx: incx	<cdecl: void 'cblas_csscal' SDWORD float "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+scalWithn: n alpha: alpha x: x incx: incx	<cdecl: void 'cblas_cscal' SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+swapWithn: n x: x incx: incx y: y incy: incy	"x <-> y"	<cdecl: void 'cblas_cswap' SDWORD "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+tpmvWithorder: order uplo: uplo trans: trans diag: diag n: n ap: ap x: x incx: incx	"x=op(a)*x op=yourself, transpose, transposeConjugated"	<cdecl: void 'cblas_ctpmv' SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+trmmWithorder: order side: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb	<cdecl: void 'cblas_ctrmm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+trmvWithorder: order uplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx	"x=op(a)*x op=yourself, transpose, transposeConjugated"	<cdecl: void 'cblas_ctrmv' SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * SDWORD >	^self invalidCall!
+
+trsmWithorder: order side: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb	<cdecl: void 'cblas_ctrsm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalFloatComplex"void * "ExternalFloatComplex"void * SDWORD "ExternalFloatComplex"void * SDWORD >	^self invalidCall! !
+!CBlasCLibrary categoriesFor: #asumWithn:x:incx:!public! !
+!CBlasCLibrary categoriesFor: #axpyWithn:alpha:x:incx:y:incy:!public! !
+!CBlasCLibrary categoriesFor: #cComplexPointerOn:!public! !
+!CBlasCLibrary categoriesFor: #cElementArgumentOn:!public! !
+!CBlasCLibrary categoriesFor: #cElementPointerOn:!public! !
+!CBlasCLibrary categoriesFor: #copyWithn:x:incx:y:incy:!public! !
+!CBlasCLibrary categoriesFor: #cRealPointerOn:!public! !
+!CBlasCLibrary categoriesFor: #dotcWithn:x:incx:y:incy:dotc:!public! !
+!CBlasCLibrary categoriesFor: #dotuWithn:x:incx:y:incy:dotu:!public! !
+!CBlasCLibrary categoriesFor: #gemmWithorder:transa:transb:m:n:k:alpha:a:lda:b:ldb:beta:c:ldc:!public! !
+!CBlasCLibrary categoriesFor: #gemvWithorder:trans:m:n:alpha:a:lda:x:incx:beta:y:incy:!public! !
+!CBlasCLibrary categoriesFor: #gercWithorder:m:n:alpha:x:incx:y:incy:a:lda:!public! !
+!CBlasCLibrary categoriesFor: #geruWithorder:m:n:alpha:x:incx:y:incy:a:lda:!public! !
+!CBlasCLibrary categoriesFor: #hemmWithorder:side:uplo:m:n:alpha:a:lda:b:ldb:beta:c:ldc:!public! !
+!CBlasCLibrary categoriesFor: #hemvWithorder:uplo:n:alpha:n:lda:x:incx:beta:y:incy:!public! !
+!CBlasCLibrary categoriesFor: #hpmvWithorder:uplo:n:alpha:ap:x:incx:beta:y:incy:!public! !
+!CBlasCLibrary categoriesFor: #iamaxWithn:x:incx:!public! !
+!CBlasCLibrary categoriesFor: #nrm2Withn:x:incx:!public! !
+!CBlasCLibrary categoriesFor: #realScalWithn:alpha:x:incx:!public! !
+!CBlasCLibrary categoriesFor: #scalWithn:alpha:x:incx:!public! !
+!CBlasCLibrary categoriesFor: #swapWithn:x:incx:y:incy:!public! !
+!CBlasCLibrary categoriesFor: #tpmvWithorder:uplo:trans:diag:n:ap:x:incx:!public! !
+!CBlasCLibrary categoriesFor: #trmmWithorder:side:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:!public! !
+!CBlasCLibrary categoriesFor: #trmvWithorder:uplo:trans:diag:n:a:lda:x:incx:!public! !
+!CBlasCLibrary categoriesFor: #trsmWithorder:side:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:!public! !
+
+CBlasDLibrary guid: (GUID fromString: '{9CF03A7C-687F-4C52-920E-6A1958D55C6C}')!
+CBlasDLibrary comment: ''!
+!CBlasDLibrary categoriesForClass!Unclassified! !
+!CBlasDLibrary methodsFor!
+
+asumWithn: n x: x incx: incx	"||real(x)||_1 + ||imag(x)||_1"	<cdecl: double 'cblas_dasum' SDWORD double * SDWORD >	^self invalidCall!
+
+axpyWithn: n alpha: alpha x: x incx: incx y: y incy: incy	"y := alpha*x+y"	<cdecl: void 'cblas_daxpy' SDWORD double double * SDWORD double * SDWORD >	^self invalidCall!
+
+cComplexPointerOn: aComplex 	^self cDoubleComplexPointerOn: aComplex!
+
+cElementArgumentOn: aDouble 	^aDouble!
+
+cElementPointerOn: aDouble 	^self cRealPointerOn: aDouble!
+
+copyWithn: n x: x incx: incx y: y incy: incy	"y := x"	<cdecl: void 'cblas_dcopy' SDWORD double * SDWORD double * SDWORD >	^self invalidCall!
+
+cRealPointerOn: aDouble 	^self cDoublePointerOn: aDouble!
+
+dotcWithn: n x: x incx: incx y: y incy: incy	^self dotWithn: n x: x incx: incx y: y incy: incy!
+
+dotuWithn: n x: x incx: incx y: y incy: incy	^self dotWithn: n x: x incx: incx y: y incy: incy!
+
+dotWithn: n x: x incx: incx y: y incy: incy	<cdecl: double 'cblas_ddot' SDWORD double * SDWORD double * SDWORD >	^self invalidCall!
+
+gemmWithorder: order transa: transa transb: transb m: m n: n k: k alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc	"C:=alpha*op(A)*op(B)+beta*C  , C has dimension (m,n)"	<cdecl: void 'cblas_dgemm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD double double * SDWORD double * SDWORD double double * SDWORD >	^self invalidCall!
+
+gemvWithorder: order trans: trans m: m n: n alpha: alpha a: a lda: lda x: x incx: incx beta: beta y: y incy: incy	"y=alpha*op(X)+beta*y op=yourself, transpose, transposeConjugate"	<cdecl: void 'cblas_dgemv' SDWORD SDWORD SDWORD SDWORD double double * SDWORD double * SDWORD double double * SDWORD >	^self invalidCall!
+
+gercWithorder: order m: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transposeConjugated(y)+A"	^self 		gerWithorder: order		m: m		n: n		alpha: alpha		x: x		incx: incx		y: y		incy: incy		a: a		lda: lda!
+
+geruWithorder: order m: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transpose(y)+A"	^self 		gerWithorder: order		m: m		n: n		alpha: alpha		x: x		incx: incx		y: y		incy: incy		a: a		lda: lda!
+
+gerWithorder: order m: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transpose(y)+A"	<cdecl: void 'cblas_dger' SDWORD SDWORD SDWORD double double * SDWORD double * SDWORD double * SDWORD>	^self invalidCall!
+
+hemmWithorder: order side: side uplo: uplo m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc	"C=alpha*A*B+beta*C"	^self 		symmWithorder: order		side: side		uplo: uplo		m: m		n: n		alpha: alpha		a: a		lda: lda		b: b		ldb: ldb		beta: beta		c: c		ldc: ldc!
+
+hemvWithorder: order uplo: uplo n: n alpha: alpha n: a lda: lda x: x incx: incx beta: beta y: y incy: incy	"y=alpha*X+beta*y"	^self 		symvWithorder: order		uplo: uplo		n: n		alpha: alpha		n: a		lda: lda		x: x		incx: incx		beta: beta		y: y		incy: incy!
+
+hpmvWithorder: order uplo: uplo n: n alpha: alpha ap: ap x: x incx: incx beta: beta y: y incy: incy	"y=alpha*X+beta*y"	^self 		spmvWithorder: order		uplo: uplo		n: n		alpha: alpha		ap: ap		x: x		incx: incx		beta: beta		y: y		incy: incy!
+
+iamaxWithn: n x: x incx: incx	"index of max : max_i (abs(real(x_i))+abs(imag(x_i)))"	<cdecl: SDWORD 'cblas_idamax' SDWORD double * SDWORD >	^self invalidCall!
+
+nrm2Withn: n x: x incx: incx	"||x||_2"	<cdecl: double 'cblas_dnrm2' SDWORD double * SDWORD >	^self invalidCall!
+
+realScalWithn: n alpha: alpha x: x incx: incx	^self scalWithn: n alpha: alpha x: x incx: incx!
+
+rotgWitha: a b: b c: c s: s	<cdecl: void 'cblas_drotg' double * double * double * double * >	^self invalidCall!
+
+rotWithn: n x: x incx: incx y: y incy: incy c: c s: s	<cdecl: void 'cblas_drot' SDWORD double * SDWORD double * SDWORD double double >	^self invalidCall!
+
+scalWithn: n alpha: alpha x: x incx: incx	<cdecl: void 'cblas_dscal' SDWORD double double * SDWORD >	^self invalidCall!
+
+spmvWithorder: order uplo: uplo n: n alpha: alpha ap: ap x: x incx: incx beta: beta y: y incy: incy	"y=alpha*X+beta*y"	<cdecl: void 'cblas_dspmv' SDWORD SDWORD SDWORD double double * double * SDWORD double double * SDWORD >	^self invalidCall!
+
+swapWithn: n x: x incx: incx y: y incy: incy	"x <-> y"	<cdecl: void 'cblas_dswap' SDWORD double * SDWORD double * SDWORD >	^self invalidCall!
+
+symmWithorder: order side: side uplo: uplo m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc	"C=alpha*A*B+beta*C"	<cdecl: void 'cblas_dsymm' SDWORD SDWORD SDWORD SDWORD SDWORD double double * SDWORD double * SDWORD double double * SDWORD >	^self invalidCall!
+
+symvWithorder: order uplo: uplo n: n alpha: alpha n: a lda: lda x: x incx: incx beta: beta y: y incy: incy 	"y=alpha*X+beta*y"	<cdecl: void 'cblas_dsymv' SDWORD SDWORD SDWORD double double * SDWORD double * SDWORD double double * SDWORD >	^self invalidCall!
+
+tpmvWithorder: order uplo: uplo trans: trans diag: diag n: n ap: ap x: x incx: incx	"x=op(a)*x op=yourself, transpose, transposeConjugated"	<cdecl: void 'cblas_dtpmv' SDWORD SDWORD SDWORD SDWORD SDWORD double * double * SDWORD >	^self invalidCall!
+
+trmmWithorder: order side: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb	<cdecl: void 'cblas_dtrmm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD double double * SDWORD double * SDWORD >	^self invalidCall!
+
+trmvWithorder: order uplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx	"x=op(a)*x op=yourself, transpose, transposeConjugated"	<cdecl: void 'cblas_dtrmv' SDWORD SDWORD SDWORD SDWORD SDWORD double * SDWORD double * SDWORD >	^self invalidCall!
+
+trsmWithorder: order side: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb	<cdecl: void 'cblas_dtrsm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD double double * SDWORD double * SDWORD >	^self invalidCall! !
+!CBlasDLibrary categoriesFor: #asumWithn:x:incx:!public! !
+!CBlasDLibrary categoriesFor: #axpyWithn:alpha:x:incx:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #cComplexPointerOn:!public! !
+!CBlasDLibrary categoriesFor: #cElementArgumentOn:!public! !
+!CBlasDLibrary categoriesFor: #cElementPointerOn:!public! !
+!CBlasDLibrary categoriesFor: #copyWithn:x:incx:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #cRealPointerOn:!public! !
+!CBlasDLibrary categoriesFor: #dotcWithn:x:incx:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #dotuWithn:x:incx:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #dotWithn:x:incx:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #gemmWithorder:transa:transb:m:n:k:alpha:a:lda:b:ldb:beta:c:ldc:!public! !
+!CBlasDLibrary categoriesFor: #gemvWithorder:trans:m:n:alpha:a:lda:x:incx:beta:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #gercWithorder:m:n:alpha:x:incx:y:incy:a:lda:!public! !
+!CBlasDLibrary categoriesFor: #geruWithorder:m:n:alpha:x:incx:y:incy:a:lda:!public! !
+!CBlasDLibrary categoriesFor: #gerWithorder:m:n:alpha:x:incx:y:incy:a:lda:!public! !
+!CBlasDLibrary categoriesFor: #hemmWithorder:side:uplo:m:n:alpha:a:lda:b:ldb:beta:c:ldc:!public! !
+!CBlasDLibrary categoriesFor: #hemvWithorder:uplo:n:alpha:n:lda:x:incx:beta:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #hpmvWithorder:uplo:n:alpha:ap:x:incx:beta:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #iamaxWithn:x:incx:!public! !
+!CBlasDLibrary categoriesFor: #nrm2Withn:x:incx:!public! !
+!CBlasDLibrary categoriesFor: #realScalWithn:alpha:x:incx:!public! !
+!CBlasDLibrary categoriesFor: #rotgWitha:b:c:s:!public! !
+!CBlasDLibrary categoriesFor: #rotWithn:x:incx:y:incy:c:s:!public! !
+!CBlasDLibrary categoriesFor: #scalWithn:alpha:x:incx:!public! !
+!CBlasDLibrary categoriesFor: #spmvWithorder:uplo:n:alpha:ap:x:incx:beta:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #swapWithn:x:incx:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #symmWithorder:side:uplo:m:n:alpha:a:lda:b:ldb:beta:c:ldc:!public! !
+!CBlasDLibrary categoriesFor: #symvWithorder:uplo:n:alpha:n:lda:x:incx:beta:y:incy:!public! !
+!CBlasDLibrary categoriesFor: #tpmvWithorder:uplo:trans:diag:n:ap:x:incx:!public! !
+!CBlasDLibrary categoriesFor: #trmmWithorder:side:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:!public! !
+!CBlasDLibrary categoriesFor: #trmvWithorder:uplo:trans:diag:n:a:lda:x:incx:!public! !
+!CBlasDLibrary categoriesFor: #trsmWithorder:side:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:!public! !
+
+CBlasSLibrary guid: (GUID fromString: '{C72162BA-37AF-4B1E-A9E5-4E0A7060C2D6}')!
+CBlasSLibrary comment: ''!
+!CBlasSLibrary categoriesForClass!Unclassified! !
+!CBlasSLibrary methodsFor!
+
+asumWithn: n x: x incx: incx	"||real(x)||_1 + ||imag(x)||_1"	<cdecl: float 'cblas_sasum' SDWORD float * SDWORD >	^self invalidCall!
+
+axpyWithn: n alpha: alpha x: x incx: incx y: y incy: incy	"y := alpha*x+y"	<cdecl: void 'cblas_saxpy' SDWORD float float * SDWORD float * SDWORD >	^self invalidCall!
+
+cComplexPointerOn: aComplex 	^self cFloatComplexPointerOn: aComplex!
+
+cElementArgumentOn: aFloat 	^aFloat!
+
+cElementPointerOn: aFloat 	^self cRealPointerOn: aFloat!
+
+copyWithn: n x: x incx: incx y: y incy: incy	"y := x"	<cdecl: void 'cblas_scopy' SDWORD float * SDWORD float * SDWORD >	^self invalidCall!
+
+cRealPointerOn: aFloat 	^self cFloatPointerOn: aFloat!
+
+dotcWithn: n x: x incx: incx y: y incy: incy	^self dotWithn: n x: x incx: incx y: y incy: incy!
+
+dotuWithn: n x: x incx: incx y: y incy: incy	^self dotWithn: n x: x incx: incx y: y incy: incy!
+
+dotWithn: n x: x incx: incx y: y incy: incy	<cdecl: float 'cblas_sdot' SDWORD float * SDWORD float * SDWORD >	^self invalidCall!
+
+gemmWithorder: order transa: transa transb: transb m: m n: n k: k alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc	"C:=alpha*op(A)*op(B)+beta*C  , C has dimension (m,n)"	<cdecl: void 'cblas_sgemm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD float float * SDWORD float * SDWORD float float * SDWORD >	^self invalidCall!
+
+gemvWithorder: order trans: trans m: m n: n alpha: alpha a: a lda: lda x: x incx: incx beta: beta y: y incy: incy	"y=alpha*op(X)+beta*y op=yourself, transpose, transposeConjugate"	<cdecl: void 'cblas_sgemv' SDWORD SDWORD SDWORD SDWORD float float * SDWORD float * SDWORD float float * SDWORD >	^self invalidCall!
+
+gercWithorder: order m: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transposeConjugated(y)+A"	^self 		gerWithorder: order		m: m		n: n		alpha: alpha		x: x		incx: incx		y: y		incy: incy		a: a		lda: lda!
+
+geruWithorder: order m: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transpose(y)+A"	^self 		gerWithorder: order		m: m		n: n		alpha: alpha		x: x		incx: incx		y: y		incy: incy		a: a		lda: lda!
+
+gerWithorder: order m: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 
+	"A=alpha*x*transpose(y)+A"
+
+	<cdecl: void 'cblas_sger' SDWORD SDWORD SDWORD float float * SDWORD float * SDWORD float * SDWORD>
+	^self invalidCall!
+
+hemmWithorder: order side: side uplo: uplo m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc	"C=alpha*A*B+beta*C"	^self 		symmWithorder: order		side: side		uplo: uplo		m: m		n: n		alpha: alpha		a: a		lda: lda		b: b		ldb: ldb		beta: beta		c: c		ldc: ldc!
+
+hemvWithorder: order uplo: uplo n: n alpha: alpha n: a lda: lda x: x incx: incx beta: beta y: y incy: incy	"y=alpha*X+beta*y"	^self 		symvWithorder: order		uplo: uplo		n: n		alpha: alpha		n: a		lda: lda		x: x		incx: incx		beta: beta		y: y		incy: incy!
+
+hpmvWithorder: order uplo: uplo n: n alpha: alpha ap: ap x: x incx: incx beta: beta y: y incy: incy	"y=alpha*X+beta*y"	^self 		spmvWithorder: order		uplo: uplo		n: n		alpha: alpha		ap: ap		x: x		incx: incx		beta: beta		y: y		incy: incy!
+
+iamaxWithn: n x: x incx: incx	"index of max : max_i (abs(real(x_i))+abs(imag(x_i)))"	<cdecl: SDWORD 'cblas_isamax' SDWORD float * SDWORD >	^self invalidCall!
+
+nrm2Withn: n x: x incx: incx	"||x||_2"	<cdecl: float 'cblas_snrm2' SDWORD float * SDWORD >	^self invalidCall!
+
+realScalWithn: n alpha: alpha x: x incx: incx	^self scalWithn: n alpha: alpha x: x incx: incx!
+
+rotgWitha: a b: b c: c s: s	<cdecl: void 'cblas_srotg' float * float * float * float * >	^self invalidCall!
+
+rotWithn: n x: x incx: incx y: y incy: incy c: c s: s	<cdecl: void 'cblas_srot' SDWORD float * SDWORD float * SDWORD float float >	^self invalidCall!
+
+scalWithn: n alpha: alpha x: x incx: incx	<cdecl: void 'cblas_sscal' SDWORD float float * SDWORD >	^self invalidCall!
+
+spmvWithorder: order uplo: uplo n: n alpha: alpha ap: ap x: x incx: incx beta: beta y: y incy: incy	"y=alpha*X+beta*y"	<cdecl: void 'cblas_sspmv' SDWORD SDWORD SDWORD float float * float * SDWORD float float * SDWORD >	^self invalidCall!
+
+swapWithn: n x: x incx: incx y: y incy: incy	"x <-> y"	<cdecl: void 'cblas_sswap' SDWORD float * SDWORD float * SDWORD >	^self invalidCall!
+
+symmWithorder: order side: side uplo: uplo m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc	"C=alpha*A*B+beta*C"	<cdecl: void 'cblas_ssymm' SDWORD SDWORD SDWORD SDWORD SDWORD float float * SDWORD float * SDWORD float float * SDWORD >	^self invalidCall!
+
+symvWithorder: order uplo: uplo n: n alpha: alpha n: a lda: lda x: x incx: incx beta: beta y: y incy: incy 	"y=alpha*X+beta*y"	<cdecl: void 'cblas_ssymv' SDWORD SDWORD SDWORD float float * SDWORD float * SDWORD float float * SDWORD >	^self invalidCall!
+
+tpmvWithorder: order uplo: uplo trans: trans diag: diag n: n ap: ap x: x incx: incx	"x=op(a)*x op=yourself, transpose, transposeConjugated"	<cdecl: void 'cblas_stpmv' SDWORD SDWORD SDWORD SDWORD SDWORD float * float * SDWORD >	^self invalidCall!
+
+trmmWithorder: order side: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb	<cdecl: void 'cblas_strmm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD float float * SDWORD float * SDWORD >	^self invalidCall!
+
+trmvWithorder: order uplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx	"x=op(a)*x op=yourself, transpose, transposeConjugated"	<cdecl: void 'cblas_strmv' SDWORD SDWORD SDWORD SDWORD SDWORD float * SDWORD float * SDWORD >	^self invalidCall!
+
+trsmWithorder: order side: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb	<cdecl: void 'cblas_strsm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD float float * SDWORD float * SDWORD >	^self invalidCall! !
+!CBlasSLibrary categoriesFor: #asumWithn:x:incx:!public! !
+!CBlasSLibrary categoriesFor: #axpyWithn:alpha:x:incx:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #cComplexPointerOn:!public! !
+!CBlasSLibrary categoriesFor: #cElementArgumentOn:!public! !
+!CBlasSLibrary categoriesFor: #cElementPointerOn:!public! !
+!CBlasSLibrary categoriesFor: #copyWithn:x:incx:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #cRealPointerOn:!public! !
+!CBlasSLibrary categoriesFor: #dotcWithn:x:incx:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #dotuWithn:x:incx:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #dotWithn:x:incx:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #gemmWithorder:transa:transb:m:n:k:alpha:a:lda:b:ldb:beta:c:ldc:!public! !
+!CBlasSLibrary categoriesFor: #gemvWithorder:trans:m:n:alpha:a:lda:x:incx:beta:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #gercWithorder:m:n:alpha:x:incx:y:incy:a:lda:!public! !
+!CBlasSLibrary categoriesFor: #geruWithorder:m:n:alpha:x:incx:y:incy:a:lda:!public! !
+!CBlasSLibrary categoriesFor: #gerWithorder:m:n:alpha:x:incx:y:incy:a:lda:!public! !
+!CBlasSLibrary categoriesFor: #hemmWithorder:side:uplo:m:n:alpha:a:lda:b:ldb:beta:c:ldc:!public! !
+!CBlasSLibrary categoriesFor: #hemvWithorder:uplo:n:alpha:n:lda:x:incx:beta:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #hpmvWithorder:uplo:n:alpha:ap:x:incx:beta:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #iamaxWithn:x:incx:!public! !
+!CBlasSLibrary categoriesFor: #nrm2Withn:x:incx:!public! !
+!CBlasSLibrary categoriesFor: #realScalWithn:alpha:x:incx:!public! !
+!CBlasSLibrary categoriesFor: #rotgWitha:b:c:s:!public! !
+!CBlasSLibrary categoriesFor: #rotWithn:x:incx:y:incy:c:s:!public! !
+!CBlasSLibrary categoriesFor: #scalWithn:alpha:x:incx:!public! !
+!CBlasSLibrary categoriesFor: #spmvWithorder:uplo:n:alpha:ap:x:incx:beta:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #swapWithn:x:incx:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #symmWithorder:side:uplo:m:n:alpha:a:lda:b:ldb:beta:c:ldc:!public! !
+!CBlasSLibrary categoriesFor: #symvWithorder:uplo:n:alpha:n:lda:x:incx:beta:y:incy:!public! !
+!CBlasSLibrary categoriesFor: #tpmvWithorder:uplo:trans:diag:n:ap:x:incx:!public! !
+!CBlasSLibrary categoriesFor: #trmmWithorder:side:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:!public! !
+!CBlasSLibrary categoriesFor: #trmvWithorder:uplo:trans:diag:n:a:lda:x:incx:!public! !
+!CBlasSLibrary categoriesFor: #trsmWithorder:side:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:!public! !
+
+CBlasZLibrary guid: (GUID fromString: '{25DFBE0A-3F43-4988-9C4F-32D2733096AF}')!
+CBlasZLibrary comment: ''!
+!CBlasZLibrary categoriesForClass!Unclassified! !
+!CBlasZLibrary methodsFor!
+
+asumWithn: n x: x incx: incx	"||real(x)||_1 + ||imag(x)||_1"	<cdecl: double 'cblas_dzasum' SDWORD  "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+axpyWithn: n alpha: alpha x: x incx: incx y: y incy: incy	"y := alpha*x+y"	<cdecl: void 'cblas_zaxpy' SDWORD  "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD  "ExternalDoubleComplex"void * SDWORD  >	^self invalidCall!
+
+cComplexPointerOn: aComplex 	^self cDoubleComplexPointerOn: aComplex!
+
+cElementArgumentOn: aComplex 	^self cComplexPointerOn: aComplex!
+
+cElementPointerOn: aComplex 	^self cComplexPointerOn: aComplex!
+
+copyWithn: n x: x incx: incx y: y incy: incy	"y := x"	<cdecl: void 'cblas_zcopy' SDWORD  "ExternalDoubleComplex"void * SDWORD  "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+cRealPointerOn: aDouble 	^self cDoublePointerOn: aDouble!
+
+dotcWithN: N X: X incX: incX Y: Y incY: incY 	| dotc |	dotc := DOUBLECOMPLEXArray with: Complex zero.	self 		dotcWithn: N		x: X		incx: incX		y: Y		incy: incY		dotc: dotc arrayPointer.	^dotc at: 1!
+
+dotcWithn: n x: x incx: incx y: y incy: incy dotc: dotc	"dotc := transposeConjugate(x)*y"	<cdecl: void 'cblas_zdotc_sub' SDWORD  "ExternalDoubleComplex"void * SDWORD  "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * >	^self invalidCall!
+
+dotuWithN: N X: X incX: incX Y: Y incY: incY 	| dotu |	dotu := DOUBLECOMPLEXArray with: Complex zero.	self 		dotuWithn: N		x: X		incx: incX		y: Y		incy: incY		dotu: dotu arrayPointer.	^dotu at: 1!
+
+dotuWithn: n x: x incx: incx y: y incy: incy dotu: dotu	"dotu := transpose(x)*y"	<cdecl: void 'cblas_zdotu_sub' SDWORD  "ExternalDoubleComplex"void * SDWORD  "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * >	^self invalidCall!
+
+gemmWithorder: order transa: transa transb: transb m: m n: n k: k alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc	"C:=alpha*op(A)*op(B)+beta*C  , C has dimension (m,n)"	<cdecl: void 'cblas_zgemm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD * "ExternalDoubleComplex"void * SDWORD  "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+gemvWithorder: order trans: trans m: m n: n alpha: alpha a: a lda: lda x: x incx: incx beta: beta y: y incy: incy	"y=alpha*op(X)+beta*y op=yourself, transpose, transposeConjugated"	<cdecl: void 'cblas_zgemv' SDWORD SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD  "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+gercWithorder: order m: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transposeConjugate(y)+A"	<cdecl: void 'cblas_zgerc' SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+geruWithorder: order m: m n: n alpha: alpha x: x incx: incx y: y incy: incy a: a lda: lda 	"A=alpha*x*transpose(y)+A"	<cdecl: void 'cblas_zgeru' SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+hemmWithorder: order side: side uplo: uplo m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb beta: beta c: c ldc: ldc	"C=alpha*A*B+beta*C"	<cdecl: void 'cblas_zhemm' SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+hemvWithorder: order uplo: uplo n: n alpha: alpha n: a lda: lda x: x incx: incx beta: beta y: y incy: incy	"y=alpha*X+beta*y"	<cdecl: void 'cblas_zhemv' SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+hpmvWithorder: order uplo: uplo n: n alpha: alpha ap: ap x: x incx: incx beta: beta y: y incy: incy	"y=alpha*X+beta*y"	<cdecl: void 'cblas_zhpmv' SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+iamaxWithn: n x: x incx: incx	"index of max : max_i (abs(real(x_i))+abs(imag(x_i)))"	<cdecl: SDWORD 'cblas_izamax' SDWORD "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+nrm2Withn: n x: x incx: incx	"||x||_2"	<cdecl: double 'cblas_sznrm2' SDWORD "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+realScalWithn: n alpha: alpha x: x incx: incx	<cdecl: void 'cblas_zdscal' SDWORD double "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+scalWithn: n alpha: alpha x: x incx: incx	<cdecl: void 'cblas_zscal' SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+swapWithn: n x: x incx: incx y: y incy: incy	"x <-> y"	<cdecl: void 'cblas_zswap' SDWORD "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+tpmvWithorder: order uplo: uplo trans: trans diag: diag n: n ap: ap x: x incx: incx	"x=op(a)*x op=yourself, transpose, transposeConjugated"	<cdecl: void 'cblas_ztpmv' SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+trmmWithorder: order side: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb	<cdecl: void 'cblas_ztrmm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+trmvWithorder: order uplo: uplo trans: trans diag: diag n: n a: a lda: lda x: x incx: incx	"x=op(a)*x op=yourself, transpose, transposeConjugated"	<cdecl: void 'cblas_ztrmv' SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * SDWORD >	^self invalidCall!
+
+trsmWithorder: order side: side uplo: uplo trans: trans diag: diag m: m n: n alpha: alpha a: a lda: lda b: b ldb: ldb	<cdecl: void 'cblas_ztrsm' SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD SDWORD "ExternalDoubleComplex"void * "ExternalDoubleComplex"void * SDWORD "ExternalDoubleComplex"void * SDWORD >	^self invalidCall! !
+!CBlasZLibrary categoriesFor: #asumWithn:x:incx:!public! !
+!CBlasZLibrary categoriesFor: #axpyWithn:alpha:x:incx:y:incy:!public! !
+!CBlasZLibrary categoriesFor: #cComplexPointerOn:!public! !
+!CBlasZLibrary categoriesFor: #cElementArgumentOn:!public! !
+!CBlasZLibrary categoriesFor: #cElementPointerOn:!public! !
+!CBlasZLibrary categoriesFor: #copyWithn:x:incx:y:incy:!public! !
+!CBlasZLibrary categoriesFor: #cRealPointerOn:!public! !
+!CBlasZLibrary categoriesFor: #dotcWithN:X:incX:Y:incY:!public! !
+!CBlasZLibrary categoriesFor: #dotcWithn:x:incx:y:incy:dotc:!public! !
+!CBlasZLibrary categoriesFor: #dotuWithN:X:incX:Y:incY:!public! !
+!CBlasZLibrary categoriesFor: #dotuWithn:x:incx:y:incy:dotu:!public! !
+!CBlasZLibrary categoriesFor: #gemmWithorder:transa:transb:m:n:k:alpha:a:lda:b:ldb:beta:c:ldc:!public! !
+!CBlasZLibrary categoriesFor: #gemvWithorder:trans:m:n:alpha:a:lda:x:incx:beta:y:incy:!public! !
+!CBlasZLibrary categoriesFor: #gercWithorder:m:n:alpha:x:incx:y:incy:a:lda:!public! !
+!CBlasZLibrary categoriesFor: #geruWithorder:m:n:alpha:x:incx:y:incy:a:lda:!public! !
+!CBlasZLibrary categoriesFor: #hemmWithorder:side:uplo:m:n:alpha:a:lda:b:ldb:beta:c:ldc:!public! !
+!CBlasZLibrary categoriesFor: #hemvWithorder:uplo:n:alpha:n:lda:x:incx:beta:y:incy:!public! !
+!CBlasZLibrary categoriesFor: #hpmvWithorder:uplo:n:alpha:ap:x:incx:beta:y:incy:!public! !
+!CBlasZLibrary categoriesFor: #iamaxWithn:x:incx:!public! !
+!CBlasZLibrary categoriesFor: #nrm2Withn:x:incx:!public! !
+!CBlasZLibrary categoriesFor: #realScalWithn:alpha:x:incx:!public! !
+!CBlasZLibrary categoriesFor: #scalWithn:alpha:x:incx:!public! !
+!CBlasZLibrary categoriesFor: #swapWithn:x:incx:y:incy:!public! !
+!CBlasZLibrary categoriesFor: #tpmvWithorder:uplo:trans:diag:n:ap:x:incx:!public! !
+!CBlasZLibrary categoriesFor: #trmmWithorder:side:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:!public! !
+!CBlasZLibrary categoriesFor: #trmvWithorder:uplo:trans:diag:n:a:lda:x:incx:!public! !
+!CBlasZLibrary categoriesFor: #trsmWithorder:side:uplo:trans:diag:m:n:alpha:a:lda:b:ldb:!public! !
 
 LapackCLibrary guid: (GUID fromString: '{70E0D32E-9B4F-4BC0-93CE-CA5616F198CB}')!
 LapackCLibrary comment: ''!

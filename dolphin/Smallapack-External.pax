@@ -19,6 +19,11 @@ package classNames
 	add: #BlasLibrary;
 	add: #BlasSLibrary;
 	add: #BlasZLibrary;
+	add: #CBlasCLibrary;
+	add: #CBlasDLibrary;
+	add: #CBlasLibrary;
+	add: #CBlasSLibrary;
+	add: #CBlasZLibrary;
 	add: #CMathLibrary;
 	add: #DOUBLECOMPLEX;
 	add: #DOUBLECOMPLEXArray;
@@ -43,6 +48,7 @@ package globalAliases: (Set new
 	yourself).
 
 package setPrerequisites: (IdentitySet new
+	add: '..\..\..\Contributions\Burning River\Complex\Complex';
 	add: '..\..\..\Core\Object Arts\Dolphin\Base\Dolphin';
 	add: 'Smallapack-Settings';
 	yourself).
@@ -62,6 +68,11 @@ CMathLibrary subclass: #ArrayLibrary
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
 CMathLibrary subclass: #BlasLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CMathLibrary subclass: #CBlasLibrary
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -107,6 +118,26 @@ BlasLibrary subclass: #BlasSLibrary
 	poolDictionaries: ''
 	classInstanceVariableNames: ''!
 BlasLibrary subclass: #BlasZLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CBlasLibrary subclass: #CBlasCLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CBlasLibrary subclass: #CBlasDLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CBlasLibrary subclass: #CBlasSLibrary
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	classInstanceVariableNames: ''!
+CBlasLibrary subclass: #CBlasZLibrary
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
