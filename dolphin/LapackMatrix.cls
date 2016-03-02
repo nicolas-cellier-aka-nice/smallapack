@@ -1016,19 +1016,19 @@ realMatrix	^self findClassWithFlags: (self flags maskClear: ComplexityMask)!
 
 resetArrayInterfaces
 	ArrayInterfaces := Array new: 4.
-	ArrayInterfaces at: 1 + SinglePrecisionMask + RealMask put: ArraySLibrary default.
-	ArrayInterfaces at: 1 + DoublePrecisionMask + RealMask put: ArrayDLibrary default.
-	ArrayInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: ArrayCLibrary default.
-	ArrayInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: ArrayZLibrary default!
+	ArrayInterfaces at: 1 + SinglePrecisionMask + RealMask put: (ArraySLibrary closeDefault; default).
+	ArrayInterfaces at: 1 + DoublePrecisionMask + RealMask put: (ArrayDLibrary closeDefault; default).
+	ArrayInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: (ArrayCLibrary closeDefault; default).
+	ArrayInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: (ArrayZLibrary closeDefault; default)!
 
-resetBlasInterfaces	BlasInterfaces := Array new: 4.	SmallapackSettings useAtlasCBlas 		ifTrue: 			[BlasInterfaces at: 1 + SinglePrecisionMask + RealMask put: CBlasSLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + RealMask put: CBlasDLibrary default.			BlasInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: CBlasCLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: CBlasZLibrary default]		ifFalse: 			[BlasInterfaces at: 1 + SinglePrecisionMask + RealMask put: BlasSLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + RealMask put: BlasDLibrary default.			BlasInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: BlasCLibrary default.			BlasInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: BlasZLibrary default]!
+resetBlasInterfaces	BlasInterfaces := Array new: 4.	SmallapackSettings useAtlasCBlas 		ifTrue: 			[BlasInterfaces at: 1 + SinglePrecisionMask + RealMask put: (CBlasSLibrary closeDefault; default).			BlasInterfaces at: 1 + DoublePrecisionMask + RealMask put: (CBlasDLibrary closeDefault; default).			BlasInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: (CBlasCLibrary closeDefault; default).			BlasInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: (CBlasZLibrary closeDefault; default)]		ifFalse: 			[BlasInterfaces at: 1 + SinglePrecisionMask + RealMask put: (BlasSLibrary closeDefault; default).			BlasInterfaces at: 1 + DoublePrecisionMask + RealMask put: (BlasDLibrary closeDefault; default).			BlasInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: (BlasCLibrary closeDefault; default).			BlasInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: (BlasZLibrary closeDefault; default)]!
 
 resetInterfaces
 	[self resetBlasInterfaces] on: Win32Error do: [:exc |exc return: nil].
 	[self resetLapackInterfaces] on: Win32Error do: [:exc |exc return: nil].
 	[self resetArrayInterfaces] on: Win32Error do: [:exc |exc return: nil].!
 
-resetLapackInterfaces	LapackInterfaces := Array new: 4.	LapackInterfaces at: 1 + SinglePrecisionMask + RealMask put: LapackSLibrary default.	LapackInterfaces at: 1 + DoublePrecisionMask + RealMask put: LapackDLibrary default.	LapackInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: LapackCLibrary default.	LapackInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: LapackZLibrary default!
+resetLapackInterfaces	LapackInterfaces := Array new: 4.	LapackInterfaces at: 1 + SinglePrecisionMask + RealMask put: (LapackSLibrary close default; default).	LapackInterfaces at: 1 + DoublePrecisionMask + RealMask put: (LapackDLibrary closeDefault; default).	LapackInterfaces at: 1 + SinglePrecisionMask + ComplexMask put: (LapackCLibrary closeDefault; default).	LapackInterfaces at: 1 + DoublePrecisionMask + ComplexMask put: (LapackZLibrary closeDefault; default)!
 
 rowMatrix	^self generalMatrix!
 
