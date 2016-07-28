@@ -7,7 +7,7 @@ It provides many robust and efficient (in time and memory) functions for solving
 
 It relies on the existence of an optimized BLAS library for doing basic operations on Matrices and Vectors.
 
-Smallapack has been implemented in 3 dialetcs Cincom Visualworks, Squeak/Pharo and Dolphin - see [Availability](https://github.com/nicolas-cellier-aka-nice/smallapack/wiki/SmallapackAvailability).
+Smallapack has been implemented in 3 dialects Cincom Visualworks, Squeak/Pharo and Dolphin - see [Availability](https://github.com/nicolas-cellier-aka-nice/smallapack/wiki/SmallapackAvailability).
 
 Basic tutorials can be found on the wiki too.
 
